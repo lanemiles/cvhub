@@ -17,5 +17,6 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    url(r'^cvhub_app/', include('cvhub_app.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]
