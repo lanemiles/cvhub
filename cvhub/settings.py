@@ -81,7 +81,7 @@ DATABASES = {
         'USER': 'lmiles',
         'PASSWORD': 'CS133Databases',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': ''
     }
 }
 
