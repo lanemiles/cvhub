@@ -1,6 +1,9 @@
 from django.db import models
 from django_enumfield import enum
 import datetime
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 
@@ -9,12 +12,12 @@ class UserInfo(models.Model):
 
     # our custom info
     dob = models.DateField()
-    join_time = models.DateField()
-    points = models.IntegerField()
-    resume_url = models.CharField(max_length=512)
+    points = models.IntegerField(default=0)
+    user = models.OneToOneField(User)
+    resume_url = models.CharField(max_length=512, null=True)
 
-    # actual user authentication info
-    user = models.OneToOne(User)
+    def __unicode__(self):
+        return '{} - {}'.format(self.user.username, self.dob)
 
 
 class CommentableResumeItem(models.Model):
@@ -33,7 +36,7 @@ class ResumeItem(CommentableResumeItem):
     We shall see
     """
 
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(UserInfo)
 
     class Meta:
         abstract = True
@@ -45,7 +48,11 @@ class BulletPoint(CommentableResumeItem):
     """
 
     text = models.CharField(max_length=1024)
-    parent_item = models.ForeignKey(ResumeItem)
+
+    # foreign key to CommentableResumeItem
+    content_type = models.ForeignKey(ContentType, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    parent_item = GenericForeignKey('content_type', 'object_id')
 
 
 class ContactInformation(ResumeItem):
@@ -121,7 +128,12 @@ class CommentStatus(enum.Enum):
 class Comment(models.Model):
 
     author = models.ForeignKey(UserInfo)
-    resume_item = models.ForeignKey(CommentableResumeItem)
+
+    # foreign key to CommentableResumeItem
+    content_type = models.ForeignKey(ContentType, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    resume_item = GenericForeignKey('content_type', 'object_id')
+
     timestamp = models.DateTimeField(auto_now_add=True)
     text = models.CharField(max_length=1024)
     suggestion = models.CharField(max_length=1024, null=True, blank=True)
@@ -129,7 +141,7 @@ class Comment(models.Model):
     status = enum.EnumField(DegreeType, default=CommentStatus.PENDING)
 
     class Meta:
-        unique_together = ("author", "resume_item", "timestamp")
+        unique_together = ("author", "content_type", "object_id", "timestamp")
 
     def save(self, *args, **kwargs):
 
@@ -137,7 +149,7 @@ class Comment(models.Model):
         if suggestion is not None:
             is_suggestion = True
 
-        super(Education, self).save(*args, **kwargs)
+        super(Comment, self).save(*args, **kwargs)
 
 
 class VoteType(enum.Enum):
@@ -163,8 +175,3 @@ class ResumePDF(models.Model):
 
     class Meta:
         unique_together = ("user", "version_number")
-            
-
-
-
-
