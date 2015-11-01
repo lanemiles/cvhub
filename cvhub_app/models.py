@@ -12,7 +12,6 @@ class UserInfo(models.Model):
 
     # our custom info
     dob = models.DateField()
-    join_time = models.DateTimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
     user = models.OneToOneField(User)
     resume_url = models.CharField(max_length=512, null=True)
