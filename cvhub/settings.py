@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cvhub_app',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
