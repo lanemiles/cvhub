@@ -26,3 +26,10 @@ class UserInfoForm(forms.ModelForm):
     class Meta:
         model = UserInfo
         fields = ['first_name', 'last_name', 'email', 'password', 'dob']
+
+class EducationForm(forms.ModelForm):
+
+    class Meta:
+        model = Education
+        fields = ['school', 'degree_type', 'start_date', 'end_date', 'gpa', 'location']
+
