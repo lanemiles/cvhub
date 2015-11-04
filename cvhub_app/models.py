@@ -13,7 +13,7 @@ class UserInfo(models.Model):
     # our custom info
     dob = models.DateField()
     points = models.IntegerField(default=0)
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='user_info')
     resume_url = models.CharField(max_length=512, null=True)
 
     def __unicode__(self):
@@ -25,7 +25,7 @@ class CommentableResumeItem(models.Model):
     Highest level abstract base class for commentable items
     """
     order = models.IntegerField()
-    enabled = models.BooleanField()
+    enabled = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -85,10 +85,10 @@ class Education(ResumeItem):
     def save(self, *args, **kwargs):
 
         # check if in progress
-        if end_date > datetime.datetime.now().date():
-            in_progress = True
+        if self.end_date > datetime.datetime.now().date():
+            self.in_progress = True
         else:
-            in_progress = False
+            self.in_progress = False
 
         super(Education, self).save(*args, **kwargs)
 
@@ -146,8 +146,8 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
 
         # check if in progress
-        if suggestion is not None:
-            is_suggestion = True
+        if self.suggestion is not None:
+            self.is_suggestion = True
 
         super(Comment, self).save(*args, **kwargs)
 
