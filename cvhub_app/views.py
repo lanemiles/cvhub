@@ -33,17 +33,13 @@ def create_user(request):
             user_wrapper.user = user
             user_wrapper.save()
 
-<<<<<<< HEAD
-            # redirect to a new URL:
-            return render(request, 'thanks.html', {'user_wrapper': user_wrapper})
-=======
             # redirect to the profile page:
             user = authenticate(username=user.email, password=form.cleaned_data.get('password'))
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user.user_info)})
->>>>>>> a8e4c354a43436a11ce989a069f1864cade0f51d
+
 
     # if a GET (or any other method) we'll create a blank form
     else:
