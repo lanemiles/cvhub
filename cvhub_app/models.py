@@ -44,7 +44,7 @@ class ResumeItem(CommentableResumeItem):
 
 class BulletPoint(CommentableResumeItem):
     """
-    Abstract base class for different types of resume items
+    TODO
     """
 
     text = models.CharField(max_length=1024)
@@ -54,6 +54,19 @@ class BulletPoint(CommentableResumeItem):
     object_id = models.PositiveIntegerField(null=True)
     parent_item = GenericForeignKey('content_type', 'object_id')
 
+    # return the parent object of the bullet point
+    def get_parent(self):
+
+        if str(self.content_type) == 'education':
+            return Education.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'contact information':
+            return ContactInformation.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'skill':
+            return Skill.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'experience':
+            return Experience.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'award':
+            return Award.objects.get(id=self.object_id)
 
 class ContactInformation(ResumeItem):
 
@@ -143,6 +156,7 @@ class Comment(models.Model):
     class Meta:
         unique_together = ("author", "content_type", "object_id", "timestamp")
 
+    # every time we save a comment, check if we have a suggestion 
     def save(self, *args, **kwargs):
 
         # check if in progress
@@ -150,6 +164,20 @@ class Comment(models.Model):
             self.is_suggestion = True
 
         super(Comment, self).save(*args, **kwargs)
+
+    # return the parent object of the bullet point
+    def get_parent(self):
+
+        if str(self.content_type) == 'education':
+            return Education.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'contact information':
+            return ContactInformation.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'skill':
+            return Skill.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'experience':
+            return Experience.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'award':
+            return Award.objects.get(id=self.object_id)
 
 
 class VoteType(enum.Enum):

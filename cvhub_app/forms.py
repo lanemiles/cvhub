@@ -27,9 +27,34 @@ class UserInfoForm(forms.ModelForm):
         model = UserInfo
         fields = ['first_name', 'last_name', 'email', 'password', 'dob']
 
+
 class EducationForm(forms.ModelForm):
 
     class Meta:
         model = Education
         fields = ['school', 'degree_type', 'start_date', 'end_date', 'gpa', 'location']
+
+# Form to add bullet points to education
+class BulletPointForm(forms.Form):
+
+    bpText = forms.CharField(label='Text', max_length=1000)
+    def __init__(self, user, *args, **kwargs):
+        super(BulletPointForm, self).__init__(*args, **kwargs)
+        self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user))
+
+# retrieve all education items for the given user
+def get_education_items(user):
+    user_info = user.user_info
+
+    choices_list = []
+    education_objects = Education.objects.filter(owner=user_info)
+
+    # put education into choice list format, 
+    # with pk as the key and school name as the string to display
+    for x in education_objects:
+        choices_list.append((x.pk, x.school))
+
+    return choices_list
+
+
 

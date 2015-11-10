@@ -40,6 +40,7 @@ def create_user(request):
                     login(request, user)
                     return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user.user_info)})
 
+
     # if a GET (or any other method) we'll create a blank form
     else:
         form = UserInfoForm()
@@ -96,3 +97,48 @@ def create_education(request):
         form = EducationForm()
 
     return render(request, 'add_education.html', {'form': form})
+
+@login_required
+def add_bp(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = BulletPointForm(request.user, request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            bp = BulletPoint()
+
+            # get user
+            user_info = request.user.user_info
+            
+            # get text of bullet point from form
+            bpText = form.cleaned_data.get('bpText')
+            bp.text = bpText
+
+            # get education from the drop down list in form
+            education = form.cleaned_data.get('education_item_choices')
+
+            # return all bullet points for that education, and find the next number for an ordering
+            order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                bp.order = order_max + 1
+            else:
+                bp.order = 1
+
+            # set bullet point's foreign keys to a given education choice
+            education_type = ContentType.objects.get_for_model(Education)
+            bp.content_type = education_type
+            bp.object_id = education
+            
+            # add bullet point to db
+            bp.save()
+
+            # redirect to a new URL:
+            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info)})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = BulletPointForm(request.user)
+
+    return render(request, 'add_bp.html', {'form': form})
