@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.db.models import Max
 from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
 
 
 def index(request):
@@ -54,7 +55,7 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info)})
+    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order')})
 
 
 def logout_view(request):
@@ -90,7 +91,7 @@ def create_education(request):
             education.save()
 
             # redirect to a new URL:
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info)})
+            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -115,6 +116,10 @@ def add_bp(request):
             # get text of bullet point from form
             bpText = form.cleaned_data.get('bpText')
             bp.text = bpText
+
+            # enable/disable the bullet point
+            bpEnabled = form.cleaned_data.get('bpEnabled')
+            bp.enabled = bpEnabled
 
             # get education from the drop down list in form
             education = form.cleaned_data.get('education_item_choices')
@@ -142,3 +147,54 @@ def add_bp(request):
         form = BulletPointForm(request.user)
 
     return render(request, 'add_bp.html', {'form': form})
+
+# View my resume (displays all enabled items)
+@login_required
+def view_my_resume(request):
+    return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True)})
+
+@login_required
+def choose_resume_to_edit(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ChooseResumeToEditForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            if request.POST.get("choose_user"):
+
+                # get selected user's id
+                selected_user = form.cleaned_data.get('user_choice')
+
+                # get UserInfo object from the id
+                user_info = UserInfo.objects.get(id=selected_user)
+
+            # randomly choose a user & resume to view
+            elif request.POST.get("random_resume"):
+                user_info = UserInfo.objects.order_by('?').first()
+
+            # redirect to the page for commenting resumes
+            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ChooseResumeToEditForm()
+
+    return render(request, 'choose_resume_to_edit.html', {'form': form})
+
+# add comments to a resume
+@login_required
+def comment_resume(request):
+
+    # did we arrive at comment_resume legally, after choosing a user or getting a random resume?
+    try:
+        user_info
+    except NameError:
+
+        # no resume chosen - redirect to resume choosing page
+        return redirect('choose_resume_to_edit')   
+    else:
+
+        # valid resume chosen - can edit
+        return render(request, 'comment_resume.html', {'education_list': Education.objects.filter(owner=user_info).order_by('order')})
