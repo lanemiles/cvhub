@@ -1,6 +1,9 @@
 from django.db import models
 from django_enumfield import enum
 import datetime
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 
@@ -9,12 +12,12 @@ class UserInfo(models.Model):
 
     # our custom info
     dob = models.DateField()
-    join_time = models.DateField()
-    points = models.IntegerField()
-    resume_url = models.CharField(max_length=512)
+    points = models.IntegerField(default=0)
+    user = models.OneToOneField(User, related_name='user_info')
+    resume_url = models.CharField(max_length=512, null=True)
 
-    # actual user authentication info
-    user = models.OneToOne(User)
+    def __unicode__(self):
+        return '{} - {}'.format(self.user.username, self.dob)
 
 
 class CommentableResumeItem(models.Model):
@@ -22,7 +25,7 @@ class CommentableResumeItem(models.Model):
     Highest level abstract base class for commentable items
     """
     order = models.IntegerField()
-    enabled = models.BooleanField()
+    enabled = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -33,7 +36,7 @@ class ResumeItem(CommentableResumeItem):
     We shall see
     """
 
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(UserInfo)
 
     class Meta:
         abstract = True
@@ -41,12 +44,29 @@ class ResumeItem(CommentableResumeItem):
 
 class BulletPoint(CommentableResumeItem):
     """
-    Abstract base class for different types of resume items
+    TODO
     """
 
     text = models.CharField(max_length=1024)
-    parent_item = models.ForeignKey(ResumeItem)
 
+    # foreign key to CommentableResumeItem
+    content_type = models.ForeignKey(ContentType, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    parent_item = GenericForeignKey('content_type', 'object_id')
+
+    # return the parent object of the bullet point
+    def get_parent(self):
+
+        if str(self.content_type) == 'education':
+            return Education.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'contact information':
+            return ContactInformation.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'skill':
+            return Skill.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'experience':
+            return Experience.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'award':
+            return Award.objects.get(id=self.object_id)
 
 class ContactInformation(ResumeItem):
 
@@ -63,6 +83,7 @@ class DegreeType(enum.Enum):
     MS = 2
     MBA = 3
     PhD = 4
+    GED = 5 
 
 
 class Education(ResumeItem):
@@ -78,10 +99,10 @@ class Education(ResumeItem):
     def save(self, *args, **kwargs):
 
         # check if in progress
-        if end_date > datetime.datetime.now().date():
-            in_progress = True
+        if self.end_date > datetime.datetime.now().date():
+            self.in_progress = True
         else:
-            in_progress = False
+            self.in_progress = False
 
         super(Education, self).save(*args, **kwargs)
 
@@ -121,7 +142,12 @@ class CommentStatus(enum.Enum):
 class Comment(models.Model):
 
     author = models.ForeignKey(UserInfo)
-    resume_item = models.ForeignKey(CommentableResumeItem)
+
+    # foreign key to CommentableResumeItem
+    content_type = models.ForeignKey(ContentType, null=True)
+    object_id = models.PositiveIntegerField(null=True)
+    resume_item = GenericForeignKey('content_type', 'object_id')
+
     timestamp = models.DateTimeField(auto_now_add=True)
     text = models.CharField(max_length=1024)
     suggestion = models.CharField(max_length=1024, null=True, blank=True)
@@ -129,15 +155,30 @@ class Comment(models.Model):
     status = enum.EnumField(DegreeType, default=CommentStatus.PENDING)
 
     class Meta:
-        unique_together = ("author", "resume_item", "timestamp")
+        unique_together = ("author", "content_type", "object_id", "timestamp")
 
+    # every time we save a comment, check if we have a suggestion 
     def save(self, *args, **kwargs):
 
         # check if in progress
-        if suggestion is not None:
-            is_suggestion = True
+        if self.suggestion is not None:
+            self.is_suggestion = True
 
-        super(Education, self).save(*args, **kwargs)
+        super(Comment, self).save(*args, **kwargs)
+
+    # return the parent object of the bullet point
+    def get_parent(self):
+
+        if str(self.content_type) == 'education':
+            return Education.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'contact information':
+            return ContactInformation.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'skill':
+            return Skill.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'experience':
+            return Experience.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'award':
+            return Award.objects.get(id=self.object_id)
 
 
 class VoteType(enum.Enum):
@@ -163,8 +204,3 @@ class ResumePDF(models.Model):
 
     class Meta:
         unique_together = ("user", "version_number")
-            
-
-
-
-
