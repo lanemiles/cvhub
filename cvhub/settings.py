@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cvhub_app',
+    'django_extensions',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,3 +106,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Login settings
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/profile'

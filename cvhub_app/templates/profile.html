@@ -1,0 +1,31 @@
+<h1> Your Profile </h1>
+
+Username: {{user}}
+<br>
+
+<h2>Your Contact Info</h2>
+<h2>Your Education</h2>
+
+<ul>
+{% for info in education_list %}
+<li>
+	{{info.school}} in {{info.location}}
+		<ul>
+			<li> Attending from {{info.start_date}} to {{info.end_date}}
+			</li>
+			<li> GPA: {{info.gpa}}
+			</li>
+			<li> Degree: {{info.get_degree_type_display}}
+			</li>
+			<li> Enabled: {{info.enabled}}
+			</li>
+		</ul>
+</li>
+
+
+{% endfor %}
+</ul>
+
+<h2>Your Skills</h2>
+<h2>Your Experience</h2>
+<h2>Your Awards</h2>
