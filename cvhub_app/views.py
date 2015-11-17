@@ -153,6 +153,8 @@ def add_bp(request):
 def view_my_resume(request):
     return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True)})
 
+# User chooses a resume (or requests a random resume) to comment
+# TODO: change this to choose_resume_to_comment, not choose
 @login_required
 def choose_resume_to_edit(request):
     # if this is a POST request we need to process the form data
@@ -175,7 +177,8 @@ def choose_resume_to_edit(request):
                 user_info = UserInfo.objects.order_by('?').first()
 
             # redirect to the page for commenting resumes
-            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+            print "rendering comment_resume"
+            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user_info.user) })
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -183,18 +186,52 @@ def choose_resume_to_edit(request):
 
     return render(request, 'choose_resume_to_edit.html', {'form': form})
 
+# TODO fix
 # add comments to a resume
 @login_required
 def comment_resume(request):
 
     # did we arrive at comment_resume legally, after choosing a user or getting a random resume?
     try:
-        user_info
+        user
+
     except NameError:
 
         # no resume chosen - redirect to resume choosing page
+        print "NameError"
         return redirect('choose_resume_to_edit')   
     else:
 
+        print "valid user info"
+        if request.method == 'POST':
+            form = CommentResumeForm(request.POST, user=user)
+            if form.is_valid():
+
+                # if the user tried to submit a comment
+                if request.POST.get("submit_comment"):
+
+                    print "POST submit_comment"
+
+                    # new comment with comment and suggestion text from form
+                    new_comment = Comment()
+                    new_comment.text = form.cleaned_data.get('comment_text')
+                    new_comment.suggestion = form.cleaned_data.get('suggestion_text')
+                    new_comment.author = request.user.user_info
+
+                    # set comment's foreign key to the selected item
+                    education_type = ContentType.objects.get_for_model(Education)
+                    new_comment.content_type = education_type
+                    education_item = form.cleaned_data.get('commentable_resume_item')
+                    new_comment.object_id = education_item
+                
+                    # put new comment into the database
+                    new_comment.save()
+                    print "tried to put into db"
+                    return redirect('thanks.html')   
+
+        # GET method
+        else:
+            form = CommentResumeForm(user=user)
+
         # valid resume chosen - can edit
-        return render(request, 'comment_resume.html', {'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+        return render(request, 'comment_resume.html', {'user': user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user) })
