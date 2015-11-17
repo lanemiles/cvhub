@@ -1,0 +1,3420 @@
+[07/Oct/2015 00:06:30] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:31] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:36] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:36] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:37] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:37] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:44] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:44] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:44] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:44] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:45] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:45] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:46] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 00:06:46] "GET /cvhub_app/ HTTP/1.1" 200 2
+[07/Oct/2015 02:57:03] "GET / HTTP/1.1" 404 2016
+[07/Oct/2015 02:57:03] "GET /robots.txt HTTP/1.1" 404 2046
+[07/Oct/2015 02:57:03] "GET /sitemap.xml HTTP/1.1" 404 2049
+[07/Oct/2015 15:38:02] "GET http://testp1.piwo.pila.pl/testproxy.php HTTP/1.1" 404 1723
+[08/Oct/2015 03:01:27] "GET / HTTP/1.1" 404 2016
+[08/Oct/2015 03:01:28] "GET /favicon.ico HTTP/1.1" 404 2049
+[08/Oct/2015 04:14:34] "GET /cvhub_app HTTP/1.1" 301 0
+[08/Oct/2015 04:14:34] "GET /cvhub_app/ HTTP/1.1" 200 2
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 07, 2015 - 00:06:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[08/Oct/2015 04:17:22] "GET /cvhub_app/ HTTP/1.1" 200 3
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 08, 2015 - 04:17:18
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[08/Oct/2015 04:23:38] "GET /cvhub_app/ HTTP/1.1" 200 3
+[08/Oct/2015 04:23:39] "GET /cvhub_app/ HTTP/1.1" 200 3
+[08/Oct/2015 04:23:40] "GET /cvhub_app/ HTTP/1.1" 200 3
+[08/Oct/2015 04:23:40] "GET /cvhub_app/ HTTP/1.1" 200 3
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 08, 2015 - 04:22:47
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Oct/2015 21:38:49] "GET http://testp4.pospr.waw.pl/testproxy.php HTTP/1.1" 404 1723
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 593, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 334, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 102, in __init__
+    super(WSGIRequestHandler, self).__init__(*args, **kwargs)
+  File "/usr/lib/python2.7/SocketServer.py", line 649, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 167, in handle
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python2.7/socket.py", line 476, in readline
+    data = self._sock.recv(self._rbufsize)
+error: [Errno 104] Connection reset by peer
+[20/Oct/2015 04:22:13] "GET / HTTP/1.1" 404 2011
+[20/Oct/2015 04:22:21] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00TZ\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x10\x04\x01.\x05\x00\x00\x00\x00\x81I\xa8\xc0\x00')
+[20/Oct/2015 04:22:21] 
+[21/Oct/2015 10:53:17] "GET /manager/html HTTP/1.1" 404 2052
+[28/Oct/2015 17:00:10] "GET /admin HTTP/1.1" 301 0
+[28/Oct/2015 17:00:10] "GET /admin/ HTTP/1.1" 302 0
+[28/Oct/2015 17:00:10] "GET /admin/login/?next=/admin/ HTTP/1.1" 200 1915
+[28/Oct/2015 17:00:10] "GET /static/admin/css/login.css HTTP/1.1" 200 940
+[28/Oct/2015 17:00:10] "GET /static/admin/css/base.css HTTP/1.1" 200 14049
+[28/Oct/2015 17:00:11] "GET /static/admin/img/nav-bg.gif HTTP/1.1" 200 265
+[28/Oct/2015 17:00:11] "GET /favicon.ico HTTP/1.1" 404 2055
+[28/Oct/2015 17:00:18] "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+[28/Oct/2015 17:00:18] "GET /admin/ HTTP/1.1" 200 3020
+[28/Oct/2015 17:00:18] "GET /static/admin/css/dashboard.css HTTP/1.1" 200 434
+[28/Oct/2015 17:00:18] "GET /static/admin/img/default-bg.gif HTTP/1.1" 200 836
+[28/Oct/2015 17:00:18] "GET /static/admin/img/icon_addlink.gif HTTP/1.1" 200 119
+[28/Oct/2015 17:00:18] "GET /static/admin/img/icon_changelink.gif HTTP/1.1" 200 119
+[28/Oct/2015 17:00:23] "GET /test/ HTTP/1.1" 404 2037
+[28/Oct/2015 17:00:25] "GET /cvhub/ HTTP/1.1" 404 2040
+[28/Oct/2015 17:00:28] "GET /hello/ HTTP/1.1" 404 2040
+[28/Oct/2015 17:00:34] "GET /cvhub_app/ HTTP/1.1" 200 3
+[28/Oct/2015 17:00:36] "GET / HTTP/1.1" 404 2022
+[28/Oct/2015 17:00:39] "GET /admin HTTP/1.1" 301 0
+[28/Oct/2015 17:00:39] "GET /admin/ HTTP/1.1" 200 3020
+[28/Oct/2015 17:00:45] "GET / HTTP/1.1" 404 2016
+[28/Oct/2015 17:00:45] "GET /favicon.ico HTTP/1.1" 404 2049
+[28/Oct/2015 17:00:47] "GET /admin HTTP/1.1" 301 0
+[28/Oct/2015 17:00:47] "GET /admin/ HTTP/1.1" 302 0
+[28/Oct/2015 17:00:47] "GET /admin/login/?next=/admin/ HTTP/1.1" 200 1915
+[28/Oct/2015 17:00:47] "GET /static/admin/css/base.css HTTP/1.1" 200 14049
+[28/Oct/2015 17:00:47] "GET /static/admin/css/login.css HTTP/1.1" 200 940
+[28/Oct/2015 17:00:47] "GET /static/admin/img/nav-bg.gif HTTP/1.1" 200 265
+[28/Oct/2015 17:02:36] "GET /cvhub_app HTTP/1.1" 301 0
+[28/Oct/2015 17:02:36] "GET /cvhub_app/ HTTP/1.1" 200 3
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 08, 2015 - 04:32:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+----------------------------------------
+Exception happened during processing of request from ('85.25.185.112', 46560)
+----------------------------------------
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:27:17
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:27:21
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:27:28
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f58b33e4c80>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 35
+    class ContactInformation(CommentableResumeItem)
+                                                  ^
+SyntaxError: invalid syntax
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:49:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:54:06
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:54:28
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:55:08
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 21:55:13
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f0e405f2c80>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 66
+    if end_date
+              ^
+SyntaxError: invalid syntax
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 22:01:32
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 22:01:44
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 22:02:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 22:03:33
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f435b9b29b0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7fa7c9033cf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 19, in <module>
+    class ResumeItem(CommentableResumeItem):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 24, in ResumeItem
+    owner = models.ForeignKey(User)
+NameError: name 'User' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7f4e8a9bb1b8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 26, in <module>
+    class ResumeItem(CommentableResumeItem):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 31, in ResumeItem
+    owner = models.ForeignKey(User)
+NameError: name 'User' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7f36b6842cf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 16, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fcada69dcf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 16, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7faf9c10ecf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 16, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fb6daa95cf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 16, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7f0666b90cf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 16, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fa494526cf8>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 16, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7f0448f2dd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fdc877ddd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7f78925dfd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7f72062b1d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7f386e293d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fac846a8d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7ff98c245d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 22:49:58
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f272a6b0d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fb2663bad70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fa1a2380d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOneField(User)
+NameError: name 'User' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7f6b52e5aaa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7f40d9326aa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7f2f99bb3aa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7f4d1e461aa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7f73c3673aa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7f589651caa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7fbcca53aaa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7fd8b3c7aaa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:09:54
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7fefb753aaa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7efc1ae5eaa0>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 482, in check
+    include_deployment_checks=include_deployment_checks,
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/registry.py", line 72, in run_checks
+    new_errors = check(app_configs=app_configs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/checks/model_checks.py", line 28, in check_all_models
+    errors.extend(model.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1205, in check
+    errors.extend(cls._check_fields(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 1282, in _check_fields
+    errors.extend(field.check(**kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1834, in check
+    errors = super(ForeignKey, self).check(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1507, in check
+    errors.extend(self._check_unique_target())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in _check_unique_target
+    for rel_field in self.foreign_related_fields)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1527, in <genexpr>
+    for rel_field in self.foreign_related_fields)
+AttributeError: 'NoneType' object has no attribute 'unique'
+Unhandled exception in thread started by <function wrapper at 0x7f3ac5f55230>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 43, in <module>
+    class BulletPoint(CommentableResumeItem):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 51, in BulletPoint
+    content_type = models.ForeignKey(ContentType)
+NameError: name 'ContentType' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7fe31d1f2230>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 43, in <module>
+    class BulletPoint(CommentableResumeItem):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 51, in BulletPoint
+    content_type = models.ForeignKey(ContentType)
+NameError: name 'ContentType' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7f06b87e4230>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 43, in <module>
+    class BulletPoint(CommentableResumeItem):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 51, in BulletPoint
+    content_type = models.ForeignKey(ContentType)
+NameError: name 'ContentType' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7f17c6957c80>
+Performing system checks...
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 114, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 469, in validate
+    return self.check(app_configs=app_configs, display_num_errors=display_num_errors)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 528, in check
+    raise SystemCheckError(msg)
+django.core.management.base.SystemCheckError: SystemCheckError: System check identified some issues:
+
+ERRORS:
+cvhub_app.Comment: (models.E016) 'unique_together' refers to field 'resume_item' which is not local to model 'Comment'.
+	HINT: This issue may be caused by multi-table inheritance.
+
+System check identified 1 issue (0 silenced).
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run 'python manage.py migrate' to apply them.
+October 31, 2015 - 23:21:19
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run 'python manage.py migrate' to apply them.
+October 31, 2015 - 23:22:24
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run 'python manage.py migrate' to apply them.
+October 31, 2015 - 23:22:35
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run 'python manage.py migrate' to apply them.
+October 31, 2015 - 23:22:51
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have unapplied migrations; your app may not work properly until they are applied.
+Run 'python manage.py migrate' to apply them.
+October 31, 2015 - 23:23:19
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:27:36
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:34:48
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:36:04
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:39:06
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7fd30b9c0488>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 11, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    resume_url = models.CharField(max_length=512, default=user.id)
+NameError: name 'user' is not defined
+Unhandled exception in thread started by <function wrapper at 0x7f1e013dd488>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 11, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 18, in UserInfo
+    resume_url = models.CharField(max_length=512, default=user.id)
+AttributeError: 'OneToOneField' object has no attribute 'id'
+Unhandled exception in thread started by <function wrapper at 0x7f27ea107488>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 11, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 18, in UserInfo
+    resume_url = models.CharField(max_length=512, default=user.id)
+AttributeError: 'OneToOneField' object has no attribute 'id'
+Unhandled exception in thread started by <function wrapper at 0x7f6e3060a488>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 11, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 18, in UserInfo
+    resume_url = models.CharField(max_length=512, default=user.pk)
+AttributeError: 'OneToOneField' object has no attribute 'pk'
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:40:16
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 31, 2015 - 23:40:34
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 22:30:17
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 22:30:33
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 22:31:00
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 22:32:11
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 22:32:36
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:09:50] "GET / HTTP/1.1" 500 120032
+[01/Nov/2015 23:09:50] "GET /favicon.ico HTTP/1.1" 500 136332
+[01/Nov/2015 23:11:08] "GET / HTTP/1.1" 404 2007
+[01/Nov/2015 23:11:08] "GET /favicon.ico HTTP/1.1" 404 2040
+[01/Nov/2015 23:11:18] "GET /index HTTP/1.1" 404 2022
+[01/Nov/2015 23:11:20] "GET /index.html HTTP/1.1" 404 2037
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 22:41:46
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:11:32] "GET /index.html HTTP/1.1" 404 2451
+[01/Nov/2015 23:11:34] "GET / HTTP/1.1" 200 3
+[01/Nov/2015 23:11:35] "GET / HTTP/1.1" 200 3
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:11:26
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:11:48] "GET /create-user HTTP/1.1" 404 2454
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:11:42
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:12:14] "GET /create-user HTTP/1.1" 200 3
+[01/Nov/2015 23:12:15] "GET /create-user HTTP/1.1" 200 3
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:12:08
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:12:27] "GET /create-user HTTP/1.1" 404 2454
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:12:24
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:13:47] "GET /create-user HTTP/1.1" 200 832
+[01/Nov/2015 23:14:13] "GET /create-user HTTP/1.1" 200 832
+[01/Nov/2015 23:14:13] "GET /favicon.ico HTTP/1.1" 404 2452
+[01/Nov/2015 23:14:49] "POST /create-user/ HTTP/1.1" 200 1009
+[01/Nov/2015 23:14:52] "GET /create-user HTTP/1.1" 200 832
+[01/Nov/2015 23:14:54] "POST /create-user/ HTTP/1.1" 200 1009
+[01/Nov/2015 23:14:56] "POST /create-user/ HTTP/1.1" 200 1009
+[01/Nov/2015 23:15:04] "POST /create-user/ HTTP/1.1" 200 1026
+[01/Nov/2015 23:15:21] "POST /create-user/ HTTP/1.1" 200 947
+[01/Nov/2015 23:15:29] "POST /create-user/ HTTP/1.1" 200 1028
+[01/Nov/2015 23:15:34] "POST /create-user/ HTTP/1.1" 200 1028
+[01/Nov/2015 23:15:44] "POST /create-user/ HTTP/1.1" 200 1001
+[01/Nov/2015 23:15:54] "POST /create-user/ HTTP/1.1" 200 946
+[01/Nov/2015 23:16:01] "POST /create-user/ HTTP/1.1" 200 946
+[01/Nov/2015 23:16:08] "POST /create-user/ HTTP/1.1" 200 929
+[01/Nov/2015 23:16:13] "POST /create-user/ HTTP/1.1" 200 929
+[01/Nov/2015 23:24:04] "POST /create-user/ HTTP/1.1" 200 947
+[01/Nov/2015 23:24:06] "GET /create-user/ HTTP/1.1" 200 832
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:13:41
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:27:06] "GET /create-user/ HTTP/1.1" 200 832
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:25:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:27:36] "GET /create-user/ HTTP/1.1" 200 574
+[01/Nov/2015 23:27:58] "POST /create-user/ HTTP/1.1" 500 63952
+[01/Nov/2015 23:27:59] "GET /create-user/ HTTP/1.1" 200 574
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:27:34
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:28:24] "GET /create-user/ HTTP/1.1" 500 118131
+[01/Nov/2015 23:28:29] "GET /create-user/ HTTP/1.1" 500 118131
+[01/Nov/2015 23:28:40] "GET /create-user/ HTTP/1.1" 500 115130
+[01/Nov/2015 23:28:42] "GET /create-user/ HTTP/1.1" 500 115130
+[01/Nov/2015 23:28:50] "GET /create-user/ HTTP/1.1" 500 102339
+[01/Nov/2015 23:28:58] "GET /create-user/ HTTP/1.1" 500 131410
+[01/Nov/2015 23:29:10] "GET /create-user/ HTTP/1.1" 200 722
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:28:20
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:30:29] "GET /create-user/ HTTP/1.1" 200 446
+[01/Nov/2015 23:30:30] "GET /create-user/ HTTP/1.1" 200 446
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:30:28
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:30:39] "GET /create-user/ HTTP/1.1" 200 446
+[01/Nov/2015 23:30:39] "GET /create-user/ HTTP/1.1" 200 446
+[01/Nov/2015 23:30:40] "POST /create-user/ HTTP/1.1" 200 564
+[01/Nov/2015 23:30:49] "POST /create-user/ HTTP/1.1" 200 534
+[01/Nov/2015 23:30:54] "POST /create-user/ HTTP/1.1" 200 539
+[01/Nov/2015 23:31:00] "POST /create-user/ HTTP/1.1" 500 63291
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:30:38
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:31:18] "POST /create-user/ HTTP/1.1" 302 0
+[01/Nov/2015 23:31:18] "GET /thanks/ HTTP/1.1" 200 18
+[01/Nov/2015 23:33:40] "POST /create-user/ HTTP/1.1" 200 539
+[01/Nov/2015 23:33:49] "GET /create-user/ HTTP/1.1" 200 446
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:31:17
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[01/Nov/2015 23:41:45] "GET /create-user/ HTTP/1.1" 200 858
+[01/Nov/2015 23:42:24] "GET /create-user/ HTTP/1.1" 200 858
+[01/Nov/2015 23:42:31] "POST /create-user/ HTTP/1.1" 302 0
+[01/Nov/2015 23:42:31] "GET /thanks/ HTTP/1.1" 200 18
+[01/Nov/2015 23:42:32] "GET /create-user/ HTTP/1.1" 200 858
+[01/Nov/2015 23:42:33] "GET /create-user/ HTTP/1.1" 200 858
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:35:07
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:42:38
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:42:44
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f39e98e8d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 15
+    <<<<<<< HEAD
+     ^
+SyntaxError: invalid syntax
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:47:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f168f664d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+[02/Nov/2015 00:03:22] "GET /create-user/ HTTP/1.1" 500 102516
+[02/Nov/2015 00:03:23] "GET /create-user/ HTTP/1.1" 500 102516
+[02/Nov/2015 00:03:23] "GET /create-user/ HTTP/1.1" 500 102516
+[02/Nov/2015 00:03:24] "GET /create-user/ HTTP/1.1" 500 102516
+- Broken pipe from ('134.173.78.2', 61534)
+[02/Nov/2015 00:03:24] "GET /create-user/ HTTP/1.1" 500 102516
+[02/Nov/2015 00:03:38] "GET /create-user/ HTTP/1.1" 200 858
+[02/Nov/2015 00:04:01] "GET /create-user/ HTTP/1.1" 200 858
+[02/Nov/2015 00:05:42] "POST /create-user/ HTTP/1.1" 302 0
+[02/Nov/2015 00:05:42] "GET /thanks/ HTTP/1.1" 200 18
+[02/Nov/2015 00:05:44] "GET /create-user/ HTTP/1.1" 200 858
+[02/Nov/2015 00:05:49] "POST /create-user/ HTTP/1.1" 200 1018
+[02/Nov/2015 00:06:19] "POST /create-user/ HTTP/1.1" 200 1018
+[02/Nov/2015 00:06:21] "GET /create-user/ HTTP/1.1" 200 858
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 01, 2015 - 23:50:22
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[02/Nov/2015 00:08:15] "POST /create-user/ HTTP/1.1" 200 1183
+[02/Nov/2015 00:08:16] "GET /create-user/ HTTP/1.1" 200 858
+[02/Nov/2015 00:08:20] "POST /create-user/ HTTP/1.1" 200 1185
+[02/Nov/2015 00:08:26] "GET /create-user/ HTTP/1.1" 200 858
+[02/Nov/2015 00:08:29] "POST /create-user/ HTTP/1.1" 200 1185
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 02, 2015 - 00:06:22
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[02/Nov/2015 00:14:43] "POST /create-user/ HTTP/1.1" 200 1185
+[02/Nov/2015 00:14:45] "GET /create-user/ HTTP/1.1" 200 858
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 02, 2015 - 00:08:47
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[02/Nov/2015 00:15:25] "POST /create-user/ HTTP/1.1" 200 21
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 02, 2015 - 00:14:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[02/Nov/2015 00:15:53] "GET /create-user/ HTTP/1.1" 200 862
+[02/Nov/2015 00:16:33] "POST /create-user/ HTTP/1.1" 200 1075
+[02/Nov/2015 00:16:43] "GET /create-user/ HTTP/1.1" 200 862
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 02, 2015 - 00:15:48
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[02/Nov/2015 08:11:04] "GET /create-user/ HTTP/1.1" 200 862
+[03/Nov/2015 05:57:45] "GET /create-user/ HTTP/1.1" 200 862
+[04/Nov/2015 00:01:13] "GET / HTTP/1.0" 500 82488
+[04/Nov/2015 06:31:54] "GET /create-user HTTP/1.1" 200 862
+[04/Nov/2015 06:32:50] "GET /create-user/ HTTP/1.1" 200 862
+[04/Nov/2015 06:32:50] "GET /favicon.ico HTTP/1.1" 404 2452
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 02, 2015 - 00:16:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:36:49] "GET /login HTTP/1.1" 301 0
+[04/Nov/2015 06:36:49] "GET /login/ HTTP/1.1" 500 78958
+[04/Nov/2015 06:36:51] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:51] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:52] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:53] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:56] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:56] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:57] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:57] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:57] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:36:58] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:00] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:01] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:01] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:02] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:06] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:07] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:12] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:12] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:13] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:13] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:13] "GET /login/ HTTP/1.1" 500 79305
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:35:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:37:16] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:17] "GET /login/ HTTP/1.1" 500 79305
+[04/Nov/2015 06:37:18] "GET /login/ HTTP/1.1" 500 79305
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:37:16
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:37:36] "GET /login/ HTTP/1.1" 500 79395
+[04/Nov/2015 06:37:36] "GET /login/ HTTP/1.1" 500 79395
+[04/Nov/2015 06:37:38] "GET /login/ HTTP/1.1" 500 79395
+[04/Nov/2015 06:37:38] "GET /login/ HTTP/1.1" 500 79395
+[04/Nov/2015 06:37:39] "GET /login/ HTTP/1.1" 500 79395
+[04/Nov/2015 06:37:40] "GET /login/ HTTP/1.1" 500 79395
+[04/Nov/2015 06:37:41] "GET /login/ HTTP/1.1" 500 79395
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:37:26
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:37:41] "GET /login/ HTTP/1.1" 500 79395
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 593, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 334, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 102, in __init__
+    super(WSGIRequestHandler, self).__init__(*args, **kwargs)
+  File "/usr/lib/python2.7/SocketServer.py", line 649, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 182, in handle
+    handler.run(self.server.get_app())
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 92, in run
+----------------------------------------
+Exception happened during processing of request from ('134.173.78.2', 41305)
+[04/Nov/2015 06:37:42] "GET /login/ HTTP/1.1" 500 79405
+[04/Nov/2015 06:37:43] "GET /login/ HTTP/1.1" 500 79405
+[04/Nov/2015 06:37:44] "GET /login/ HTTP/1.1" 500 79405
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:37:42
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:38:25] "GET /login/ HTTP/1.1" 500 79405
+[04/Nov/2015 06:38:26] "GET /login/ HTTP/1.1" 500 79405
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:38:03
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:38:27] "GET /login/ HTTP/1.1" 500 75255
+[04/Nov/2015 06:38:28] "GET /login/ HTTP/1.1" 500 75255
+[04/Nov/2015 06:38:29] "GET /login/ HTTP/1.1" 500 75255
+[04/Nov/2015 06:38:36] "GET /login/ HTTP/1.1" 500 75255
+[04/Nov/2015 06:38:37] "GET /login/ HTTP/1.1" 500 75255
+[04/Nov/2015 06:38:39] "GET /login/ HTTP/1.1" 500 75255
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:38:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:38:39] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:38:40] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:38:40] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:38:41] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:38:41] "POST /login/ HTTP/1.1" 200 756
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:38:39
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:38:51] "POST /login/ HTTP/1.1" 200 756
+[04/Nov/2015 06:40:43] "GET /create-user/ HTTP/1.1" 200 862
+[04/Nov/2015 06:40:52] "POST /create-user/ HTTP/1.1" 200 1004
+[04/Nov/2015 06:43:02] "POST /create-user/ HTTP/1.1" 200 24
+[04/Nov/2015 06:43:07] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:43:08] "GET /login HTTP/1.1" 301 0
+[04/Nov/2015 06:43:08] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:43:50] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 06:43:50] "GET /accounts/profile/ HTTP/1.1" 404 2626
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:38:48
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:44:49] "GET /login/ HTTP/1.1" 500 79735
+[04/Nov/2015 06:44:50] "GET /login/ HTTP/1.1" 500 80082
+[04/Nov/2015 06:44:52] "GET /login/ HTTP/1.1" 500 80082
+[04/Nov/2015 06:44:53] "GET /login/ HTTP/1.1" 500 80082
+[04/Nov/2015 06:44:56] "GET /login/ HTTP/1.1" 500 80082
+[04/Nov/2015 06:44:58] "GET /login/ HTTP/1.1" 500 80082
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:44:05
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:45:00] "GET /login/ HTTP/1.1" 500 83911
+[04/Nov/2015 06:45:01] "GET /login/ HTTP/1.1" 500 84027
+[04/Nov/2015 06:45:33] "GET /login/ HTTP/1.1" 500 80082
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:44:59
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:45:35] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:45:38] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 06:45:38] "GET /accounts/profile/ HTTP/1.1" 404 2626
+[04/Nov/2015 06:45:39] "GET /accounts/profile/ HTTP/1.1" 404 2626
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:45:34
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:45:50
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:48:34] "GET /login/ HTTP/1.1" 200 677
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:48:31
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:50:37] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 06:50:38] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:50:42] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:51:21] "GET /login HTTP/1.1" 301 0
+[04/Nov/2015 06:51:21] "GET /login/ HTTP/1.1" 200 677
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:49:10
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:51:31
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:51:34
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:51:47] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 06:51:47] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:51:48] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:51:48] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:51:49] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:51:49] "GET /accounts/login/?next=/profile HTTP/1.1" 404 2811
+[04/Nov/2015 06:51:53] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 06:51:53] "GET /login?next=/profile HTTP/1.1" 301 0
+[04/Nov/2015 06:51:53] "GET /login/?next=/profile HTTP/1.1" 200 685
+[04/Nov/2015 06:51:59] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 06:51:59] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:24] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:25] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:25] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:26] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:27] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:27] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:28] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:28] "GET /profile HTTP/1.1" 500 95937
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:51:44
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:52:29] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:30] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:31] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:32] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:33] "GET /profile HTTP/1.1" 500 95937
+[04/Nov/2015 06:52:34] "GET /profile HTTP/1.1" 500 95937
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:52:29
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:56:09] "GET /profile HTTP/1.1" 200 21
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:52:35
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 06:56:58] "GET /profile HTTP/1.1" 200 77
+[04/Nov/2015 06:57:01] "GET /profile HTTP/1.1" 200 77
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:56:56
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 594, in process_request_thread
+    self.shutdown_request(request)
+  File "/usr/lib/python2.7/SocketServer.py", line 471, in shutdown_request
+    except socket.error:
+----------------------------------------
+Exception happened during processing of request from ('134.173.78.2', 57501)
+[04/Nov/2015 06:57:01] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 06:57:09] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 06:57:14] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 06:57:23] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 06:57:24] "GET /login?next=/profile HTTP/1.1" 301 0
+[04/Nov/2015 06:57:24] "GET /login/?next=/profile HTTP/1.1" 200 685
+[04/Nov/2015 06:57:24] "GET /favicon.ico HTTP/1.1" 404 2785
+[04/Nov/2015 06:57:25] "POST /login/ HTTP/1.1" 200 764
+[04/Nov/2015 06:57:29] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 06:57:29] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 06:57:35] "GET /logout HTTP/1.1" 404 2770
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:57:01
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:00:51] "GET /profile HTTP/1.1" 500 99922
+[04/Nov/2015 07:00:52] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:00:53] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:03] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:04] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:04] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:10] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:11] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:11] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:12] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:12] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:12] "GET /profile HTTP/1.1" 500 100163
+- Broken pipe from ('134.173.78.2', 57579)
+[04/Nov/2015 07:01:12] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:13] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:14] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:14] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:15] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:17] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:18] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:19] "GET /profile HTTP/1.1" 500 100163
+[04/Nov/2015 07:01:23] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 07:01:24] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 07:01:27] "GET /logout HTTP/1.1" 200 18
+[04/Nov/2015 07:01:30] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 07:01:30] "GET /login?next=/profile HTTP/1.1" 301 0
+[04/Nov/2015 07:01:30] "GET /login/?next=/profile HTTP/1.1" 200 685
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 06:58:48
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:02:01] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 07:02:01] "GET /profile HTTP/1.1" 200 21
+[04/Nov/2015 07:03:39] "GET /profile HTTP/1.1" 200 180
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:01:34
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:09:18] "GET /add-education HTTP/1.1" 500 100024
+[04/Nov/2015 07:09:25] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 07:09:34] "POST /add-education/ HTTP/1.1" 200 1411
+[04/Nov/2015 07:09:36] "POST /add-education/ HTTP/1.1" 200 1411
+[04/Nov/2015 07:09:38] "GET /add-education/ HTTP/1.1" 200 1116
+[04/Nov/2015 07:10:11] "POST /add-education/ HTTP/1.1" 500 74619
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:04:28
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:10:38] "GET /add-education/ HTTP/1.1" 302 0
+[04/Nov/2015 07:10:38] "GET /login?next=/add-education/ HTTP/1.1" 301 0
+[04/Nov/2015 07:10:38] "GET /login/?next=/add-education/ HTTP/1.1" 200 692
+[04/Nov/2015 07:10:38] "GET /favicon.ico HTTP/1.1" 404 3147
+[04/Nov/2015 07:10:47] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 07:10:47] "GET /add-education/ HTTP/1.1" 200 1116
+[04/Nov/2015 07:10:51] "POST /add-education/ HTTP/1.1" 200 1456
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:10:31
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:11:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:14:12
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:16:09
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:24:14] "GET /add-education/ HTTP/1.1" 200 1116
+[04/Nov/2015 07:24:14] "GET /add-education/ HTTP/1.1" 200 1116
+[04/Nov/2015 07:24:35] "POST /add-education/ HTTP/1.1" 500 78843
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:24:06
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:25:06
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:25:19
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:25:40] "POST /add-education/ HTTP/1.1" 500 136706
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:25:39
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:27:12
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:43:07] "POST /add-education/ HTTP/1.1" 500 74959
+[04/Nov/2015 07:43:22] "POST /add-education/ HTTP/1.1" 500 74959
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:28:28
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:44:39] "POST /add-education/ HTTP/1.1" 500 74959
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:44:32
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:44:46] "POST /add-education/ HTTP/1.1" 500 74959
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:44:45
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:45:40] "POST /add-education/ HTTP/1.1" 500 75061
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:44:59
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f0f43c5e230>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 143, in inner_run
+    ipv6=self.use_ipv6, threading=threading)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 201, in run
+    httpd.serve_forever()
+  File "/usr/lib/python2.7/SocketServer.py", line 235, in serve_forever
+    r, w, e = _eintr_retry(select.select, [self], [], [],
+AttributeError: 'NoneType' object has no attribute 'select'
+[04/Nov/2015 07:47:12] "GET /profile HTTP/1.1" 200 180
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:46:42
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:52:40] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:42] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:43] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:43] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:44] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:44] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:44] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:44] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:45] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:45] "GET /profile HTTP/1.1" 200 232
+[04/Nov/2015 07:52:51] "GET /logout HTTP/1.1" 200 18
+[04/Nov/2015 07:52:53] "GET / HTTP/1.1" 500 85953
+[04/Nov/2015 07:52:56] "GET /idnex HTTP/1.1" 404 3129
+[04/Nov/2015 07:52:58] "GET /index HTTP/1.1" 404 3129
+[04/Nov/2015 07:53:00] "GET /index/htm HTTP/1.1" 404 3141
+[04/Nov/2015 07:53:03] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 07:53:03] "GET /login?next=/profile HTTP/1.1" 301 0
+[04/Nov/2015 07:53:04] "GET /login/?next=/profile HTTP/1.1" 200 685
+[04/Nov/2015 07:53:10] "GET /create-user/ HTTP/1.1" 200 862
+[04/Nov/2015 07:53:27] "POST /create-user/ HTTP/1.1" 200 29
+[04/Nov/2015 07:53:34] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 07:53:34] "GET /login/?next=/profile HTTP/1.1" 200 685
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:51:09
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:58:24] "GET /create-user/ HTTP/1.1" 200 862
+[04/Nov/2015 07:58:34] "POST /create-user/ HTTP/1.1" 500 64527
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:53:44
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 07:58:52] "POST /create-user/ HTTP/1.1" 200 1055
+[04/Nov/2015 07:59:00] "POST /create-user/ HTTP/1.1" 200 197
+[04/Nov/2015 07:59:05] "GET /profile HTTP/1.1" 200 197
+[04/Nov/2015 07:59:14] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 07:59:17] "GET /logout HTTP/1.1" 200 18
+[04/Nov/2015 07:59:20] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 07:59:20] "GET /login?next=/profile HTTP/1.1" 301 0
+[04/Nov/2015 07:59:21] "GET /login/?next=/profile HTTP/1.1" 200 685
+[04/Nov/2015 07:59:24] "GET /add-education HTTP/1.1" 302 0
+[04/Nov/2015 07:59:24] "GET /login?next=/add-education HTTP/1.1" 301 0
+[04/Nov/2015 07:59:24] "GET /login/?next=/add-education HTTP/1.1" 200 691
+[04/Nov/2015 07:59:35] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 07:59:35] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 07:59:47] "POST /add-education/ HTTP/1.1" 200 235
+[04/Nov/2015 07:59:50] "POST /add-education/ HTTP/1.1" 200 273
+[04/Nov/2015 07:59:51] "POST /add-education/ HTTP/1.1" 200 311
+[04/Nov/2015 07:59:52] "POST /add-education/ HTTP/1.1" 200 349
+[04/Nov/2015 08:00:08] "POST /add-education/ HTTP/1.1" 200 235
+[04/Nov/2015 08:00:25] "GET /logout HTTP/1.1" 200 18
+[04/Nov/2015 08:00:27] "GET /logout HTTP/1.1" 200 18
+[04/Nov/2015 08:00:29] "GET /login HTTP/1.1" 301 0
+[04/Nov/2015 08:00:29] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 08:03:05] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 08:03:05] "GET /profile HTTP/1.1" 200 366
+[04/Nov/2015 08:03:07] "GET /profile HTTP/1.1" 200 366
+[04/Nov/2015 08:03:27] "GET /profile HTTP/1.1" 200 365
+[04/Nov/2015 08:03:28] "GET /profile HTTP/1.1" 200 365
+[04/Nov/2015 08:03:29] "GET /profile HTTP/1.1" 200 365
+[04/Nov/2015 08:03:29] "GET /profile HTTP/1.1" 200 365
+[04/Nov/2015 08:03:29] "GET /profile HTTP/1.1" 200 365
+[04/Nov/2015 08:03:30] "GET /profile HTTP/1.1" 200 365
+[04/Nov/2015 08:04:03] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 08:05:18] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 08:05:21] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 08:05:21] "GET /profile HTTP/1.1" 200 367
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 07:58:49
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 08:06:49
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 08:11:33
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 08:12:37
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f93fcc4ad70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 08:13:46
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f3465184d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7fe453595d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 4
+    <<<<<<< HEAD
+     ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f3d5d8c6d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 8, in <module>
+    class UserInfo(models.Model):
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 17, in UserInfo
+    user = models.OneToOne(User)
+AttributeError: 'module' object has no attribute 'OneToOne'
+Unhandled exception in thread started by <function wrapper at 0x7f666cb6bd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 4
+    <<<<<<< HEAD
+     ^
+SyntaxError: invalid syntax
+[04/Nov/2015 08:17:05] "GET /create-user HTTP/1.1" 500 109067
+[04/Nov/2015 08:17:42] "GET /create-user HTTP/1.1" 500 119013
+[04/Nov/2015 08:17:53] "GET /create-user HTTP/1.1" 200 862
+[04/Nov/2015 08:18:00] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 08:18:09] "POST /login/ HTTP/1.1" 200 779
+[04/Nov/2015 08:18:14] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 08:18:15] "GET /profile HTTP/1.1" 200 367
+[04/Nov/2015 08:18:24] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:18:53] "POST /add-education/ HTTP/1.1" 200 543
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 08:16:55
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7efe6b29cd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 4
+    <<<<<<< HEAD
+     ^
+SyntaxError: invalid syntax
+[04/Nov/2015 08:20:40] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:21:16] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:21:18] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:23:42] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:14] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:16] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:17] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:17] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:17] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:17] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 08:24:23] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:08] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:13] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:14] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:15] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:15] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:15] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:15] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:16] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 08:26:16] "GET /add-education HTTP/1.1" 200 1116
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 08:25:32
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[04/Nov/2015 17:57:17] "GET /login HTTP/1.1" 301 0
+[04/Nov/2015 17:57:18] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 17:57:34] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 17:57:36] "GET /create-user HTTP/1.1" 200 862
+[04/Nov/2015 17:58:55] "POST /create-user/ HTTP/1.1" 200 1139
+[04/Nov/2015 17:59:12] "POST /create-user/ HTTP/1.1" 200 185
+[04/Nov/2015 17:59:21] "GET /login HTTP/1.1" 301 0
+[04/Nov/2015 17:59:21] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 17:59:22] "GET /logout HTTP/1.1" 200 18
+[04/Nov/2015 17:59:28] "GET /profile HTTP/1.1" 302 0
+[04/Nov/2015 17:59:28] "GET /login?next=/profile HTTP/1.1" 301 0
+[04/Nov/2015 17:59:28] "GET /login/?next=/profile HTTP/1.1" 200 685
+[04/Nov/2015 17:59:38] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 17:59:38] "GET /profile HTTP/1.1" 200 185
+[04/Nov/2015 17:59:42] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 18:00:02] "POST /add-education/ HTTP/1.1" 200 355
+[04/Nov/2015 18:00:10] "GET /add-education/ HTTP/1.1" 200 1116
+[04/Nov/2015 18:00:33] "POST /add-education/ HTTP/1.1" 200 527
+[04/Nov/2015 19:10:59] "GET /login/ HTTP/1.1" 200 677
+[04/Nov/2015 19:11:02] "POST /login/ HTTP/1.1" 302 0
+[04/Nov/2015 19:11:02] "GET /profile HTTP/1.1" 200 543
+[04/Nov/2015 19:11:15] "GET /add-education HTTP/1.1" 200 1116
+[04/Nov/2015 19:11:49] "POST /add-education/ HTTP/1.1" 200 714
+[08/Nov/2015 13:39:44] "GET https://m.baidu.com/ HTTP/1.1" 404 1655
+[10/Nov/2015 04:49:42] "GET /login HTTP/1.1" 301 0
+[10/Nov/2015 04:49:42] "GET /login/ HTTP/1.1" 200 677
+[10/Nov/2015 04:49:42] "GET /favicon.ico HTTP/1.1" 404 3147
+[10/Nov/2015 04:49:43] "GET / HTTP/1.1" 500 86990
+[10/Nov/2015 04:49:46] "GET / HTTP/1.1" 500 87337
+[10/Nov/2015 04:49:51] "GET /login/ HTTP/1.1" 200 677
+[10/Nov/2015 04:49:55] "POST /login/ HTTP/1.1" 302 0
+[10/Nov/2015 04:49:55] "GET /profile HTTP/1.1" 200 714
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 04, 2015 - 09:27:18
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 05:00:21
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:05:31] "GET /add-education HTTP/1.1" 500 100278
+[10/Nov/2015 06:05:34] "GET /add-bp HTTP/1.1" 500 100159
+[10/Nov/2015 06:05:46] "GET /add-bp HTTP/1.1" 200 1111
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 05:19:50
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:06:04] "GET /add-bp HTTP/1.1" 500 109655
+[10/Nov/2015 06:21:28] "GET /add-bp HTTP/1.1" 500 70826
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:06:03
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:22:16] "GET /add-bp HTTP/1.1" 200 473
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:21:47
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:23:15] "GET /add-bp HTTP/1.1" 200 606
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:22:31
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:23:21] "GET /add-bp HTTP/1.1" 200 604
+[10/Nov/2015 06:23:40] "POST /add-bp/ HTTP/1.1" 500 74419
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:23:21
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:24:07] "GET /add-bp/ HTTP/1.1" 200 604
+[10/Nov/2015 06:24:11] "POST /add-bp/ HTTP/1.1" 500 74491
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:24:01
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:25:12] "GET /add-bp/ HTTP/1.1" 200 604
+[10/Nov/2015 06:25:15] "POST /add-bp/ HTTP/1.1" 200 714
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:24:44
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 06:36:24] "GET /add-bp/ HTTP/1.1" 200 604
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:32:36
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f873d891d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 58
+    if content_type == 
+                      ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f96527b1d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 58
+    if str(content_type) == 
+                           ^
+SyntaxError: invalid syntax
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:46:58
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:47:10
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:47:26
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f682811ad70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f7050a68d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f39339e8d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f33e3dddd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f34b76edd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7fcb56faad70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7fce8a378d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7fc2fe4e2d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7fbb124afd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7fb85486bd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f18e8bbcd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f97401fed70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 60
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7ff01a14fd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 61
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7fb66bf52d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 62
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f9aec939d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 62
+    else if str(self.content_type) == 'contact information':
+          ^
+SyntaxError: invalid syntax
+Unhandled exception in thread started by <function wrapper at 0x7f3010e71d70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 64
+    else if str(self.content_type) == 'skill':
+          ^
+SyntaxError: invalid syntax
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:53:14
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:53:46
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:53:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:53:57
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:54:29
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:54:33
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[10/Nov/2015 07:29:16] "GET /add-bp/ HTTP/1.1" 200 604
+[10/Nov/2015 08:25:14] "GET /add-bp HTTP/1.1" 200 604
+[10/Nov/2015 08:25:45] "GET /add-bp HTTP/1.1" 200 604
+[10/Nov/2015 10:42:29] "GET / HTTP/1.1" 500 82632
+[10/Nov/2015 10:42:31] "GET /robots.txt HTTP/1.1" 404 3314
+[10/Nov/2015 10:42:31] "GET /sitemap.xml HTTP/1.1" 404 3317
+[10/Nov/2015 21:03:48] "GET / HTTP/1.1" 500 83033
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 86, in run
+    self.finish_response()
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 128, in finish_response
+    self.write(data)
+  File "/usr/lib/python2.7/wsgiref/handlers.py", line 217, in write
+    self._write(data)
+  File "/usr/lib/python2.7/socket.py", line 324, in write
+    self.flush()
+  File "/usr/lib/python2.7/socket.py", line 303, in flush
+    self._sock.sendall(view[write_offset:write_offset+buffer_size])
+error: [Errno 110] Connection timed out
+[10/Nov/2015 21:03:48] "GET / HTTP/1.1" 500 59
+- Broken pipe from ('203.67.9.75', 60000)
+[11/Nov/2015 01:59:54] "GET /add-bp HTTP/1.1" 200 604
+[11/Nov/2015 01:59:54] "GET /favicon.ico HTTP/1.1" 404 3317
+[11/Nov/2015 02:00:05] "GET /login/ HTTP/1.1" 200 677
+[11/Nov/2015 08:11:08] "GET /add-bp HTTP/1.1" 200 604
+[11/Nov/2015 08:20:29] "GET /add-bp HTTP/1.1" 200 604
+[11/Nov/2015 08:39:30] "GET /profile HTTP/1.1" 200 714
+[11/Nov/2015 08:42:18] "GET /add-education HTTP/1.1" 200 1116
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 10, 2015 - 06:56:22
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 08:42:46] "GET /add-education HTTP/1.1" 200 1240
+[11/Nov/2015 08:43:52] "GET /profile HTTP/1.1" 200 714
+[11/Nov/2015 08:43:56] "GET /profile HTTP/1.1" 200 714
+[11/Nov/2015 08:45:33] "GET /profile HTTP/1.1" 200 714
+[11/Nov/2015 09:02:31] "GET /login/ HTTP/1.1" 200 677
+[11/Nov/2015 09:02:38] "POST /login/ HTTP/1.1" 302 0
+[11/Nov/2015 09:02:38] "GET /profile HTTP/1.1" 200 527
+[11/Nov/2015 09:03:02] "GET /login/ HTTP/1.1" 200 677
+[11/Nov/2015 09:03:05] "GET /profile HTTP/1.1" 200 527
+[11/Nov/2015 09:03:09] "GET /logout HTTP/1.1" 200 18
+[11/Nov/2015 09:03:18] "GET /login/ HTTP/1.1" 200 677
+[11/Nov/2015 09:03:26] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:03:30] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:03:33] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:03:36] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:03:39] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:03:42] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:03:45] "POST /login/ HTTP/1.1" 200 786
+[11/Nov/2015 09:04:11] "GET /create-user HTTP/1.1" 200 862
+[11/Nov/2015 09:04:47] "POST /create-user/ HTTP/1.1" 500 132335
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 08:42:44
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:05:50] "POST /create-user/ HTTP/1.1" 500 132340
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:05:29
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:05:57] "POST /create-user/ HTTP/1.1" 500 132340
+[11/Nov/2015 09:06:30] "POST /create-user/ HTTP/1.1" 200 189
+[11/Nov/2015 09:06:37] "GET /add-education HTTP/1.1" 200 1240
+[11/Nov/2015 09:06:44] "GET /add-bp HTTP/1.1" 200 499
+[11/Nov/2015 09:06:48] "POST /add-bp/ HTTP/1.1" 200 617
+[11/Nov/2015 09:06:52] "GET /add-education HTTP/1.1" 200 1240
+[11/Nov/2015 09:07:25] "POST /add-education/ HTTP/1.1" 200 372
+[11/Nov/2015 09:09:10] "GET /profile HTTP/1.1" 200 197
+[11/Nov/2015 09:09:15] "GET /add-education HTTP/1.1" 200 1240
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:05:54
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:09:58] "GET /add-education HTTP/1.1" 200 1271
+[11/Nov/2015 09:10:28] "POST /add-education/ HTTP/1.1" 200 386
+[11/Nov/2015 09:11:18] "GET /profile HTTP/1.1" 200 417
+[11/Nov/2015 09:11:25] "GET /add-education HTTP/1.1" 200 1271
+[11/Nov/2015 09:11:48] "POST /add-education/ HTTP/1.1" 200 625
+[11/Nov/2015 09:11:52] "GET /add-education/ HTTP/1.1" 200 1271
+[11/Nov/2015 09:12:48] "POST /add-education/ HTTP/1.1" 200 832
+[11/Nov/2015 09:13:01] "GET /add-education/ HTTP/1.1" 200 1271
+[11/Nov/2015 09:14:06] "POST /add-education/ HTTP/1.1" 200 1044
+[11/Nov/2015 09:16:26] "GET /profile HTTP/1.1" 500 162708
+[11/Nov/2015 09:16:39] "GET /profile HTTP/1.1" 200 837
+[11/Nov/2015 09:16:54] "GET /profile HTTP/1.1" 200 1044
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:09:56
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:18:56] "GET /view-my-resume HTTP/1.1" 500 96168
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:18:02
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:19:12] "GET /view-my-resume HTTP/1.1" 200 741
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:19:12
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:26:08] "GET /thanks.html HTTP/1.1" 200 33
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:19:40
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:35:33] "GET /add-bp HTTP/1.1" 200 685
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:26:35
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:41:16] "GET /add-bp HTTP/1.1" 200 832
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:39:24
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:41:41] "GET /add-bp HTTP/1.1" 200 832
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:41:40
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:41:48] "GET /add-bp HTTP/1.1" 200 832
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:41:46
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:41:59] "GET /add-bp HTTP/1.1" 200 554
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:41:52
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:42:06] "GET /add-bp HTTP/1.1" 200 832
+[11/Nov/2015 09:42:24] "POST /add-bp/ HTTP/1.1" 200 1044
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:42:03
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:47:01] "GET /profile HTTP/1.1" 200 1044
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:42:31
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:48:03] "GET /choose-resume-to-edit HTTP/1.1" 404 3733
+[11/Nov/2015 09:48:27] "GET /choose-resume-to-edit HTTP/1.1" 404 3733
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:47:17
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:48:30] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:48:28
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:49:47] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+[11/Nov/2015 09:49:49] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+[11/Nov/2015 09:49:50] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:49:29
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:50:02] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+[11/Nov/2015 09:50:03] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+[11/Nov/2015 09:50:04] "GET /choose-resume-to-edit HTTP/1.1" 200 847
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:49:54
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:50:37] "GET /choose-resume-to-edit HTTP/1.1" 500 166369
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:50:37
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:52:16] "GET /choose-resume-to-edit HTTP/1.1" 500 166369
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:52:12
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:52:20] "GET /choose-resume-to-edit HTTP/1.1" 500 166369
+[11/Nov/2015 09:53:47] "GET /choose-resume-to-edit HTTP/1.1" 200 208
+[11/Nov/2015 09:54:30] "GET /choose-resume-to-edit HTTP/1.1" 500 166379
+[11/Nov/2015 09:54:36] "GET /choose-resume-to-edit HTTP/1.1" 200 213
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:52:20
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 09:55:19] "GET /choose-resume-to-edit HTTP/1.1" 200 481
+[11/Nov/2015 10:12:10] "GET /choose-resume-to-edit HTTP/1.1" 200 530
+[11/Nov/2015 10:12:28] "GET /choose-resume-to-edit HTTP/1.1" 200 540
+[11/Nov/2015 10:12:51] "GET /choose-resume-to-edit HTTP/1.1" 200 538
+[11/Nov/2015 10:12:57] "GET /choose-resume-to-edit HTTP/1.1" 200 547
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 09:55:19
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:15:54] "GET /choose-resume-to-edit HTTP/1.1" 200 587
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:15:36
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:22:05] "GET /choose-resume-to-edit HTTP/1.1" 500 110838
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:16:07
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:23:11] "GET /choose-resume-to-edit HTTP/1.1" 200 587
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:23:01
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:24:43] "POST /choose-resume-to-edit/ HTTP/1.1" 500 82808
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:24:22
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:25:38] "POST /choose-resume-to-edit/ HTTP/1.1" 500 130446
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:25:33
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:25:59] "POST /choose-resume-to-edit/ HTTP/1.1" 200 723
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:25:57
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:26:09] "GET /choose-resume-to-edit/ HTTP/1.1" 200 587
+[11/Nov/2015 10:26:38] "GET /comment-resume/ HTTP/1.1" 500 70650
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:26:08
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:28:19] "GET /comment-resume/ HTTP/1.1" 500 71269
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:28:00
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:28:54] "GET /comment-resume/ HTTP/1.1" 500 93442
+[11/Nov/2015 10:29:18] "GET /comment-resume/ HTTP/1.1" 500 93442
+[11/Nov/2015 10:29:29] "GET /comment-resume/ HTTP/1.1" 500 93442
+[11/Nov/2015 10:29:53] "GET /comment-resume/ HTTP/1.1" 500 93442
+[11/Nov/2015 10:31:11] "GET /comment-resume/ HTTP/1.1" 500 71035
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:28:53
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:31:45] "GET /comment-resume/ HTTP/1.1" 302 0
+[11/Nov/2015 10:31:45] "GET /choose-resume-to-edit HTTP/1.1" 200 587
+[11/Nov/2015 10:31:47] "POST /choose-resume-to-edit/ HTTP/1.1" 200 723
+[11/Nov/2015 10:31:56] "GET /comment-resume/ HTTP/1.1" 302 0
+[11/Nov/2015 10:31:56] "GET /choose-resume-to-edit HTTP/1.1" 200 587
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:31:43
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:33:27] "POST /choose-resume-to-edit/ HTTP/1.1" 500 82808
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:32:39
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:34:24] "POST /choose-resume-to-edit/ HTTP/1.1" 200 723
+[11/Nov/2015 10:35:32] "POST /choose-resume-to-edit/ HTTP/1.1" 200 692
+[11/Nov/2015 10:37:33] "GET /choose-resume-to-edit HTTP/1.1" 200 587
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:34:23
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:40:12] "GET /choose-resume-to-edit HTTP/1.1" 200 587
+[11/Nov/2015 10:40:13] "POST /choose-resume-to-edit/ HTTP/1.1" 200 149
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:39:04
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:40:54] "POST /choose-resume-to-edit/ HTTP/1.1" 500 74522
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:40:42
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:41:03] "POST /choose-resume-to-edit/ HTTP/1.1" 200 347
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:41:02
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+[11/Nov/2015 10:49:24] "GET /choose-resume-to-edit/ HTTP/1.1" 200 587
+[11/Nov/2015 10:49:26] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[11/Nov/2015 10:49:28] "GET /choose-resume-to-edit/ HTTP/1.1" 200 587
+[11/Nov/2015 10:49:29] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[11/Nov/2015 10:49:31] "GET /choose-resume-to-edit/ HTTP/1.1" 200 587
+[11/Nov/2015 10:49:33] "POST /choose-resume-to-edit/ HTTP/1.1" 200 163
+[11/Nov/2015 10:53:04] "GET /create-user HTTP/1.1" 200 862
+[11/Nov/2015 10:53:20] "POST /create-user/ HTTP/1.1" 200 196
+[11/Nov/2015 10:53:28] "GET /add-education HTTP/1.1" 200 1271
+[11/Nov/2015 10:54:12] "POST /add-education/ HTTP/1.1" 200 406
+[11/Nov/2015 17:34:53] "GET / HTTP/1.1" 500 86608
+[11/Nov/2015 17:34:55] "GET /favicon.ico HTTP/1.1" 404 3889
+[11/Nov/2015 17:34:56] "GET /profile HTTP/1.1" 200 1044
+[11/Nov/2015 17:36:57] "GET /profile HTTP/1.1" 200 1044
+[11/Nov/2015 17:37:43] "GET /view-my-resume HTTP/1.1" 200 716
+[11/Nov/2015 17:38:00] "GET /comment-resume HTTP/1.1" 302 0
+[11/Nov/2015 17:38:00] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 17:38:05] "POST /choose-resume-to-edit/ HTTP/1.1" 200 163
+[11/Nov/2015 17:38:06] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 17:38:07] "POST /choose-resume-to-edit/ HTTP/1.1" 200 350
+[11/Nov/2015 17:38:09] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[11/Nov/2015 17:38:11] "POST /choose-resume-to-edit/ HTTP/1.1" 200 163
+[11/Nov/2015 17:38:14] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[11/Nov/2015 17:38:22] "GET /comment-resume HTTP/1.1" 302 0
+[11/Nov/2015 17:38:23] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 17:38:25] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[11/Nov/2015 17:38:27] "POST /choose-resume-to-edit/ HTTP/1.1" 200 350
+[11/Nov/2015 17:38:54] "GET /profile HTTP/1.1" 200 1044
+[11/Nov/2015 17:38:57] "GET /add-education HTTP/1.1" 200 1271
+[11/Nov/2015 18:00:09] "GET /login/ HTTP/1.1" 200 677
+[11/Nov/2015 18:00:10] "GET /favicon.ico HTTP/1.1" 404 3889
+[11/Nov/2015 18:03:58] "POST /login/ HTTP/1.1" 302 0
+[11/Nov/2015 18:03:58] "GET /profile HTTP/1.1" 200 1044
+[11/Nov/2015 18:04:12] "GET /view-my-resume HTTP/1.1" 200 716
+[11/Nov/2015 18:04:35] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 18:06:31] "POST /choose-resume-to-edit/ HTTP/1.1" 200 163
+[11/Nov/2015 18:06:34] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 18:06:37] "POST /choose-resume-to-edit/ HTTP/1.1" 200 347
+[11/Nov/2015 18:06:48] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[11/Nov/2015 18:06:56] "POST /choose-resume-to-edit/ HTTP/1.1" 200 350
+[11/Nov/2015 18:07:08] "GET /add-education HTTP/1.1" 200 1271
+[11/Nov/2015 18:07:10] "GET /add-bp HTTP/1.1" 200 832
+[11/Nov/2015 18:07:57] "GET /add-education HTTP/1.1" 200 1271
+[11/Nov/2015 18:08:27] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 18:08:34] "GET /comment-resume/ HTTP/1.1" 302 0
+[11/Nov/2015 18:08:34] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[11/Nov/2015 18:08:43] "GET /comment-resume/ HTTP/1.1" 302 0
+[11/Nov/2015 18:08:43] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+Traceback (most recent call last):
+  File "/usr/lib/python2.7/SocketServer.py", line 593, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python2.7/SocketServer.py", line 334, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 102, in __init__
+    super(WSGIRequestHandler, self).__init__(*args, **kwargs)
+  File "/usr/lib/python2.7/SocketServer.py", line 649, in __init__
+    self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 167, in handle
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python2.7/socket.py", line 476, in readline
+    data = self._sock.recv(self._rbufsize)
+error: [Errno 104] Connection reset by peer
+[13/Nov/2015 19:08:54] "GET / HTTP/1.1" 500 83219
+[13/Nov/2015 19:09:02] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00TZ\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x10\x04\x01.\x05\x00\x00\x00\x00\x81I\xa8\xc0\x00')
+[13/Nov/2015 19:09:02] 
+[16/Nov/2015 17:37:49] "GET / HTTP/1.0" 500 81914
+[16/Nov/2015 17:40:17] "GET / HTTP/1.1" 500 83101
+[17/Nov/2015 04:00:03] "GET /profile HTTP/1.1" 200 1044
+[17/Nov/2015 04:00:03] "GET /favicon.ico HTTP/1.1" 404 3889
+[17/Nov/2015 04:01:00] "GET /view-my-resume HTTP/1.1" 200 716
+[17/Nov/2015 04:01:05] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[17/Nov/2015 04:01:05] "GET /favicon.ico HTTP/1.1" 404 3889
+[17/Nov/2015 04:01:07] "GET /choose-resume-to-edit HTTP/1.1" 200 639
+[17/Nov/2015 04:01:10] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+[17/Nov/2015 04:01:11] "POST /choose-resume-to-edit/ HTTP/1.1" 200 163
+[17/Nov/2015 04:02:06] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 11, 2015 - 10:41:10
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+----------------------------------------
+Exception happened during processing of request from ('85.25.185.112', 21016)
+----------------------------------------
+[17/Nov/2015 04:11:34] "POST /choose-resume-to-edit/ HTTP/1.1" 200 718
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 17, 2015 - 04:07:23
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7f002414dd70>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 107, in inner_run
+    autoreload.raise_last_exception()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 252, in raise_last_exception
+    six.reraise(*_exception)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/cvhub/cvhub/cvhub_app/models.py", line 4
+    <<<<<<< HEAD
+     ^
+SyntaxError: invalid syntax
+[17/Nov/2015 04:21:46] "GET /choose-resume-to-edit HTTP/1.1" 404 3177
+[17/Nov/2015 04:28:34] "GET /choose-resume-to-edit HTTP/1.1" 404 3177
