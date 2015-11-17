@@ -3418,3 +3418,4 @@ Traceback (most recent call last):
 SyntaxError: invalid syntax
 [17/Nov/2015 04:21:46] "GET /choose-resume-to-edit HTTP/1.1" 404 3177
 [17/Nov/2015 04:28:34] "GET /choose-resume-to-edit HTTP/1.1" 404 3177
+[17/Nov/2015 04:47:44] "GET /manager/html HTTP/1.1" 404 3150

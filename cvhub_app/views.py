@@ -55,7 +55,19 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order')})
+
+    # get education bullet points for user
+    user = request.user.user_info
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent().owner == user:
+            if bp.get_parent() in user_bps:
+                user_bps[bp.get_parent()].append(bp)
+            else:
+                user_bps[bp.get_parent()] = [bp]
+
+    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
 
 
 def logout_view(request):
@@ -90,14 +102,59 @@ def create_education(request):
 
             education.save()
 
-            # redirect to a new URL:
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+            # get education bullet points for user
+            user = request.user.user_info
+            bps = BulletPoint.objects.all()
+            user_bps = {}
+            for bp in bps:
+                if bp.get_parent().owner == user:
+                    if bp.get_parent() in user_bps:
+                        user_bps[bp.get_parent()].append(bp)
+                    else:
+                        user_bps[bp.get_parent()] = [bp]
+
+            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EducationForm()
 
     return render(request, 'add_education.html', {'form': form})
+
+@login_required
+def edit_education(request, education_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+        form = EducationForm(request.POST)
+        print form.data
+        form2 = EducationForm(request.POST, instance=Education.objects.get(id=form.data.get('edu_id')))
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+
+            # get education bullet points for user
+            user = request.user.user_info
+            bps = BulletPoint.objects.all()
+            user_bps = {}
+            for bp in bps:
+                if bp.get_parent().owner == user:
+                    if bp.get_parent() in user_bps:
+                        user_bps[bp.get_parent()].append(bp)
+                    else:
+                        user_bps[bp.get_parent()] = [bp]
+
+            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        form = EducationForm(instance=Education.objects.get(id=education_id))
+
+    return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
 
 @login_required
 def add_bp(request):
