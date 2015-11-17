@@ -6,7 +6,7 @@ class UserInfoForm(forms.ModelForm):
 
     first_name = forms.CharField(label='First name', max_length=128)
     last_name = forms.CharField(label='Last name', max_length=128)
-    email = forms.CharField(label='Email', max_length=128)
+    email = forms.CharField(label='Email', max_length=500)
     password = forms.CharField(label='Password', max_length=128, widget=forms.PasswordInput)
 
     # validator method for email, enforcing uniqueness
@@ -32,15 +32,17 @@ class EducationForm(forms.ModelForm):
 
     class Meta:
         model = Education
-        fields = ['school', 'degree_type', 'start_date', 'end_date', 'gpa', 'location']
+        fields = ['school', 'degree_type', 'start_date', 'end_date', 'gpa', 'location', 'enabled']
 
 # Form to add bullet points to education
 class BulletPointForm(forms.Form):
 
-    bpText = forms.CharField(label='Text', max_length=1000)
     def __init__(self, user, *args, **kwargs):
         super(BulletPointForm, self).__init__(*args, **kwargs)
         self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user))
+
+    bpText = forms.CharField(label='Text', max_length=1000)
+    bpEnabled = forms.BooleanField(label='Enable this bullet point?')
 
 # retrieve all education items for the given user
 def get_education_items(user):
@@ -56,5 +58,25 @@ def get_education_items(user):
 
     return choices_list
 
+# Form to choose a user's resume to edit
+class ChooseResumeToEditForm(forms.Form):
 
+    # TODO: add a button to choose a random resume
 
+    # dynamically generate dropdown box of users
+    def __init__(self, *args, **kwargs):
+        super(ChooseResumeToEditForm, self).__init__(*args, **kwargs)
+        self.fields['user_choice'] = forms.ChoiceField(choices=get_all_users())
+
+# retrieve a list of all the users
+def get_all_users():
+
+    choices_list = []
+    all_users = UserInfo.objects.all()
+
+    # put users into choice list format, 
+    # with pk as the key and username/email as display value
+    for x in all_users:
+        choices_list.append((x.pk, x.user.username))
+
+    return choices_list

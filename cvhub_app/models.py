@@ -83,6 +83,7 @@ class DegreeType(enum.Enum):
     MS = 2
     MBA = 3
     PhD = 4
+    GED = 5 
 
 
 class Education(ResumeItem):
