@@ -9,7 +9,7 @@ Username: {{user}}
 <ul>
 {% for info in education_list %}
 <li>
-	{{info.school}} in {{info.location}}
+	{{info.school}} in {{info.location}} {% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a>{% endwith %}
 		<ul>
 			<li> Attending from {{info.start_date}} to {{info.end_date}}
 			</li>
@@ -19,6 +19,17 @@ Username: {{user}}
 			</li>
 			<li> Enabled: {{info.enabled}}
 			</li>
+			{% for key, value in bps.items %}
+			{% if key == info %}
+			{% for text in value %}
+
+			<li>
+			{{text.text}}
+			</li>
+
+			{% endfor %}
+			{% endif %}
+			{% endfor %}
 		</ul>
 </li>
 
