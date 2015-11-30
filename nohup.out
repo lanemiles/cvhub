@@ -3419,3 +3419,169 @@ SyntaxError: invalid syntax
 [17/Nov/2015 04:21:46] "GET /choose-resume-to-edit HTTP/1.1" 404 3177
 [17/Nov/2015 04:28:34] "GET /choose-resume-to-edit HTTP/1.1" 404 3177
 [17/Nov/2015 04:47:44] "GET /manager/html HTTP/1.1" 404 3150
+Unknown command: '0.0.0.0:8002'
+Type 'manage.py help' for usage.
+[18/Nov/2015 17:52:09] "GET /profile HTTP/1.1" 302 0
+[18/Nov/2015 17:52:09] "GET /login?next=/profile HTTP/1.1" 301 0
+[18/Nov/2015 17:52:09] "GET /login/?next=/profile HTTP/1.1" 200 685
+[18/Nov/2015 17:52:10] "GET /favicon.ico HTTP/1.1" 404 4292
+[18/Nov/2015 17:52:14] "POST /login/ HTTP/1.1" 302 0
+[18/Nov/2015 17:52:14] "GET /profile HTTP/1.1" 200 1355
+[18/Nov/2015 17:52:17] "GET /edit-education/16 HTTP/1.1" 200 1447
+[18/Nov/2015 17:52:22] "POST /edit-education/ HTTP/1.1" 200 1356
+[18/Nov/2015 17:52:31] "GET /add-bp/ HTTP/1.1" 200 832
+[18/Nov/2015 17:52:39] "POST /add-bp/ HTTP/1.1" 200 1212
+[18/Nov/2015 17:52:44] "GET /pro/ HTTP/1.1" 404 4271
+[18/Nov/2015 17:52:46] "GET /profile HTTP/1.1" 200 1441
+[18/Nov/2015 17:52:55] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:52:56] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:52:58] "GET /view-my-resume HTTP/1.1" 200 898
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 18, 2015 - 17:51:51
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8002/
+Quit the server with CONTROL-C.
+<QueryDict: {u'edu_id': [u'16'], u'school': [u'Stanford University'], u'end_date': [u'2019-05-01'], u'enabled': [u'on'], u'degree_type': [u'5'], u'gpa': [u'2.00'], u'location': [u'Stanford, CA'], u'csrfmiddlewaretoken': [u'XbtJ16iRKLVTXnuIm9wfqAmhabRAZBLP'], u'start_date': [u'2017-05-01']}>
+[18/Nov/2015 17:54:58] "GET /view-my-resume HTTP/1.1" 500 109845
+[18/Nov/2015 17:54:59] "GET /view-my-resume HTTP/1.1" 500 109845
+[18/Nov/2015 17:55:20] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:55:22] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:55:22] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:55:23] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:55:23] "GET /view-my-resume HTTP/1.1" 200 898
+[18/Nov/2015 17:56:18] "GET /view-my-resume HTTP/1.1" 500 157623
+[18/Nov/2015 17:56:20] "GET /view-my-resume HTTP/1.1" 500 157623
+[18/Nov/2015 17:56:38] "GET /view-my-resume HTTP/1.1" 200 1445
+[18/Nov/2015 17:56:40] "GET /view-my-resume HTTP/1.1" 200 1445
+[18/Nov/2015 17:56:50] "GET /view-my-resume HTTP/1.1" 200 1403
+[18/Nov/2015 17:57:00] "GET /profile HTTP/1.1" 200 1441
+[18/Nov/2015 17:57:06] "GET /edit-education/16 HTTP/1.1" 200 1447
+[18/Nov/2015 17:57:09] "POST /edit-education/ HTTP/1.1" 200 1441
+[18/Nov/2015 17:57:15] "GET /add-bp/ HTTP/1.1" 200 832
+[18/Nov/2015 17:57:19] "POST /add-bp/ HTTP/1.1" 200 1212
+[18/Nov/2015 17:57:23] "GET /view-my-resume HTTP/1.1" 200 1438
+[18/Nov/2015 17:57:28] "GET /view-my-resume HTTP/1.1" 200 1438
+[18/Nov/2015 17:57:29] "GET /view-my-resume HTTP/1.1" 200 1438
+[18/Nov/2015 17:57:29] "GET /view-my-resume HTTP/1.1" 200 1438
+[18/Nov/2015 17:57:30] "GET /edit-education/16 HTTP/1.1" 200 1447
+[18/Nov/2015 17:57:35] "GET /add-bp HTTP/1.1" 200 832
+[18/Nov/2015 17:57:40] "POST /add-bp/ HTTP/1.1" 200 927
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 18, 2015 - 17:53:48
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8002/
+Quit the server with CONTROL-C.
+<QueryDict: {u'edu_id': [u'16'], u'school': [u'Stanford University'], u'end_date': [u'2019-05-01'], u'enabled': [u'on'], u'degree_type': [u'3'], u'gpa': [u'2.00'], u'location': [u'Stanford, CA'], u'csrfmiddlewaretoken': [u'XbtJ16iRKLVTXnuIm9wfqAmhabRAZBLP'], u'start_date': [u'2017-05-01']}>
+[18/Nov/2015 17:58:47] "POST /add-bp/ HTTP/1.1" 200 1212
+[18/Nov/2015 17:58:52] "GET /profile HTTP/1.1" 200 1510
+[18/Nov/2015 17:58:55] "GET /edit-education/16 HTTP/1.1" 200 1447
+[18/Nov/2015 17:58:58] "GET /view-my-resume HTTP/1.1" 200 1438
+[18/Nov/2015 17:59:05] "GET /edit-education/16 HTTP/1.1" 200 1447
+[18/Nov/2015 17:59:07] "GET /add-bp HTTP/1.1" 200 832
+[18/Nov/2015 17:59:14] "POST /add-bp/ HTTP/1.1" 200 1212
+[18/Nov/2015 17:59:17] "GET /profile HTTP/1.1" 200 1583
+[18/Nov/2015 17:59:17] "GET /profile HTTP/1.1" 200 1583
+[18/Nov/2015 17:59:20] "GET /view-my-resume HTTP/1.1" 200 1438
+[18/Nov/2015 18:01:26] "GET / HTTP/1.1" 500 87026
+[18/Nov/2015 18:01:27] "GET /favicon.ico HTTP/1.1" 404 4292
+[18/Nov/2015 18:01:30] "GET /profile HTTP/1.1" 200 1583
+[18/Nov/2015 18:01:38] "GET /edit-education/14 HTTP/1.1" 200 1443
+[18/Nov/2015 18:01:43] "POST /edit-education/ HTTP/1.1" 200 1583
+[18/Nov/2015 18:01:48] "GET /add-bp HTTP/1.1" 200 832
+[18/Nov/2015 18:01:56] "POST /add-bp/ HTTP/1.1" 200 1212
+[18/Nov/2015 18:01:59] "GET /profile HTTP/1.1" 200 1626
+[18/Nov/2015 18:02:05] "GET /add-bp HTTP/1.1" 200 832
+[18/Nov/2015 18:02:13] "POST /add-bp/ HTTP/1.1" 200 1212
+[18/Nov/2015 18:02:16] "GET /profile HTTP/1.1" 200 1674
+[18/Nov/2015 18:02:24] "GET /view-my-resume HTTP/1.1" 200 1521
+[18/Nov/2015 18:02:42] "GET /profile HTTP/1.1" 200 1674
+[18/Nov/2015 18:44:11] "GET /profile HTTP/1.1" 302 0
+[18/Nov/2015 18:44:11] "GET /login?next=/profile HTTP/1.1" 301 0
+[18/Nov/2015 18:44:11] "GET /login/?next=/profile HTTP/1.1" 200 685
+[18/Nov/2015 18:44:11] "GET /favicon.ico HTTP/1.1" 404 4292
+[19/Nov/2015 18:45:50] "GET /profile HTTP/1.1" 302 0
+[19/Nov/2015 18:45:50] "GET /login?next=/profile HTTP/1.1" 301 0
+[19/Nov/2015 18:45:50] "GET /login/?next=/profile HTTP/1.1" 200 685
+[19/Nov/2015 18:45:50] "GET /favicon.ico HTTP/1.1" 404 4292
+[19/Nov/2015 21:24:43] "GET /profile HTTP/1.1" 302 0
+[19/Nov/2015 21:24:43] "GET /login?next=/profile HTTP/1.1" 301 0
+[19/Nov/2015 21:24:43] "GET /login/?next=/profile HTTP/1.1" 200 685
+[19/Nov/2015 21:24:44] "GET /favicon.ico HTTP/1.1" 404 4292
+[21/Nov/2015 02:14:08] "GET /favicon.ico HTTP/1.1" 404 4292
+[21/Nov/2015 19:41:30] "GET /profile HTTP/1.1" 302 0
+[21/Nov/2015 19:41:30] "GET /login?next=/profile HTTP/1.1" 301 0
+[21/Nov/2015 19:41:30] "GET /login/?next=/profile HTTP/1.1" 200 685
+[22/Nov/2015 04:17:38] "GET /favicon.ico HTTP/1.1" 404 4292
+[22/Nov/2015 21:17:26] "GET /profile HTTP/1.1" 302 0
+[22/Nov/2015 21:17:26] "GET /login?next=/profile HTTP/1.1" 301 0
+[22/Nov/2015 21:17:26] "GET /login/?next=/profile HTTP/1.1" 200 685
+[22/Nov/2015 21:17:27] "GET /favicon.ico HTTP/1.1" 404 4292
+[23/Nov/2015 18:13:54] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00')
+[23/Nov/2015 18:13:54] "    c                           " 400 -
+[23/Nov/2015 18:45:07] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00')
+[23/Nov/2015 18:45:07] "    c                           " 400 -
+[23/Nov/2015 19:08:08] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00')
+[23/Nov/2015 19:08:08] "    c                           " 400 -
+[23/Nov/2015 19:22:39] code 400, message Bad HTTP/0.9 request type ('\x00\x00\x00')
+[23/Nov/2015 19:22:39] "    c                           " 400 -
+[23/Nov/2015 21:13:24] "GET /login?next=/profile HTTP/1.1" 301 0
+[23/Nov/2015 21:13:24] "GET /login/?next=/profile HTTP/1.1" 200 685
+[24/Nov/2015 13:14:08] "GET /profile HTTP/1.1" 302 0
+[24/Nov/2015 13:14:08] "GET /login?next=/profile HTTP/1.1" 301 0
+[24/Nov/2015 13:14:08] "GET /login/?next=/profile HTTP/1.1" 200 685
+[24/Nov/2015 13:14:08] "GET /favicon.ico HTTP/1.1" 404 4292
+[25/Nov/2015 13:59:27] "GET https://m.baidu.com/ HTTP/1.1" 404 1655
+[25/Nov/2015 16:35:25] "GET /profile HTTP/1.1" 302 0
+[25/Nov/2015 16:35:25] "GET /login?next=/profile HTTP/1.1" 301 0
+[25/Nov/2015 16:35:25] "GET /login/?next=/profile HTTP/1.1" 200 685
+[25/Nov/2015 16:35:26] "GET /favicon.ico HTTP/1.1" 404 4292
+[25/Nov/2015 20:03:36] "GET /edit-education/16 HTTP/1.1" 302 0
+[25/Nov/2015 20:03:37] "GET /login?next=/edit-education/16 HTTP/1.1" 301 0
+[25/Nov/2015 20:03:37] "GET /login/?next=/edit-education/16 HTTP/1.1" 200 695
+[25/Nov/2015 23:42:11] "GET /view-my-resume HTTP/1.1" 302 0
+[25/Nov/2015 23:42:11] "GET /login?next=/view-my-resume HTTP/1.1" 301 0
+[25/Nov/2015 23:42:11] "GET /login/?next=/view-my-resume HTTP/1.1" 200 692
+[26/Nov/2015 19:27:28] "GET / HTTP/1.1" 500 75137
+[26/Nov/2015 19:27:28] "GET /robots.txt HTTP/1.1" 404 3144
+[26/Nov/2015 19:27:28] "GET /sitemap.xml HTTP/1.1" 404 3147
+[27/Nov/2015 04:28:37] "GET /profile HTTP/1.1" 302 0
+[27/Nov/2015 04:28:37] "GET /view-my-resume HTTP/1.1" 302 0
+[27/Nov/2015 04:28:38] "GET /login?next=/profile HTTP/1.1" 301 0
+[27/Nov/2015 04:28:38] "GET /login?next=/view-my-resume HTTP/1.1" 301 0
+[27/Nov/2015 04:28:38] "GET /login/?next=/profile HTTP/1.1" 200 685
+[27/Nov/2015 04:28:38] "GET /login/?next=/view-my-resume HTTP/1.1" 200 692
+[27/Nov/2015 04:28:38] "GET /favicon.ico HTTP/1.1" 404 4292
+[27/Nov/2015 04:28:38] "GET /favicon.ico HTTP/1.1" 404 4292
+[27/Nov/2015 17:57:26] "GET /stats HTTP/1.1" 404 3124
+[27/Nov/2015 17:57:26] "GET / HTTP/1.0" 500 74527
+- Broken pipe from ('117.39.6.178', 63167)
+[27/Nov/2015 17:57:26] "GET / HTTP/1.1" 500 75633
+[27/Nov/2015 17:57:34] code 400, message Bad request syntax ('QCCON')
+[27/Nov/2015 17:57:34] "QCCON" 400 -
+[29/Nov/2015 00:59:56] "GET /profile HTTP/1.1" 302 0
+[29/Nov/2015 00:59:56] "GET /view-my-resume HTTP/1.1" 302 0
+[29/Nov/2015 00:59:56] "GET /login?next=/profile HTTP/1.1" 301 0
+[29/Nov/2015 00:59:56] "GET /login?next=/view-my-resume HTTP/1.1" 301 0
+[29/Nov/2015 00:59:56] "GET /login/?next=/profile HTTP/1.1" 200 685
+[29/Nov/2015 00:59:56] "GET /login/?next=/view-my-resume HTTP/1.1" 200 692
+[29/Nov/2015 00:59:56] "GET /favicon.ico HTTP/1.1" 404 4292
+[29/Nov/2015 00:59:56] "GET /favicon.ico HTTP/1.1" 404 4292
+[29/Nov/2015 13:19:02] "GET /profile HTTP/1.1" 302 0
+[29/Nov/2015 13:19:02] "GET /view-my-resume HTTP/1.1" 302 0
+[29/Nov/2015 13:19:02] "GET /login?next=/profile HTTP/1.1" 301 0
+[29/Nov/2015 13:19:02] "GET /login?next=/view-my-resume HTTP/1.1" 301 0
+[29/Nov/2015 13:19:03] "GET /login/?next=/profile HTTP/1.1" 200 685
+[29/Nov/2015 13:19:03] "GET /login/?next=/view-my-resume HTTP/1.1" 200 692
+[29/Nov/2015 13:19:03] "GET /favicon.ico HTTP/1.1" 404 4292
+[30/Nov/2015 03:17:18] "GET /view-my-resume HTTP/1.1" 302 0
+[30/Nov/2015 03:17:18] "GET /profile HTTP/1.1" 302 0
+[30/Nov/2015 03:17:18] "GET /login?next=/view-my-resume HTTP/1.1" 301 0
+[30/Nov/2015 03:17:18] "GET /login?next=/profile HTTP/1.1" 301 0
+[30/Nov/2015 03:17:18] "GET /login/?next=/profile HTTP/1.1" 200 685
+[30/Nov/2015 03:17:18] "GET /login/?next=/view-my-resume HTTP/1.1" 200 692
+[30/Nov/2015 03:17:18] "GET /favicon.ico HTTP/1.1" 404 4292
+[30/Nov/2015 03:17:18] "GET /favicon.ico HTTP/1.1" 404 4292

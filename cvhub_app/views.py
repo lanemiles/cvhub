@@ -208,7 +208,18 @@ def add_bp(request):
 # View my resume (displays all enabled items)
 @login_required
 def view_my_resume(request):
-    return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True)})
+    # get education bullet points for user
+    user = request.user.user_info
+    bps = BulletPoint.objects.filter(enabled=True)
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent().owner == user:
+            if bp.get_parent() in user_bps:
+                user_bps[bp.get_parent()].append(bp)
+            else:
+                user_bps[bp.get_parent()] = [bp]
+
+    return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True), 'bps': user_bps})
 
 @login_required
 def choose_resume_to_edit(request):

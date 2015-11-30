@@ -42,7 +42,7 @@ class BulletPointForm(forms.Form):
         self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user))
 
     bpText = forms.CharField(label='Text', max_length=1000)
-    bpEnabled = forms.BooleanField(label='Enable this bullet point?')
+    bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
 
 # retrieve all education items for the given user
 def get_education_items(user):
