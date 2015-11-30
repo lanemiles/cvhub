@@ -3585,3 +3585,35 @@ Quit the server with CONTROL-C.
 [30/Nov/2015 03:17:18] "GET /login/?next=/view-my-resume HTTP/1.1" 200 692
 [30/Nov/2015 03:17:18] "GET /favicon.ico HTTP/1.1" 404 4292
 [30/Nov/2015 03:17:18] "GET /favicon.ico HTTP/1.1" 404 4292
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 18, 2015 - 17:58:46
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8002/
+Quit the server with CONTROL-C.
+<QueryDict: {u'edu_id': [u'14'], u'school': [u'Pomona College'], u'end_date': [u'2017-05-01'], u'enabled': [u'on'], u'degree_type': [u'0'], u'gpa': [u'3.5'], u'location': [u'Claremont, CA'], u'csrfmiddlewaretoken': [u'11HxpAtSt1aTTxJq13vQB8mA64kp5fGC'], u'start_date': [u'2013-08-01']}>
+[30/Nov/2015 04:11:11] "GET /profile HTTP/1.1" 200 1674
+[30/Nov/2015 04:11:12] "GET /favicon.ico HTTP/1.1" 404 4292
+[30/Nov/2015 04:11:54] "GET /view-my-resume HTTP/1.1" 200 1521
+Performing system checks...
+
+System check identified no issues (0 silenced).
+November 30, 2015 - 04:11:00
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8002/
+Quit the server with CONTROL-C.
+Unhandled exception in thread started by <function wrapper at 0x7fc8a79e7320>
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/autoreload.py", line 229, in wrapper
+    fn(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/commands/runserver.py", line 143, in inner_run
+    ipv6=self.use_ipv6, threading=threading)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/servers/basehttp.py", line 201, in run
+    httpd.serve_forever()
+  File "/usr/lib/python2.7/SocketServer.py", line 235, in serve_forever
+    r, w, e = _eintr_retry(select.select, [self], [], [],
+AttributeError: 'NoneType' object has no attribute 'select'
+[30/Nov/2015 04:17:01] "GET /view-my-resume HTTP/1.1" 500 174063
+[30/Nov/2015 04:17:17] "GET /view-my-resume HTTP/1.1" 200 4930
+[30/Nov/2015 04:17:18] "GET /resume_template_css.css HTTP/1.1" 404 4328
