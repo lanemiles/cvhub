@@ -17,9 +17,7 @@ class UserInfo(models.Model):
     resume_url = models.CharField(max_length=512, null=True)
     display_name = models.CharField(max_length=128)
     phone_number = models.CharField(max_length=10)
-    display_email = models.CharField(max_length=128)
     website = models.CharField(max_length=128)
-    location = models.CharField(max_length=128)
 
     def __unicode__(self):
         return '{} - {}'.format(self.user.username, self.dob)
@@ -71,13 +69,14 @@ class BulletPoint(CommentableResumeItem):
         elif str(self.content_type) == 'award':
             return Award.objects.get(id=self.object_id)
 
+
 class DegreeType(enum.Enum):
     BA = 0
     BS = 1
     MS = 2
     MBA = 3
     PhD = 4
-    GED = 5 
+    GED = 5
 
 
 class Education(ResumeItem):

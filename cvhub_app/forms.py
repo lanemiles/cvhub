@@ -6,6 +6,8 @@ class UserInfoForm(forms.ModelForm):
 
     first_name = forms.CharField(label='First name', max_length=128)
     last_name = forms.CharField(label='Last name', max_length=128)
+    website = forms.CharField(label='Website', max_length=500)
+    phone_number = forms.CharField(label='Phone Number', max_length=500)
     email = forms.CharField(label='Email', max_length=500)
     password = forms.CharField(label='Password', max_length=128, widget=forms.PasswordInput)
 
@@ -25,7 +27,7 @@ class UserInfoForm(forms.ModelForm):
 
     class Meta:
         model = UserInfo
-        fields = ['first_name', 'last_name', 'email', 'password', 'dob']
+        fields = ['first_name', 'last_name', 'email', 'password', 'dob', 'website', 'phone_number']
 
 
 class EducationForm(forms.ModelForm):
