@@ -7,6 +7,99 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<link rel='stylesheet' href='{% static "cvhub_app/resume_template_css.css" %}' />
 
+		<style type='text/css'>
+			#container {
+			font-family: Garamond;
+			border: 1px solid black;
+			width: 800px;
+			margin: 0 auto;
+			}
+
+			span:hover {
+				color: blue;
+			}
+
+			.title {
+				text-align: center;
+				margin-bottom: 0px;
+			}
+
+			.contact {
+				text-align: center;
+
+			}
+
+			.summary {
+				text-align: center;
+				width: 700px;
+				margin: 0 auto;
+				margin-bottom: 15px;
+				
+			}
+
+			.section {
+				width: 700px;
+				margin: 0 auto;
+			}
+
+			.section_name {
+				font-size: 11pt;
+			}
+
+			.section_hr {
+				border: 0px;
+				height: 1px;
+				background: black;
+				margin-top: -1px;
+			}
+
+			.row_right {
+				float: right;
+				max-width: 250px;
+
+			}
+
+			.row_left {
+				float: left;
+			}
+
+			.row_clear {
+				clear: both;
+				height: 1px;
+			}
+
+
+			.item {
+				margin-bottom: 15px;
+				margin-left: 10px;
+			}
+
+			.bullet_point_ul {
+				margin-top: 3px;
+				margin-bottom: 0px;
+			}
+
+			.bullet_point_li {
+				margin-top: 2px;
+				margin-left: -10px;
+			}
+
+
+			.small_caps {
+				font-variant: small-caps;
+			}
+
+
+			.bold {
+				font-weight: bold;
+			}
+
+			.italics {
+				font-style: italic;
+			}
+
+		</style>
+
 	</head>
 
 	<body>
@@ -57,6 +150,191 @@
 						{% else %}
 						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
 						{% endif %}
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+			{% if skill_category_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>SKILLS:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in skill_category_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.category}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+			{% if experience_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>EXPERIENCE:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in experience_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.employer}}</span>, <span class='item_sub_title'>{{info.title}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						{% if info.current %}
+						<span class='item_date italics'>{{info.start_date}} - Present</span>
+						{% else %}
+						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
+						{% endif %}
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+			{% if award_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>EXPERIENCE:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in award_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.name}}</span>, <span class='item_sub_title'>{{info.issuer}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						
+						<span class='item_date italics'>{{info.date_awarded}}</span>
 						</span>
 
 					</div>

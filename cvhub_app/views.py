@@ -9,6 +9,12 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
+import os
+from django.conf import settings
+from django.template import Context
+from django.template.loader import get_template
+import datetime
+from xhtml2pdf import pisa
 
 
 def index(request):
@@ -88,14 +94,10 @@ def create_education(request):
             # get user
             user_info = request.user.user_info
 
-            education_info = form.cleaned_data
-
-            gpa = education_info.pop('gpa', None)
-            
             # create education
-            education = Education(**education_info)
+            education = Education(**form.cleaned_data)
             education.owner = user_info
-            
+
             # set order to last item
             order_max = Education.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
             if order_max is not None:
@@ -105,36 +107,6 @@ def create_education(request):
 
             education.save()
 
-            # create the GPA bullet point for it
-            bp = BulletPoint()
-
-            # get text of bullet point from form
-            bp.text = "GPA: " + str(gpa)
-
-            # enable/disable the bullet point
-            bp.enabled = True
-
-            # return all bullet points for that education, and find the next number for an ordering
-            bp.order = 1
-
-            # set bullet point's foreign keys to a given education choice
-            education_type = ContentType.objects.get_for_model(Education)
-            bp.content_type = education_type
-            bp.object_id = education.pk
-            
-            # add bullet point to db
-            bp.save()
-
-            # get education bullet points for user
-            user = request.user.user_info
-            bps = BulletPoint.objects.all()
-            user_bps = {}
-            for bp in bps:
-                if bp.get_parent().owner == user:
-                    if bp.get_parent() in user_bps:
-                        user_bps[bp.get_parent()].append(bp)
-                    else:
-                        user_bps[bp.get_parent()] = [bp]
             return render(request, 'profile.html', user_profile_dict(request))
 
 
@@ -144,6 +116,14 @@ def create_education(request):
         form = EducationForm()
 
     return render(request, 'add_education.html', {'form': form})
+
+
+@login_required
+def remove_education(request, education_id=None):
+
+    Education.objects.get(id=education_id).delete()
+
+    return render(request, 'profile.html', user_profile_dict(request))
 
 @login_required
 def edit_education(request, education_id=None):
@@ -224,32 +204,7 @@ def view_my_resume(request):
 
     # we pass in user and user info
 
-    # get education objects
-    try:
-
-        education_list = Education.objects.filter(owner=request.user.user_info, enabled=True)
-
-    except ObjectDoesNotExist:
-
-        education_list = {}
-
-    # then we need to get education items
-    # get education bullet points for user
-    user = request.user.user_info
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent().owner == user:
-            if bp.get_parent() in user_bps:
-                user_bps[bp.get_parent()].append(bp)
-            else:
-                user_bps[bp.get_parent()] = [bp]
-
-
-    return render(request, 'view-my-resume.html', {'user': request.user, \
-        'user_info': request.user.user_info, \
-        'education_list': education_list, \
-        'bps': user_bps})
+    return render(request, 'view-my-resume.html', user_profile_dict(request, True))
 
 @login_required
 def choose_resume_to_edit(request):
@@ -443,7 +398,7 @@ def create_skill_category(request):
 
 # method called whenever we want to render profile.html
 # gets user's info, education, skills, experience, and awards
-def user_profile_dict(request):
+def user_profile_dict(request, only_enabled=False):
     # get experience bullet points for user
     user_info = request.user.user_info
     bps = BulletPoint.objects.all()
@@ -455,12 +410,45 @@ def user_profile_dict(request):
             else:
                 user_bps[bp.get_parent()] = [bp]
 
-    # create dictionary
-    dictionary = {'user': request.user, \
-                    'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
-                    'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
-                    'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
-                    'award_list': Award.objects.filter(owner=user_info).order_by('order'), \
-                    'bps': user_bps}
+    if only_enabled:
+
+        # create dictionary
+        dictionary = {'user': request.user, \
+                        'user_info': request.user.user_info, \
+                        'education_list': Education.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'skill_category_list': Skill.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'experience_list': Experience.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'award_list': Award.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'bps': user_bps}
+
+    else:
+
+        # create dictionary
+        dictionary = {'user': request.user, \
+                        'user_info': request.user.user_info, \
+                        'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
+                        'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
+                        'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
+                        'award_list': Award.objects.filter(owner=user_info).order_by('order'), \
+                        'bps': user_bps}
 
     return dictionary
+
+
+
+
+
+def generate_pdf(request):
+    data = {}
+
+    template = get_template('view-my-resume.html')
+    html  = template.render(Context(user_profile_dict(request)))
+
+    file = open('test.pdf', "w+b")
+    pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
+            encoding='utf-8')
+
+    file.seek(0)
+    pdf = file.read()
+    file.close()            
+    return HttpResponse(pdf, 'application/pdf')
