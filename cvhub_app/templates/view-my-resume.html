@@ -1,0 +1,103 @@
+{% load staticfiles %}
+
+<html>
+
+	<head>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel='stylesheet' href='{% static "cvhub_app/resume_template_css.css" %}' />
+
+	</head>
+
+	<body>
+
+		<div id='container'>
+
+
+			<h1 class='title small_caps'>{{user_info.display_name}}</h1>
+
+			<div class='contact'>
+				<span class='email'>{{user.email}}</span>
+				<span class='divider_pipe'> | </span>
+				<span class='phone'>{{user_info.phone_number}}</span>
+				<span class='divider_pipe'> | </span>
+				<span class='url'>{{user_info.website}}</span>
+			</div>
+
+			<!-- <div class='summary'>
+				<span class='summary_text italics'>
+					A fast-learning and self-motivated student leader passionate about computer science, politics, and their intersections
+				</span>
+			</div> -->
+
+			{% if education_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>EDUCATION:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in education_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.school}}</span>, <span class='item_sub_title'>{{info.location}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						{% if info.in_progress %}
+						<span class='item_date italics'>Expected Graduation: {{info.end_date}}</span>
+						{% else %}
+						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
+						{% endif %}
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+
+
+		</div>
+
+	</body>
+
+</html>

@@ -1,0 +1,29 @@
+<h1> View Resume for Commenting </h1>
+
+{{user}}
+
+<h2>Contact Info</h2>
+<h2>Education</h2>
+
+<ul>
+{% for info in education_list %}
+{% if info.enabled == True %}
+<li>
+	{{info.school}} in {{info.location}}
+		<ul>
+			<li> Attending from {{info.start_date}} to {{info.end_date}}
+			</li>
+			<li> GPA: {{info.gpa}}
+			</li>
+			<li> Degree: {{info.get_degree_type_display}}
+			</li>
+		</ul>
+</li>
+
+{% endif %}
+{% endfor %}
+</ul>
+
+<h2>Skills</h2>
+<h2>Experience</h2>
+<h2>Awards</h2>

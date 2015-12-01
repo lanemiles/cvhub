@@ -15,6 +15,9 @@ class UserInfo(models.Model):
     points = models.IntegerField(default=0)
     user = models.OneToOneField(User, related_name='user_info')
     resume_url = models.CharField(max_length=512, null=True)
+    display_name = models.CharField(max_length=128)
+    phone_number = models.CharField(max_length=10)
+    website = models.CharField(max_length=128)
 
     def __unicode__(self):
         return '{} - {}'.format(self.user.username, self.dob)
@@ -59,22 +62,12 @@ class BulletPoint(CommentableResumeItem):
 
         if str(self.content_type) == 'education':
             return Education.objects.get(id=self.object_id)
-        elif str(self.content_type) == 'contact information':
-            return ContactInformation.objects.get(id=self.object_id)
         elif str(self.content_type) == 'skill':
             return Skill.objects.get(id=self.object_id)
         elif str(self.content_type) == 'experience':
             return Experience.objects.get(id=self.object_id)
         elif str(self.content_type) == 'award':
             return Award.objects.get(id=self.object_id)
-
-class ContactInformation(ResumeItem):
-
-    display_name = models.CharField(max_length=128)
-    phone_number = models.CharField(max_length=10)
-    display_email = models.CharField(max_length=128)
-    website = models.CharField(max_length=128)
-    location = models.CharField(max_length=128)
 
 
 class DegreeType(enum.Enum):
@@ -83,7 +76,7 @@ class DegreeType(enum.Enum):
     MS = 2
     MBA = 3
     PhD = 4
-    GED = 5 
+    GED = 5
 
 
 class Education(ResumeItem):
@@ -171,8 +164,6 @@ class Comment(models.Model):
 
         if str(self.content_type) == 'education':
             return Education.objects.get(id=self.object_id)
-        elif str(self.content_type) == 'contact information':
-            return ContactInformation.objects.get(id=self.object_id)
         elif str(self.content_type) == 'skill':
             return Skill.objects.get(id=self.object_id)
         elif str(self.content_type) == 'experience':
