@@ -7,6 +7,7 @@ from django.contrib.auth import logout
 from django.db.models import Max
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+from django.core import serializers
 
 
 def index(request):
@@ -186,52 +187,62 @@ def choose_resume_to_edit(request):
 
     return render(request, 'choose_resume_to_edit.html', {'form': form})
 
-# TODO fix
-# add comments to a resume
+# GET: send information about the relevant commentable resume item 
+#   to the popup box
+# POST: add comments to a resume from the popup box
 @login_required
 def comment_resume(request):
 
     # did we arrive at comment_resume legally, after choosing a user or getting a random resume?
-    try:
-        user
-
-    except NameError:
-
+    # try:
+    #    user
+    # except NameError:
         # no resume chosen - redirect to resume choosing page
-        print "NameError"
-        return redirect('choose_resume_to_edit')   
+        # print "NameError"
+        # return redirect('choose_resume_to_edit')   
+    #else:
+
+    # TODO: change depending on what form looks like
+    if request.method == 'POST':
+        form = CommentResumeForm(request.POST, user=user)
+        if form.is_valid():
+
+            # if the user tried to submit a comment
+            if request.POST.get("submit_comment"):
+
+                # new comment with comment and suggestion text from form
+                new_comment = Comment()
+                new_comment.text = form.cleaned_data.get('comment_text')
+                new_comment.suggestion = form.cleaned_data.get('suggestion_text')
+                new_comment.author = request.user.user_info
+
+                # set comment's foreign key to the selected item
+                education_type = ContentType.objects.get_for_model(Education)
+                new_comment.content_type = education_type
+                education_item = form.cleaned_data.get('commentable_resume_item')
+                new_comment.object_id = education_item
+            
+                # put new comment into the database
+                new_comment.save()
+                # return redirect('thanks.html') 
+                # TODO: return success code here?  
+
+    # GET method
+    # given a div id, return information in JSON format 
     else:
 
-        print "valid user info"
-        if request.method == 'POST':
-            form = CommentResumeForm(request.POST, user=user)
-            if form.is_valid():
+        # get commentable resume item
+        item_id = request.GET.get('id')
 
-                # if the user tried to submit a comment
-                if request.POST.get("submit_comment"):
+        # return all pending comments (status is 0) related to that resume item
+        item_comments = Comments.objects.filter(object_id=item_id, status=CommentStatus.PENDING)
 
-                    print "POST submit_comment"
+        # turn QuerySet into JSON
+        json_comments = serializers.serialize("json", item_comments)
 
-                    # new comment with comment and suggestion text from form
-                    new_comment = Comment()
-                    new_comment.text = form.cleaned_data.get('comment_text')
-                    new_comment.suggestion = form.cleaned_data.get('suggestion_text')
-                    new_comment.author = request.user.user_info
+        # return JSON of existing comments for the given item
+        return HttpResponse(json_comments)
 
-                    # set comment's foreign key to the selected item
-                    education_type = ContentType.objects.get_for_model(Education)
-                    new_comment.content_type = education_type
-                    education_item = form.cleaned_data.get('commentable_resume_item')
-                    new_comment.object_id = education_item
-                
-                    # put new comment into the database
-                    new_comment.save()
-                    print "tried to put into db"
-                    return redirect('thanks.html')   
 
-        # GET method
-        else:
-            form = CommentResumeForm(user=user)
-
-        # valid resume chosen - can edit
-        return render(request, 'comment_resume.html', {'user': user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user) })
+    # valid resume chosen - can edit
+    # return render(request, 'comment_resume.html', {'user': user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user) })
