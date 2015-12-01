@@ -7,6 +7,7 @@ from django.contrib.auth import logout
 from django.db.models import Max
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index(request):
@@ -21,16 +22,19 @@ def create_user(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            
+
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'), form.cleaned_data.get('email'), form.cleaned_data.get('password'))
-            user.first_name = form.cleaned_data.get('first_name') 
+            user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
 
             # make the UserInfo object
             user_wrapper = UserInfo()
             user_wrapper.dob = form.cleaned_data.get('dob')
+            user_wrapper.phone_number = form.cleaned_data.get('phone_number')
+            user_wrapper.display_name = user.first_name + " " + user.last_name
+            user_wrapper.website = form.cleaned_data.get('website')
             user_wrapper.user = user
             user_wrapper.save()
 
@@ -208,9 +212,22 @@ def add_bp(request):
 # View my resume (displays all enabled items)
 @login_required
 def view_my_resume(request):
+
+    # we pass in user and user info
+
+    # get education objects
+    try:
+
+        education_list = Education.objects.filter(owner=request.user.user_info, enabled=True)
+
+    except ObjectDoesNotExist:
+
+        education_list = {}
+
+    # then we need to get education items
     # get education bullet points for user
     user = request.user.user_info
-    bps = BulletPoint.objects.filter(enabled=True)
+    bps = BulletPoint.objects.all()
     user_bps = {}
     for bp in bps:
         if bp.get_parent().owner == user:
@@ -219,7 +236,8 @@ def view_my_resume(request):
             else:
                 user_bps[bp.get_parent()] = [bp]
 
-    return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True), 'bps': user_bps})
+
+    return render(request, 'view-my-resume.html', {'user': request.user, 'user_info': request.user.user_info, 'education_list': education_list, 'bps': user_bps})
 
 @login_required
 def choose_resume_to_edit(request):
