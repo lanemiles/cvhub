@@ -7,7 +7,11 @@ from django.contrib.auth import logout
 from django.db.models import Max
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
+<<<<<<< HEAD
 from django.core import serializers
+=======
+from django.core.exceptions import ObjectDoesNotExist
+>>>>>>> 5ecb2ed491b05bbb077af9bd4f9179aea95c449c
 
 
 def index(request):
@@ -22,16 +26,19 @@ def create_user(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            
+
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'), form.cleaned_data.get('email'), form.cleaned_data.get('password'))
-            user.first_name = form.cleaned_data.get('first_name') 
+            user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
 
             # make the UserInfo object
             user_wrapper = UserInfo()
             user_wrapper.dob = form.cleaned_data.get('dob')
+            user_wrapper.phone_number = form.cleaned_data.get('phone_number')
+            user_wrapper.display_name = user.first_name + " " + user.last_name
+            user_wrapper.website = form.cleaned_data.get('website')
             user_wrapper.user = user
             user_wrapper.save()
 
@@ -56,7 +63,19 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order')})
+
+    # get education bullet points for user
+    user = request.user.user_info
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent().owner == user:
+            if bp.get_parent() in user_bps:
+                user_bps[bp.get_parent()].append(bp)
+            else:
+                user_bps[bp.get_parent()] = [bp]
+
+    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
 
 
 def logout_view(request):
@@ -91,14 +110,59 @@ def create_education(request):
 
             education.save()
 
-            # redirect to a new URL:
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+            # get education bullet points for user
+            user = request.user.user_info
+            bps = BulletPoint.objects.all()
+            user_bps = {}
+            for bp in bps:
+                if bp.get_parent().owner == user:
+                    if bp.get_parent() in user_bps:
+                        user_bps[bp.get_parent()].append(bp)
+                    else:
+                        user_bps[bp.get_parent()] = [bp]
+
+            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
 
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EducationForm()
 
     return render(request, 'add_education.html', {'form': form})
+
+@login_required
+def edit_education(request, education_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+        form = EducationForm(request.POST)
+        print form.data
+        form2 = EducationForm(request.POST, instance=Education.objects.get(id=form.data.get('edu_id')))
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+
+            # get education bullet points for user
+            user = request.user.user_info
+            bps = BulletPoint.objects.all()
+            user_bps = {}
+            for bp in bps:
+                if bp.get_parent().owner == user:
+                    if bp.get_parent() in user_bps:
+                        user_bps[bp.get_parent()].append(bp)
+                    else:
+                        user_bps[bp.get_parent()] = [bp]
+
+            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        form = EducationForm(instance=Education.objects.get(id=education_id))
+
+    return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
 
 @login_required
 def add_bp(request):
@@ -152,10 +216,33 @@ def add_bp(request):
 # View my resume (displays all enabled items)
 @login_required
 def view_my_resume(request):
-    return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True)})
 
-# User chooses a resume (or requests a random resume) to comment
-# TODO: change this to choose_resume_to_comment, not choose
+    # we pass in user and user info
+
+    # get education objects
+    try:
+
+        education_list = Education.objects.filter(owner=request.user.user_info, enabled=True)
+
+    except ObjectDoesNotExist:
+
+        education_list = {}
+
+    # then we need to get education items
+    # get education bullet points for user
+    user = request.user.user_info
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent().owner == user:
+            if bp.get_parent() in user_bps:
+                user_bps[bp.get_parent()].append(bp)
+            else:
+                user_bps[bp.get_parent()] = [bp]
+
+
+    return render(request, 'view-my-resume.html', {'user': request.user, 'user_info': request.user.user_info, 'education_list': education_list, 'bps': user_bps})
+
 @login_required
 def choose_resume_to_edit(request):
     # if this is a POST request we need to process the form data
@@ -178,8 +265,7 @@ def choose_resume_to_edit(request):
                 user_info = UserInfo.objects.order_by('?').first()
 
             # redirect to the page for commenting resumes
-            print "rendering comment_resume"
-            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user_info.user) })
+            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -187,13 +273,18 @@ def choose_resume_to_edit(request):
 
     return render(request, 'choose_resume_to_edit.html', {'form': form})
 
+<<<<<<< HEAD
 # GET: send information about the relevant commentable resume item 
 #   to the popup box
 # POST: add comments to a resume from the popup box
+=======
+# add comments to a resume
+>>>>>>> 5ecb2ed491b05bbb077af9bd4f9179aea95c449c
 @login_required
 def comment_resume(request):
 
     # did we arrive at comment_resume legally, after choosing a user or getting a random resume?
+<<<<<<< HEAD
     # try:
     #    user
     # except NameError:
@@ -246,3 +337,15 @@ def comment_resume(request):
 
     # valid resume chosen - can edit
     # return render(request, 'comment_resume.html', {'user': user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user) })
+=======
+    try:
+        user_info
+    except NameError:
+
+        # no resume chosen - redirect to resume choosing page
+        return redirect('choose_resume_to_edit')   
+    else:
+
+        # valid resume chosen - can edit
+        return render(request, 'comment_resume.html', {'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+>>>>>>> 5ecb2ed491b05bbb077af9bd4f9179aea95c449c

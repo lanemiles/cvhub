@@ -6,6 +6,8 @@ class UserInfoForm(forms.ModelForm):
 
     first_name = forms.CharField(label='First name', max_length=128)
     last_name = forms.CharField(label='Last name', max_length=128)
+    website = forms.CharField(label='Website', max_length=500)
+    phone_number = forms.CharField(label='Phone Number', max_length=500)
     email = forms.CharField(label='Email', max_length=500)
     password = forms.CharField(label='Password', max_length=128, widget=forms.PasswordInput)
 
@@ -25,7 +27,7 @@ class UserInfoForm(forms.ModelForm):
 
     class Meta:
         model = UserInfo
-        fields = ['first_name', 'last_name', 'email', 'password', 'dob']
+        fields = ['first_name', 'last_name', 'email', 'password', 'dob', 'website', 'phone_number']
 
 
 class EducationForm(forms.ModelForm):
@@ -42,10 +44,9 @@ class BulletPointForm(forms.Form):
         self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user))
 
     bpText = forms.CharField(label='Text', max_length=1000)
-    bpEnabled = forms.BooleanField(label='Enable this bullet point?')
+    bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
 
 # retrieve all education items for the given user
-# format is a choice list (for a choice field)
 def get_education_items(user):
     user_info = user.user_info
 
@@ -59,23 +60,10 @@ def get_education_items(user):
 
     return choices_list
 
-# retrieve all enabled education items for the given user
-# format is a choice list (for a choice field)
-def get_enabled_education_items(user):
-    user_info = user.user_info
-
-    choices_list = []
-    education_objects = Education.objects.filter(owner=user_info, enabled=True)
-
-    # put education into choice list format, 
-    # with pk as the key and school name as the string to display
-    for x in education_objects:
-        choices_list.append((x.pk, x.school))
-
-    return choices_list
-
 # Form to choose a user's resume to edit
 class ChooseResumeToEditForm(forms.Form):
+
+    # TODO: add a button to choose a random resume
 
     # dynamically generate dropdown box of users
     def __init__(self, *args, **kwargs):
@@ -94,24 +82,3 @@ def get_all_users():
         choices_list.append((x.pk, x.user.username))
 
     return choices_list
-
-# Form to submit a comment
-class CommentResumeForm(forms.Form):
-
-    # dynamically generate commentable resume items
-    def __init__(self, *args, **kwargs):
-
-        # get argument: user
-        user = kwargs.pop('user');
-        super(CommentResumeForm, self).__init__(*args, **kwargs)
-
-        # dynamically populate dropdown list of commentable resume items
-        # TODO: bullet points
-        self.fields['commentable_resume_item'] = forms.ChoiceField(choices=get_enabled_education_items(user))
-
-    # write comment here
-    comment_text = forms.CharField(label='Your Comment', max_length=1000)
-
-    # write suggestion here
-    suggestion_text = forms.CharField(label='Your Optional Suggestion (will replace text)', max_length=1000)
-
