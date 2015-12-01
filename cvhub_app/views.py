@@ -105,12 +105,10 @@ def create_education(request):
 
             education.save()
 
-<<<<<<< HEAD
             # create the GPA bullet point for it
             bp = BulletPoint()
 
             # get text of bullet point from form
-            print gpa
             bp.text = "GPA: " + str(gpa)
 
             # enable/disable the bullet point
@@ -137,9 +135,8 @@ def create_education(request):
                         user_bps[bp.get_parent()].append(bp)
                     else:
                         user_bps[bp.get_parent()] = [bp]
-=======
             return render(request, 'profile.html', user_profile_dict(request))
->>>>>>> christina-branch
+
 
 
     # if a GET (or any other method) we'll create a blank form
