@@ -439,16 +439,4 @@ def user_profile_dict(request, only_enabled=False):
 
 
 def generate_pdf(request):
-    data = {}
-
-    template = get_template('view-my-resume.html')
-    html  = template.render(Context(user_profile_dict(request)))
-
-    file = open('test.pdf', "w+b")
-    pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest=file,
-            encoding='utf-8')
-
-    file.seek(0)
-    pdf = file.read()
-    file.close()            
-    return HttpResponse(pdf, 'application/pdf')
+    return render(request, 'resume-pdf.html', user_profile_dict(request, True))
