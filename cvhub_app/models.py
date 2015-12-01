@@ -70,23 +70,12 @@ class BulletPoint(CommentableResumeItem):
             return Award.objects.get(id=self.object_id)
 
 
-class DegreeType(enum.Enum):
-    BA = 0
-    BS = 1
-    MS = 2
-    MBA = 3
-    PhD = 4
-    GED = 5
-
-
 class Education(ResumeItem):
 
     school = models.CharField(max_length=128)
-    degree_type = enum.EnumField(DegreeType)
     start_date = models.DateField()
     end_date = models.DateField()
     in_progress = models.BooleanField()
-    gpa = models.DecimalField(max_digits=3, decimal_places=2)
     location = models.CharField(max_length=128)
 
     def save(self, *args, **kwargs):
@@ -145,7 +134,7 @@ class Comment(models.Model):
     text = models.CharField(max_length=1024)
     suggestion = models.CharField(max_length=1024, null=True, blank=True)
     is_suggestion = models.BooleanField()
-    status = enum.EnumField(DegreeType, default=CommentStatus.PENDING)
+    status = enum.EnumField(CommentStatus, default=CommentStatus.PENDING)
 
     class Meta:
         unique_together = ("author", "content_type", "object_id", "timestamp")
@@ -181,7 +170,7 @@ class Vote(models.Model):
 
     user = models.ForeignKey(UserInfo)
     comment = models.ForeignKey(Comment)
-    vote_type = enum.EnumField(DegreeType)
+    vote_type = enum.EnumField(VoteType)
 
     class Meta:
         unique_together = ("user", "comment")
