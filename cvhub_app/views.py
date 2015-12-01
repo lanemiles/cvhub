@@ -92,9 +92,13 @@ def create_education(request):
 
             # get user
             user_info = request.user.user_info
+
+            education_info = form.cleaned_data
+
+            gpa = education_info.pop('gpa', None)
             
             # create education
-            education = Education(**form.cleaned_data)
+            education = Education(**education_info)
             education.owner = user_info
             
             # set order to last item
@@ -105,6 +109,27 @@ def create_education(request):
                 education.order = 1
 
             education.save()
+
+            # create the GPA bullet point for it
+            bp = BulletPoint()
+
+            # get text of bullet point from form
+            print gpa
+            bp.text = "GPA: " + str(gpa)
+
+            # enable/disable the bullet point
+            bp.enabled = True
+
+            # return all bullet points for that education, and find the next number for an ordering
+            bp.order = 1
+
+            # set bullet point's foreign keys to a given education choice
+            education_type = ContentType.objects.get_for_model(Education)
+            bp.content_type = education_type
+            bp.object_id = education.pk
+            
+            # add bullet point to db
+            bp.save()
 
             # get education bullet points for user
             user = request.user.user_info
