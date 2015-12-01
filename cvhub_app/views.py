@@ -7,11 +7,8 @@ from django.contrib.auth import logout
 from django.db.models import Max
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
-<<<<<<< HEAD
 from django.core import serializers
-=======
 from django.core.exceptions import ObjectDoesNotExist
->>>>>>> 5ecb2ed491b05bbb077af9bd4f9179aea95c449c
 
 
 def index(request):
@@ -28,7 +25,8 @@ def create_user(request):
             # process the data in form.cleaned_data as required
 
             # make the User object
-            user = User.objects.create_user(form.cleaned_data.get('email'), form.cleaned_data.get('email'), form.cleaned_data.get('password'))
+            user = User.objects.create_user(form.cleaned_data.get('email'), \
+                form.cleaned_data.get('email'), form.cleaned_data.get('password'))
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
@@ -47,7 +45,11 @@ def create_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user.user_info)})
+                    return render(request, 'profile.html', {'user': request.user, \
+                        'education_list': Education.objects.filter(owner=user.user_info), \
+                        'experience_list': Experience.objects.filter(owner=request.user.user_info).order_by('order'),\
+                        'award_list': Award.objects.filter(owner=request.user.user_info).order_by('order'), \
+})
 
 
     # if a GET (or any other method) we'll create a blank form
@@ -64,18 +66,7 @@ def thanks(request):
 @login_required
 def user_profile(request):
 
-    # get education bullet points for user
-    user = request.user.user_info
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent().owner == user:
-            if bp.get_parent() in user_bps:
-                user_bps[bp.get_parent()].append(bp)
-            else:
-                user_bps[bp.get_parent()] = [bp]
-
-    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
+    return render(request, 'profile.html', user_profile_dict(request))
 
 
 def logout_view(request):
@@ -110,18 +101,8 @@ def create_education(request):
 
             education.save()
 
-            # get education bullet points for user
-            user = request.user.user_info
-            bps = BulletPoint.objects.all()
-            user_bps = {}
-            for bp in bps:
-                if bp.get_parent().owner == user:
-                    if bp.get_parent() in user_bps:
-                        user_bps[bp.get_parent()].append(bp)
-                    else:
-                        user_bps[bp.get_parent()] = [bp]
+            return render(request, 'profile.html', user_profile_dict(request))
 
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -144,18 +125,8 @@ def edit_education(request, education_id=None):
 
             form2.save()
 
-            # get education bullet points for user
-            user = request.user.user_info
-            bps = BulletPoint.objects.all()
-            user_bps = {}
-            for bp in bps:
-                if bp.get_parent().owner == user:
-                    if bp.get_parent() in user_bps:
-                        user_bps[bp.get_parent()].append(bp)
-                    else:
-                        user_bps[bp.get_parent()] = [bp]
+            return render(request, 'profile.html', user_profile_dict(request))
 
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -204,8 +175,7 @@ def add_bp(request):
             # add bullet point to db
             bp.save()
 
-            # redirect to a new URL:
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info)})
+            return render(request, 'profile.html', user_profile_dict(request))
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -241,7 +211,10 @@ def view_my_resume(request):
                 user_bps[bp.get_parent()] = [bp]
 
 
-    return render(request, 'view-my-resume.html', {'user': request.user, 'user_info': request.user.user_info, 'education_list': education_list, 'bps': user_bps})
+    return render(request, 'view-my-resume.html', {'user': request.user, \
+        'user_info': request.user.user_info, \
+        'education_list': education_list, \
+        'bps': user_bps})
 
 @login_required
 def choose_resume_to_edit(request):
@@ -265,7 +238,8 @@ def choose_resume_to_edit(request):
                 user_info = UserInfo.objects.order_by('?').first()
 
             # redirect to the page for commenting resumes
-            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+            return render(request, 'comment_resume.html', {'user': user_info.user.username, \
+                'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -273,25 +247,13 @@ def choose_resume_to_edit(request):
 
     return render(request, 'choose_resume_to_edit.html', {'form': form})
 
-<<<<<<< HEAD
 # GET: send information about the relevant commentable resume item 
 #   to the popup box
 # POST: add comments to a resume from the popup box
-=======
 # add comments to a resume
->>>>>>> 5ecb2ed491b05bbb077af9bd4f9179aea95c449c
 @login_required
 def comment_resume(request):
 
-    # did we arrive at comment_resume legally, after choosing a user or getting a random resume?
-<<<<<<< HEAD
-    # try:
-    #    user
-    # except NameError:
-        # no resume chosen - redirect to resume choosing page
-        # print "NameError"
-        # return redirect('choose_resume_to_edit')   
-    #else:
 
     # TODO: change depending on what form looks like
     if request.method == 'POST':
@@ -335,17 +297,135 @@ def comment_resume(request):
         return HttpResponse(json_comments)
 
 
-    # valid resume chosen - can edit
-    # return render(request, 'comment_resume.html', {'user': user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user) })
-=======
-    try:
-        user_info
-    except NameError:
+# Add your experience
+@login_required
+def create_experience(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ExperienceForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
 
-        # no resume chosen - redirect to resume choosing page
-        return redirect('choose_resume_to_edit')   
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            exp = Experience(**form.cleaned_data)
+            exp.owner = user_info
+            
+            # set order to last item
+            order_max = Experience.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                exp.order = order_max + 1
+            else:
+                exp.order = 1
+
+            exp.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
+    # if a GET (or any other method) we'll create a blank form
     else:
+        form = ExperienceForm()
 
-        # valid resume chosen - can edit
-        return render(request, 'comment_resume.html', {'education_list': Education.objects.filter(owner=user_info).order_by('order')})
->>>>>>> 5ecb2ed491b05bbb077af9bd4f9179aea95c449c
+    return render(request, 'add_experience.html', {'form': form})
+
+# Add an award
+@login_required
+def create_award(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AwardForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            award = Award(**form.cleaned_data)
+            award.owner = user_info
+            
+            # set order to last item
+            order_max = Award.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                award.order = order_max + 1
+            else:
+                award.order = 1
+
+            award.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AwardForm()
+
+    return render(request, 'add_award.html', {'form': form})
+
+# Add a skill category
+# (User should list individual skills as bullet points under a category)
+@login_required
+def create_skill_category(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SkillCategoryForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            skill_cat = Skill(**form.cleaned_data)
+            skill_cat.owner = user_info
+            
+            # set order to last item
+            order_max = Skill.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                skill_cat.order = order_max + 1
+            else:
+                skill_cat.order = 1
+
+            skill_cat.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SkillCategoryForm()
+
+    return render(request, 'add-skill-category.html', {'form': form})
+
+# method called whenever we want to render profile.html
+# gets user's info, education, skills, experience, and awards
+def user_profile_dict(request):
+    # get experience bullet points for user
+    user_info = request.user.user_info
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent().owner == user_info:
+            if bp.get_parent() in user_bps:
+                user_bps[bp.get_parent()].append(bp)
+            else:
+                user_bps[bp.get_parent()] = [bp]
+
+    # create dictionary
+    dictionary = {'user': request.user, \
+                    'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
+                    'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
+                    'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
+                    'award_list': Award.objects.filter(owner=user_info).order_by('order'), \
+                    'bps': user_bps}
+
+    return dictionary
