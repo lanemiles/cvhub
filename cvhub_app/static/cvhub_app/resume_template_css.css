@@ -1,8 +1,13 @@
 #container {
 	font-family: Garamond;
-	border: 1px solid black;
 	width: 800px;
 	margin: 0 auto;
+}
+
+#container_pdf {
+	font-family: Garamond;
+	margin: 0 auto;
+	background: gray;
 }
 
 span:hover {
@@ -86,4 +91,8 @@ span:hover {
 
 .italics {
 	font-style: italic;
+}
+
+#pdf {
+	text-align: center;
 }
