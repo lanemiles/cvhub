@@ -84,3 +84,24 @@ def get_all_users():
         choices_list.append((x.pk, x.user.username))
 
     return choices_list
+
+# add experience
+class ExperienceForm(forms.ModelForm):
+
+    class Meta:
+        model = Experience
+        fields = ['title', 'employer', 'start_date', 'end_date', 'current', 'location', 'enabled']
+
+# add an award
+class AwardForm(forms.ModelForm):
+
+    class Meta:
+        model = Award
+        fields = ['name', 'issuer', 'date_awarded', 'enabled']
+
+# add a skill category
+class SkillCategoryForm(forms.ModelForm):
+
+    class Meta:
+        model = Skill
+        fields = ['category', 'enabled']
