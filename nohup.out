@@ -3791,3 +3791,16 @@ December 01, 2015 - 09:42:05
 Django version 1.8.5, using settings 'cvhub.settings'
 Starting development server at http://0.0.0.0:8001/
 Quit the server with CONTROL-C.
+[01/Dec/2015 09:47:18] "GET /profile HTTP/1.1" 302 0
+[01/Dec/2015 09:47:18] "GET /login?next=/profile HTTP/1.1" 301 0
+[01/Dec/2015 09:47:18] "GET /login/?next=/profile HTTP/1.1" 200 685
+[01/Dec/2015 09:47:34] "GET /add-skill-category HTTP/1.1" 200 465
+[01/Dec/2015 09:47:45] "GET /add-award HTTP/1.1" 200 712
+[01/Dec/2015 09:47:55] "GET /add-skill-category HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /profile HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /add-experience HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /add-award HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /login?next=/add-skill-category HTTP/1.1" 301 0
+[01/Dec/2015 09:47:55] "GET /login?next=/profile HTTP/1.1" 301 0
+[01/Dec/2015 09:47:55] "GET /login?next=/add-experience HTTP/1.1" 301 0
+[01/Dec/2015 09:47:55] "GET /login?next=/add-award HTTP/1.1" 301 0
