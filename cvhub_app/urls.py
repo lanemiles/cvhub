@@ -16,6 +16,10 @@ urlpatterns = [
     url(r'^add-bp', views.add_bp, name='add_bp'),
     url(r'^view-my-resume', views.view_my_resume, name='view_my_resume'),
     url(r'^choose-resume-to-edit', views.choose_resume_to_edit, name='choose_resume_to_edit'),
-    url(r'^comment-resume', views.comment_resume, name='comment_resume')
+    url(r'^comment-resume', views.comment_resume, name='comment_resume'),
+    url(r'^add-experience', views.create_experience, name='create_experience'),
+    url(r'^add-award', views.create_award, name='create_award'),
+    url(r'^add-skill-category', views.create_skill_category, name='create_skill_category')
+
 
 ]

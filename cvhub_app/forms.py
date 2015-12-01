@@ -32,9 +32,11 @@ class UserInfoForm(forms.ModelForm):
 
 class EducationForm(forms.ModelForm):
 
+    gpa = forms.DecimalField(label='GPA', max_digits=3, max_value=4.00, min_value=0.00)
+
     class Meta:
         model = Education
-        fields = ['school', 'degree_type', 'start_date', 'end_date', 'gpa', 'location', 'enabled']
+        fields = ['school', 'start_date', 'end_date', 'location', 'enabled']
 
 # Form to add bullet points to education
 class BulletPointForm(forms.Form):
