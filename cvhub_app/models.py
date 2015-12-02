@@ -69,7 +69,6 @@ class BulletPoint(CommentableResumeItem):
         elif str(self.content_type) == 'award':
             return Award.objects.get(id=self.object_id)
 
-
 class Education(ResumeItem):
 
     school = models.CharField(max_length=128)
