@@ -213,7 +213,7 @@ def add_education_bp(request, item_id=None):
             # add bullet point to db
             bp.save()
 
-            return redirect('/profile')
+            return render(request, 'profile.html', user_profile_dict(request))
 
     # if a GET (or any other method) we'll create a blank form
     else:
