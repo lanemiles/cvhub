@@ -8,6 +8,13 @@ from django.db.models import Max
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
+import os
+from django.conf import settings
+from django.template import Context
+from django.template.loader import get_template
+import datetime
+from xhtml2pdf import pisa
 
 
 def index(request):
@@ -22,16 +29,20 @@ def create_user(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            
+
             # make the User object
-            user = User.objects.create_user(form.cleaned_data.get('email'), form.cleaned_data.get('email'), form.cleaned_data.get('password'))
-            user.first_name = form.cleaned_data.get('first_name') 
+            user = User.objects.create_user(form.cleaned_data.get('email'), \
+                form.cleaned_data.get('email'), form.cleaned_data.get('password'))
+            user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
 
             # make the UserInfo object
             user_wrapper = UserInfo()
             user_wrapper.dob = form.cleaned_data.get('dob')
+            user_wrapper.phone_number = form.cleaned_data.get('phone_number')
+            user_wrapper.display_name = user.first_name + " " + user.last_name
+            user_wrapper.website = form.cleaned_data.get('website')
             user_wrapper.user = user
             user_wrapper.save()
 
@@ -40,7 +51,11 @@ def create_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user.user_info)})
+                    return render(request, 'profile.html', {'user': request.user, \
+                        'education_list': Education.objects.filter(owner=user.user_info), \
+                        'experience_list': Experience.objects.filter(owner=request.user.user_info).order_by('order'),\
+                        'award_list': Award.objects.filter(owner=request.user.user_info).order_by('order'), \
+})
 
 
     # if a GET (or any other method) we'll create a blank form
@@ -56,7 +71,8 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order')})
+
+    return render(request, 'profile.html', user_profile_dict(request))
 
 
 def logout_view(request):
@@ -77,11 +93,11 @@ def create_education(request):
 
             # get user
             user_info = request.user.user_info
-            
+
             # create education
             education = Education(**form.cleaned_data)
             education.owner = user_info
-            
+
             # set order to last item
             order_max = Education.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
             if order_max is not None:
@@ -91,8 +107,9 @@ def create_education(request):
 
             education.save()
 
-            # redirect to a new URL:
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -100,10 +117,65 @@ def create_education(request):
 
     return render(request, 'add_education.html', {'form': form})
 
+
 @login_required
-def add_bp(request):
+def remove_education(request, education_id=None):
+
+    Education.objects.get(id=education_id).delete()
+
+    return render(request, 'profile.html', user_profile_dict(request))
+
+@login_required
+def edit_education(request, education_id=None):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+
+        form = EducationForm(request.POST)
+        form2 = EducationForm(request.POST, instance=Education.objects.get(id=form.data.get('edu_id')))
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+            bp_dict = {}
+
+            # pull out the BP stuff
+            for thing in request.POST:
+
+                if 'BP' in thing:
+                    bp_dict[thing] = request.POST.get(thing)
+
+            for (id_str, text) in bp_dict.items():
+                bp_id = id_str[2:]
+                bp = BulletPoint.objects.get(id=int(bp_id))
+                bp.text = text
+                bp.save()
+
+        return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        # get associated bullet points
+        bps = BulletPoint.objects.all()
+        education_bps = []
+        for bp in bps:
+            if bp.get_parent() == Education.objects.get(id=education_id):
+                education_bps.append(bp)
+
+        form = EducationBulletPointForm(education_bps, instance=Education.objects.get(id=education_id))
+        form.add_bp_fields(education_bps)
+
+    return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
+
+@login_required
+def add_education_bp(request, item_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
         # create a form instance and populate it with data from the request:
         form = BulletPointForm(request.user, request.POST)
         # check whether it's valid:
@@ -113,7 +185,7 @@ def add_bp(request):
 
             # get user
             user_info = request.user.user_info
-            
+
             # get text of bullet point from form
             bpText = form.cleaned_data.get('bpText')
             bp.text = bpText
@@ -123,7 +195,8 @@ def add_bp(request):
             bp.enabled = bpEnabled
 
             # get education from the drop down list in form
-            education = form.cleaned_data.get('education_item_choices')
+            education = request.POST.get('edu_id')
+            print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
             order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
@@ -136,26 +209,28 @@ def add_bp(request):
             education_type = ContentType.objects.get_for_model(Education)
             bp.content_type = education_type
             bp.object_id = education
-            
+
             # add bullet point to db
             bp.save()
 
-            # redirect to a new URL:
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=user_info)})
+            return redirect('/profile')
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = BulletPointForm(request.user)
 
-    return render(request, 'add_bp.html', {'form': form})
+        form = BulletPointForm(request.user)
+        form.set_education(request.user, item_id)
+
+        return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
 
 # View my resume (displays all enabled items)
 @login_required
 def view_my_resume(request):
-    return render(request, 'view-my-resume.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info, enabled=True)})
 
-# User chooses a resume (or requests a random resume) to comment
-# TODO: change this to choose_resume_to_comment, not choose
+    # we pass in user and user info
+
+    return render(request, 'view-my-resume.html', user_profile_dict(request, True))
+
 @login_required
 def choose_resume_to_edit(request):
     # if this is a POST request we need to process the form data
@@ -178,8 +253,8 @@ def choose_resume_to_edit(request):
                 user_info = UserInfo.objects.order_by('?').first()
 
             # redirect to the page for commenting resumes
-            print "rendering comment_resume"
-            return render(request, 'comment_resume.html', {'user': user_info.user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user_info.user) })
+            return render(request, 'comment_resume.html', {'user': user_info.user.username, \
+                'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -190,17 +265,10 @@ def choose_resume_to_edit(request):
 # GET: send information about the relevant commentable resume item 
 #   to the popup box
 # POST: add comments to a resume from the popup box
+# add comments to a resume
 @login_required
 def comment_resume(request):
 
-    # did we arrive at comment_resume legally, after choosing a user or getting a random resume?
-    # try:
-    #    user
-    # except NameError:
-        # no resume chosen - redirect to resume choosing page
-        # print "NameError"
-        # return redirect('choose_resume_to_edit')   
-    #else:
 
     # TODO: change depending on what form looks like
     if request.method == 'POST':
@@ -244,5 +312,156 @@ def comment_resume(request):
         return HttpResponse(json_comments)
 
 
-    # valid resume chosen - can edit
-    # return render(request, 'comment_resume.html', {'user': user.username, 'education_list': Education.objects.filter(owner=user_info).order_by('order'), 'form' : CommentResumeForm(user = user) })
+# Add your experience
+@login_required
+def create_experience(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ExperienceForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            exp = Experience(**form.cleaned_data)
+            exp.owner = user_info
+            
+            # set order to last item
+            order_max = Experience.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                exp.order = order_max + 1
+            else:
+                exp.order = 1
+
+            exp.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ExperienceForm()
+
+    return render(request, 'add_experience.html', {'form': form})
+
+# Add an award
+@login_required
+def create_award(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AwardForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            award = Award(**form.cleaned_data)
+            award.owner = user_info
+            
+            # set order to last item
+            order_max = Award.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                award.order = order_max + 1
+            else:
+                award.order = 1
+
+            award.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AwardForm()
+
+    return render(request, 'add_award.html', {'form': form})
+
+# Add a skill category
+# (User should list individual skills as bullet points under a category)
+@login_required
+def create_skill_category(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SkillCategoryForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            skill_cat = Skill(**form.cleaned_data)
+            skill_cat.owner = user_info
+            
+            # set order to last item
+            order_max = Skill.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                skill_cat.order = order_max + 1
+            else:
+                skill_cat.order = 1
+
+            skill_cat.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SkillCategoryForm()
+
+    return render(request, 'add-skill-category.html', {'form': form})
+
+# method called whenever we want to render profile.html
+# gets user's info, education, skills, experience, and awards
+def user_profile_dict(request, only_enabled=False):
+    # get experience bullet points for user
+    user_info = request.user.user_info
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent().owner == user_info:
+            if bp.get_parent() in user_bps:
+                user_bps[bp.get_parent()].append(bp)
+            else:
+                user_bps[bp.get_parent()] = [bp]
+
+    if only_enabled:
+
+        # create dictionary
+        dictionary = {'user': request.user, \
+                        'user_info': request.user.user_info, \
+                        'education_list': Education.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'skill_category_list': Skill.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'experience_list': Experience.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'award_list': Award.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'bps': user_bps}
+
+    else:
+
+        # create dictionary
+        dictionary = {'user': request.user, \
+                        'user_info': request.user.user_info, \
+                        'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
+                        'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
+                        'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
+                        'award_list': Award.objects.filter(owner=user_info).order_by('order'), \
+                        'bps': user_bps}
+
+    return dictionary
+
+
+
+
+
+def generate_pdf(request):
+    return render(request, 'resume-pdf.html', user_profile_dict(request, True))

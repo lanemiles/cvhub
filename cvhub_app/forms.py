@@ -6,6 +6,8 @@ class UserInfoForm(forms.ModelForm):
 
     first_name = forms.CharField(label='First name', max_length=128)
     last_name = forms.CharField(label='Last name', max_length=128)
+    website = forms.CharField(label='Website', max_length=500)
+    phone_number = forms.CharField(label='Phone Number', max_length=500)
     email = forms.CharField(label='Email', max_length=500)
     password = forms.CharField(label='Password', max_length=128, widget=forms.PasswordInput)
 
@@ -25,47 +27,50 @@ class UserInfoForm(forms.ModelForm):
 
     class Meta:
         model = UserInfo
-        fields = ['first_name', 'last_name', 'email', 'password', 'dob']
+        fields = ['first_name', 'last_name', 'email', 'password', 'dob', 'website', 'phone_number']
 
 
 class EducationForm(forms.ModelForm):
 
     class Meta:
         model = Education
-        fields = ['school', 'degree_type', 'start_date', 'end_date', 'gpa', 'location', 'enabled']
+        fields = ['school', 'start_date', 'end_date', 'location', 'enabled']
+
+
+class EducationBulletPointForm(EducationForm):
+
+    class Meta(EducationForm.Meta):
+        fields = EducationForm.Meta.fields
+
+    def __init__(self, user, *args, **kwargs):
+        super(EducationBulletPointForm, self).__init__(*args, **kwargs)
+
+    def add_bp_fields(self, bps):
+        print bps
+        for bp in bps:
+            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
 
 # Form to add bullet points to education
 class BulletPointForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super(BulletPointForm, self).__init__(*args, **kwargs)
-        self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user))
+
+    def set_education(self, user, edu_id=None):
+        self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user, edu_id=edu_id))
 
     bpText = forms.CharField(label='Text', max_length=1000)
-    bpEnabled = forms.BooleanField(label='Enable this bullet point?')
+    bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
 
 # retrieve all education items for the given user
-# format is a choice list (for a choice field)
-def get_education_items(user):
+def get_education_items(user, edu_id=None):
     user_info = user.user_info
 
     choices_list = []
-    education_objects = Education.objects.filter(owner=user_info)
-
-    # put education into choice list format, 
-    # with pk as the key and school name as the string to display
-    for x in education_objects:
-        choices_list.append((x.pk, x.school))
-
-    return choices_list
-
-# retrieve all enabled education items for the given user
-# format is a choice list (for a choice field)
-def get_enabled_education_items(user):
-    user_info = user.user_info
-
-    choices_list = []
-    education_objects = Education.objects.filter(owner=user_info, enabled=True)
+    if not edu_id:
+        education_objects = Education.objects.filter(owner=user_info)
+    else:
+        education_objects = Education.objects.filter(id=edu_id)
 
     # put education into choice list format, 
     # with pk as the key and school name as the string to display
@@ -76,6 +81,8 @@ def get_enabled_education_items(user):
 
 # Form to choose a user's resume to edit
 class ChooseResumeToEditForm(forms.Form):
+
+    # TODO: add a button to choose a random resume
 
     # dynamically generate dropdown box of users
     def __init__(self, *args, **kwargs):
@@ -95,23 +102,23 @@ def get_all_users():
 
     return choices_list
 
-# Form to submit a comment
-class CommentResumeForm(forms.Form):
+# add experience
+class ExperienceForm(forms.ModelForm):
 
-    # dynamically generate commentable resume items
-    def __init__(self, *args, **kwargs):
+    class Meta:
+        model = Experience
+        fields = ['title', 'employer', 'start_date', 'end_date', 'current', 'location', 'enabled']
 
-        # get argument: user
-        user = kwargs.pop('user');
-        super(CommentResumeForm, self).__init__(*args, **kwargs)
+# add an award
+class AwardForm(forms.ModelForm):
 
-        # dynamically populate dropdown list of commentable resume items
-        # TODO: bullet points
-        self.fields['commentable_resume_item'] = forms.ChoiceField(choices=get_enabled_education_items(user))
+    class Meta:
+        model = Award
+        fields = ['name', 'issuer', 'date_awarded', 'enabled']
 
-    # write comment here
-    comment_text = forms.CharField(label='Your Comment', max_length=1000)
+# add a skill category
+class SkillCategoryForm(forms.ModelForm):
 
-    # write suggestion here
-    suggestion_text = forms.CharField(label='Your Optional Suggestion (will replace text)', max_length=1000)
-
+    class Meta:
+        model = Skill
+        fields = ['category', 'enabled']

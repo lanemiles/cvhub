@@ -1,15 +1,29 @@
-<h1> Your Profile </h1>
+<h1> {{user.user_info.display_name}}'s Profile </h1>
 
-Username: {{user}}
-<br>
 
-<h2>Your Contact Info</h2>
+<h2>Your Information</h2>
+<ul>
+	<li> Reputation Points: {{user.user_info.points}}
+	</li>
+	<li> Resume URL: {{user.user_info.resume_url}}
+	</li>
+	<li> Email: {{user}}
+	</li>
+	<li> Phone: {{user.user_info.phone_number}}
+	</li>
+	<li> Website: {{user.user_info.website}}
+	</li>
+	<li> DOB: {{user.user_info.dob}}
+	</li>
+</ul>
+
+
 <h2>Your Education</h2>
 
 <ul>
 {% for info in education_list %}
 <li>
-	{{info.school}} in {{info.location}}
+	{{info.school}} in {{info.location}} {% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a>{% endwith %}
 		<ul>
 			<li> Attending from {{info.start_date}} to {{info.end_date}}
 			</li>
@@ -19,6 +33,17 @@ Username: {{user}}
 			</li>
 			<li> Enabled: {{info.enabled}}
 			</li>
+			{% for key, value in bps.items %}
+			{% if key == info %}
+			{% for text in value %}
+
+			<li>
+			{{text.text}}
+			</li>
+
+			{% endfor %}
+			{% endif %}
+			{% endfor %}
 		</ul>
 </li>
 
@@ -27,5 +52,91 @@ Username: {{user}}
 </ul>
 
 <h2>Your Skills</h2>
+<ul>
+{% for info in skill_category_list %}
+<li>
+	{{info.category}}
+		<ul>
+			
+			<li> Enabled: {{info.enabled}}
+			</li>
+			{% for key, value in bps.items %}
+			{% if key == info %}
+			{% for text in value %}
+
+			<li>
+			{{text.text}}
+			</li>
+
+			{% endfor %}
+			{% endif %}
+			{% endfor %}
+		</ul>
+</li>
+
+
+{% endfor %}
+</ul>
+
 <h2>Your Experience</h2>
+<ul>
+{% for info in experience_list %}
+<li>
+	{{info.title}} at {{info.employer}} 
+		<ul>
+			{% if info.current == True %}
+			<li> Currently employed; started on {{info.start_date}}
+			</li>
+
+			{% else %}
+			<li> Employed from {{info.start_date}} to {{info.end_date}}
+			</li>
+
+			{% endif %}
+			<li> Enabled: {{info.enabled}}
+			</li>
+			{% for key, value in bps.items %}
+			{% if key == info %}
+			{% for text in value %}
+
+			<li>
+			{{text.text}}
+			</li>
+
+			{% endfor %}
+			{% endif %}
+			{% endfor %}
+		</ul>
+</li>
+
+
+{% endfor %}
+</ul>
+
 <h2>Your Awards</h2>
+<ul>
+{% for info in award_list %}
+<li>
+	{{info.name}}
+		<ul>
+			<li> Given by {{info.issuer}} on {{info.date_awarded}}
+			</li>
+			<li> Enabled: {{info.enabled}}
+			</li>
+			{% for key, value in bps.items %}
+			{% if key == info %}
+			{% for text in value %}
+
+			<li>
+			{{text.text}}
+			</li>
+
+			{% endfor %}
+			{% endif %}
+			{% endfor %}
+		</ul>
+</li>
+
+
+{% endfor %}
+</ul>
