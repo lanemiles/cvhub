@@ -129,31 +129,53 @@ def remove_education(request, education_id=None):
 def edit_education(request, education_id=None):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
+
         # create a form instance and populate it with data from the request:
         user_info = request.user.user_info
+
         form = EducationForm(request.POST)
-        print form.data
         form2 = EducationForm(request.POST, instance=Education.objects.get(id=form.data.get('edu_id')))
         # check whether it's valid:
         if form2.is_valid():
             # process the data in form.cleaned_data as required
 
             form2.save()
+            bp_dict = {}
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            # pull out the BP stuff
+            for thing in request.POST:
 
+                if 'BP' in thing:
+                    bp_dict[thing] = request.POST.get(thing)
+
+            for (id_str, text) in bp_dict.items():
+                bp_id = id_str[2:]
+                bp = BulletPoint.objects.get(id=int(bp_id))
+                bp.text = text
+                bp.save()
+
+        return render(request, 'profile.html', user_profile_dict(request))
 
     # if a GET (or any other method) we'll create a blank form
     else:
 
-        form = EducationForm(instance=Education.objects.get(id=education_id))
+        # get associated bullet points
+        bps = BulletPoint.objects.all()
+        education_bps = []
+        for bp in bps:
+            if bp.get_parent() == Education.objects.get(id=education_id):
+                education_bps.append(bp)
+
+        form = EducationBulletPointForm(education_bps, instance=Education.objects.get(id=education_id))
+        form.add_bp_fields(education_bps)
 
     return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
 
 @login_required
-def add_bp(request):
+def add_education_bp(request, item_id=None):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
+
         # create a form instance and populate it with data from the request:
         form = BulletPointForm(request.user, request.POST)
         # check whether it's valid:
@@ -163,7 +185,7 @@ def add_bp(request):
 
             # get user
             user_info = request.user.user_info
-            
+
             # get text of bullet point from form
             bpText = form.cleaned_data.get('bpText')
             bp.text = bpText
@@ -173,7 +195,8 @@ def add_bp(request):
             bp.enabled = bpEnabled
 
             # get education from the drop down list in form
-            education = form.cleaned_data.get('education_item_choices')
+            education = request.POST.get('edu_id')
+            print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
             order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
@@ -186,17 +209,19 @@ def add_bp(request):
             education_type = ContentType.objects.get_for_model(Education)
             bp.content_type = education_type
             bp.object_id = education
-            
+
             # add bullet point to db
             bp.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile')
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = BulletPointForm(request.user)
 
-    return render(request, 'add_bp.html', {'form': form})
+        form = BulletPointForm(request.user)
+        form.set_education(request.user, item_id)
+
+        return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
 
 # View my resume (displays all enabled items)
 @login_required
