@@ -5,8 +5,10 @@
 	<head>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-		<link rel='stylesheet' href='{% static "cvhub_app/resume_template_css.css" %}' />
-
+		<link rel='stylesheet' href='{% static "cvhub_app/resume-pdf-css.css" %}' />
+		<script src="{% static "cvhub_app/html2canvas.js" %}"></script>
+		<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+		
 
 	</head>
 
@@ -283,6 +285,38 @@
 
 
 		</div>
+
+		<div id='pdf'>
+		<center>
+		</center>
+		</div>
+
+		<script type='text/javascript'>
+
+		$(document).ready(function(){
+		
+			// html2canvas($('#container'), {
+			// 	onrendered: function(canvas) {
+			// 		// document.getElementById("pdf").appendChild(canvas);
+			// 	// var pdf = new jsPDF()
+			// 	// pdf.addImage(canvas.toDataURL("image/jpeg"))
+			// 	console.log(canvas.toDataURL("image/jpeg"))
+
+			// },
+			// });
+
+			html2canvas($('#container'), {
+				  onrendered: function(canvas) {
+				    var pdf = new jsPDF()
+				    pdf.addImage(canvas.toDataURL("image/jpeg"),"jpeg",0,0)
+				    window.location=pdf.output("datauristring")
+				  }
+				});
+
+
+});
+
+		</script>
 
 	</body>
 
