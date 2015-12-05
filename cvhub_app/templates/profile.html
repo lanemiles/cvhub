@@ -18,12 +18,12 @@
 </ul>
 
 
-<h2>Your Education</h2>
+<h2>Your Education -- <a href='/add-education'>Add</a></h2>
 
 <ul>
 {% for info in education_list %}
 <li>
-	{{info.school}} in {{info.location}} -----  {% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a> | <a href='/remove-education/{{id}}'>Remove</a>{% endwith %}
+	{{info.school}} in {{info.location}} -----  {% with info.id|stringformat:"s" as id %}<a href='/add-education-bp/{{id}}'>Add BP</a> | <a href='/edit-education/{{id}}'>Edit</a> | <a href='/remove-education/{{id}}'>Remove</a>{% endwith %}
 		<ul>
 			<li> Enabled: {{info.enabled}}
 			</li>
