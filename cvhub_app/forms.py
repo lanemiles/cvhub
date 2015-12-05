@@ -36,22 +36,41 @@ class EducationForm(forms.ModelForm):
         model = Education
         fields = ['school', 'start_date', 'end_date', 'location', 'enabled']
 
+
+class EducationBulletPointForm(EducationForm):
+
+    class Meta(EducationForm.Meta):
+        fields = EducationForm.Meta.fields
+
+    def __init__(self, user, *args, **kwargs):
+        super(EducationBulletPointForm, self).__init__(*args, **kwargs)
+
+    def add_bp_fields(self, bps):
+        print bps
+        for bp in bps:
+            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+
 # Form to add bullet points to education
 class BulletPointForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super(BulletPointForm, self).__init__(*args, **kwargs)
-        self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user))
+
+    def set_education(self, user, edu_id=None):
+        self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user, edu_id=edu_id))
 
     bpText = forms.CharField(label='Text', max_length=1000)
     bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
 
 # retrieve all education items for the given user
-def get_education_items(user):
+def get_education_items(user, edu_id=None):
     user_info = user.user_info
 
     choices_list = []
-    education_objects = Education.objects.filter(owner=user_info)
+    if not edu_id:
+        education_objects = Education.objects.filter(owner=user_info)
+    else:
+        education_objects = Education.objects.filter(id=edu_id)
 
     # put education into choice list format, 
     # with pk as the key and school name as the string to display
