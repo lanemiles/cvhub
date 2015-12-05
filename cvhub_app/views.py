@@ -15,6 +15,8 @@ from django.template import Context
 from django.template.loader import get_template
 import datetime
 from xhtml2pdf import pisa
+from django.db.models import Q
+import collections
 
 
 def index(request):
@@ -926,8 +928,8 @@ def move_down_experience(request, object_id):
 def view_my_resume(request):
 
     # we pass in user and user info
-
     return render(request, 'view-my-resume.html', user_profile_dict(request, True))
+
 
 @login_required
 def choose_resume_to_edit(request):
@@ -938,19 +940,75 @@ def choose_resume_to_edit(request):
         # check whether it's valid:
         if form.is_valid():
 
-            if request.POST.get("choose_user"):
-
-                # get selected user's id
-                selected_user = form.cleaned_data.get('user_choice')
-
-                # get UserInfo object from the id
-                user_info = UserInfo.objects.get(id=selected_user)
-
             # randomly choose a user & resume to view
-            elif request.POST.get("random_resume"):
+            if request.POST.get("random_resume"):
+
                 user_info = UserInfo.objects.order_by('?').first()
 
-            # redirect to the page for commenting resumes
+            # Find the num_resumes_to_return resumes most relevant to keywords
+            elif request.POST.get("search_resumes"):
+                print "search resumes button pressed"
+
+                keywords = form.cleaned_data.get('keywords')
+                num_resumes_to_return = form.cleaned_data.get('num_resumes_to_return')
+
+                # if the user pressed search without any values, just return all resumes
+                if keywords is None:
+                    keywords = ""
+
+                # Search all enabled information for the keywords, and find relevant resume owners' ids
+                id_results = []
+
+                # See if user's contact information or name matches
+                id_results += queryset_to_valueslist(UserInfo.objects.filter( \
+                    Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
+                    Q(website__icontains=keywords)).values('id'))
+
+                # Attempts to search in email commented out here.
+                # UserInfo and User id's are not the same. We are using the UserInfo id's,
+                # so if a User matches, we have to fetch the UserInfo id
+                # matching_users = User.objects.filter(email__icontains=keywords)
+                # for x in matching_users:
+                #     print x
+                #     id_results.append(x.user_info.id)
+
+                # Search in Education, Skill categories, Experience, and Awards
+                id_results += queryset_to_valueslist(Education.objects.filter(Q(enabled=True), \
+                    Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+                id_results += queryset_to_valueslist(Skill.objects.filter(Q(enabled=True), \
+                    Q(category__icontains=keywords)).values('owner'))
+                id_results += queryset_to_valueslist(Experience.objects.filter(Q(enabled=True), \
+                    Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+                id_results += queryset_to_valueslist(Award.objects.filter(Q(enabled=True), \
+                    Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
+
+                # Search in Bullet Points. BP's only know about their parent objects,
+                # so we get the bp's parent's owner's id
+                bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
+                bp_owner_ids = []
+                for bp in bp_results:
+                    bp_owner_ids.append(bp.get_parent().owner.pk)
+                id_results += bp_owner_ids
+
+                # To return the num_resumes_to_return most relevant resumes, 
+                # we count how many times the keyword appeared per user
+                num_resumes_to_return = 2
+                c = collections.Counter(id_results).most_common(num_resumes_to_return)
+
+                top_hits = []
+                for x in c:
+                    top_hits.append(x[0])
+
+                # make the choice list of tuples (user id, user's display name)
+                results_list = []
+                for x in top_hits:
+                    top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
+                    results_list.append((top_hits, top_hit_user))
+
+                # redirect to results page, with search results
+                return render(request, 'search_resume_results.html', {'form':form, 'results_list': results_list})
+
+            # redirect to results page
             return render(request, 'comment_resume.html', {'user': user_info.user.username, \
                 'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
@@ -959,6 +1017,45 @@ def choose_resume_to_edit(request):
         form = ChooseResumeToEditForm()
 
     return render(request, 'choose_resume_to_edit.html', {'form': form})
+
+
+@login_required
+def search_resume_results(request):
+
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        form = SearchResumeResultsForm(request.POST)
+
+        # check whether it's valid:
+        if form.is_valid():
+
+            if request.POST.get("choose_resume"):
+
+                # get resume owner's id
+                selected_resume = request.POST.get('user_choice')
+
+                print selected_resume
+
+                # get UserInfo object about resume owner
+                user_info = UserInfo.objects.get(id=selected_resume)
+
+            # go back to choose/search resume screen
+            elif request.POST.get("back_to_choose_resume"):
+                return render(request, 'choose_resume_to_edit.html', {'form': form})
+
+            # redirect to the page for commenting resumes
+            return render(request, 'comment_resume.html', {'user': user_info.user.username, \
+                'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SearchResumeResultsForm(results_list='results_list')
+
+    return render(request, 'search_resume_results.html', {'form': form})
+
+
 
 
 @login_required
@@ -1430,3 +1527,13 @@ def user_profile_dict(request, only_enabled=False):
 
 def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+
+def queryset_to_valueslist(query_set):
+
+    # first, QuerySet to dictionary
+    id_results = {}
+    for x in query_set:
+        id_results.update(x)
+
+    # next, only return values in dictionary
+    return id_results.values()
