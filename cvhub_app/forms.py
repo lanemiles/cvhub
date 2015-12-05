@@ -50,6 +50,7 @@ class EducationBulletPointForm(EducationForm):
         for bp in bps:
             self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
 
+
 # Form to add bullet points to education
 class BulletPointForm(forms.Form):
 
@@ -61,6 +62,9 @@ class BulletPointForm(forms.Form):
 
     def set_skills(self, user, skill_id=None):
         self.fields['skill_item_choices'] = forms.ChoiceField(choices=get_skill_category_items(user, skill_id=skill_id))
+
+    def set_experience(self, user, skill_id=None):
+        self.fields['experience_item_choices'] = forms.ChoiceField(choices=get_experience_items(user, experience_id=skill_id))
 
     bpText = forms.CharField(label='Text', max_length=1000)
     bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
@@ -98,6 +102,24 @@ def get_skill_category_items(user, skill_id=None):
     # with pk as the key and school name as the string to display
     for x in skill_objects:
         choices_list.append((x.pk, x.category))
+
+    return choices_list
+
+
+# retrieve all education items for the given user
+def get_experience_items(user, experience_id=None):
+    user_info = user.user_info
+
+    choices_list = []
+    if not experience_id:
+        experience_objects = Experience.objects.filter(owner=user_info)
+    else:
+        experience_objects = Experience.objects.filter(id=experience_id)
+
+    # put education into choice list format,
+    # with pk as the key and school name as the string to display
+    for x in experience_objects:
+        choices_list.append((x.pk, x.title + " at " + x.employer))
 
     return choices_list
 
@@ -153,6 +175,20 @@ class SkillBulletPointForm(SkillCategoryForm):
 
     def __init__(self, user, *args, **kwargs):
         super(SkillBulletPointForm, self).__init__(*args, **kwargs)
+
+    def add_bp_fields(self, bps):
+        print bps
+        for bp in bps:
+            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+
+
+class ExperienceBulletPointForm(ExperienceForm):
+
+    class Meta(ExperienceForm.Meta):
+        fields = ExperienceForm.Meta.fields
+
+    def __init__(self, user, *args, **kwargs):
+        super(ExperienceBulletPointForm, self).__init__(*args, **kwargs)
 
     def add_bp_fields(self, bps):
         print bps
