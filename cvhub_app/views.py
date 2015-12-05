@@ -19,7 +19,6 @@ from django.db.models import Q
 import collections
 
 
-
 def index(request):
     return render(request, 'current_time.html', {'question': 'his'})
 
@@ -54,12 +53,7 @@ def create_user(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, 'profile.html', {'user': request.user, \
-                        'education_list': Education.objects.filter(owner=user.user_info), \
-                        'experience_list': Experience.objects.filter(owner=request.user.user_info).order_by('order'),\
-                        'award_list': Award.objects.filter(owner=request.user.user_info).order_by('order'), \
-})
-
+                    return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -76,6 +70,7 @@ def thanks(request):
 def user_profile(request):
 
     return render(request, 'profile.html', user_profile_dict(request))
+
 
 def logout_view(request):
     logout(request)
@@ -109,7 +104,7 @@ def create_education(request):
 
             education.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -129,46 +124,11 @@ def remove_education(request, education_id=None):
 
     Education.objects.get(id=education_id).delete()
 
-    return render(request, 'profile.html', user_profile_dict(request))
+    return redirect('/profile/')
 
 
 @login_required
 def edit_education(request, education_id=None):
-    # if this is a POST request we need to process the form data
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        user_info = request.user.user_info
-        form = EducationForm(request.POST)
-        print form.data
-        form2 = EducationForm(request.POST, instance=Education.objects.get(id=form.data.get('edu_id')))
-        # check whether it's valid:
-        if form2.is_valid():
-            # process the data in form.cleaned_data as required
-
-            form2.save()
-
-            # get education bullet points for user
-            user = request.user.user_info
-            bps = BulletPoint.objects.all()
-            user_bps = {}
-            for bp in bps:
-                if bp.get_parent().owner == user:
-                    if bp.get_parent() in user_bps:
-                        user_bps[bp.get_parent()].append(bp)
-                    else:
-                        user_bps[bp.get_parent()] = [bp]
-
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-
-        form = EducationForm(instance=Education.objects.get(id=education_id))
-
-    return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
-
-@login_required
-def add_bp(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
 
@@ -196,7 +156,7 @@ def add_bp(request):
                 bp.text = text
                 bp.save()
 
-        return render(request, 'profile.html', user_profile_dict(request))
+        return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -243,7 +203,7 @@ def edit_skill(request, skill_id=None):
                 bp.text = text
                 bp.save()
 
-        return render(request, 'profile.html', user_profile_dict(request))
+        return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -272,7 +232,7 @@ def remove_skill(request, skill_id=None):
 
     Skill.objects.get(id=skill_id).delete()
 
-    return render(request, 'profile.html', user_profile_dict(request))
+    return redirect('/profile/')
 
 
 
@@ -307,7 +267,7 @@ def edit_experience(request, experience_id=None):
                 bp.text = text
                 bp.save()
 
-        return render(request, 'profile.html', user_profile_dict(request))
+        return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -336,7 +296,7 @@ def remove_experience(request, experience_id=None):
 
     Experience.objects.get(id=experience_id).delete()
 
-    return render(request, 'profile.html', user_profile_dict(request))
+    return redirect('/profile/')
 
 @login_required
 def add_education_bp(request, item_id=None):
@@ -380,7 +340,7 @@ def add_education_bp(request, item_id=None):
             # add bullet point to db
             bp.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -390,6 +350,68 @@ def add_education_bp(request, item_id=None):
 
         return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
 
+
+@login_required
+def edit_award(request, award_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+
+        form = AwardForm(request.POST)
+        form2 = AwardForm(request.POST, instance=Award.objects.get(id=form.data.get('award_id')))
+
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+            bp_dict = {}
+
+            # pull out the BP stuff
+            for thing in request.POST:
+
+                if 'BP' in thing:
+                    bp_dict[thing] = request.POST.get(thing)
+                    print request.POST.get(thing)
+
+            for (id_str, text) in bp_dict.items():
+                bp_id = id_str[2:]
+                bp = BulletPoint.objects.get(id=int(bp_id))
+                bp.text = text
+                bp.save()
+
+        return redirect('/profile/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        # get associated bullet points
+        bps = BulletPoint.objects.all()
+        award_bps = []
+        for bp in bps:
+            if bp.get_parent() == Award.objects.get(id=award_id):
+                award_bps.append(bp)
+
+        form = AwardBulletPointForm(award_bps, instance=Award.objects.get(id=award_id))
+        form.add_bp_fields(award_bps)
+
+    return render(request, 'edit_award.html', {'form': form, 'award_id': award_id})
+
+
+@login_required
+def remove_award(request, award_id=None):
+
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent() == Award.objects.get(id=award_id):
+            bp.delete()
+
+    Award.objects.get(id=award_id).delete()
+
+    return redirect('/profile/')
 
 @login_required
 def add_skill_bp(request, item_id=None):
@@ -433,7 +455,7 @@ def add_skill_bp(request, item_id=None):
             # add bullet point to db
             bp.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -486,7 +508,7 @@ def add_experience_bp(request, item_id=None):
             # add bullet point to db
             bp.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -498,10 +520,63 @@ def add_experience_bp(request, item_id=None):
 
 
 @login_required
+def add_award_bp(request, item_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        form = BulletPointForm(request.user, request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            bp = BulletPoint()
+
+            # get user
+            user_info = request.user.user_info
+
+            # get text of bullet point from form
+            bpText = form.cleaned_data.get('bpText')
+            bp.text = bpText
+
+            # enable/disable the bullet point
+            bpEnabled = form.cleaned_data.get('bpEnabled')
+            bp.enabled = bpEnabled
+
+            # get education from the drop down list in form
+            award = request.POST.get('award_id')
+            print request.POST
+
+            # return all bullet points for that education, and find the next number for an ordering
+            order_max = BulletPoint.objects.filter(object_id=award).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                bp.order = order_max + 1
+            else:
+                bp.order = 1
+
+            # set bullet point's foreign keys to a given education choice
+            award_type = ContentType.objects.get_for_model(Award)
+            bp.content_type = award_type
+            bp.object_id = award
+
+            # add bullet point to db
+            bp.save()
+
+            return redirect('/profile/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        form = BulletPointForm(request.user)
+        form.set_awards(request.user, item_id)
+
+        return render(request, 'add_award_bp.html', {'form': form, 'award_id': item_id})
+
+
+@login_required
 def remove_bp(request, bp_id):
 
     BulletPoint.objects.get(id=bp_id).delete()
-    return render(request, 'profile.html', user_profile_dict(request))
+    return redirect('/profile/')
 
 
 @login_required
@@ -522,7 +597,7 @@ def move_up_bp(request, bp_id):
 
     # if top
     if move_bp.order < min(siblings, key=lambda x: x.order).order:
-        return render(request, 'profile.html', user_profile_dict(request))
+        return redirect('/profile/')
 
     # find next smallest number
     move_bp_order = move_bp.order
@@ -547,7 +622,7 @@ def move_up_bp(request, bp_id):
     move_bp.order = move_bp.order - (move_bp_order - curr_order)
     move_bp.save()
 
-    return render(request, 'profile.html', user_profile_dict(request))
+    return redirect('/profile/')
 
 
 @login_required
@@ -568,7 +643,7 @@ def move_down_bp(request, bp_id):
 
     # if bottom
     if move_bp.order > max(siblings, key=lambda x: x.order).order:
-        return render(request, 'profile.html', user_profile_dict(request))
+        return redirect('/profile/')
 
     # find next largest number
     move_bp_order = move_bp.order
@@ -590,7 +665,263 @@ def move_down_bp(request, bp_id):
     move_bp.order = move_bp.order - (move_bp_order - curr_order)
     move_bp.save()
 
-    return render(request, 'profile.html', user_profile_dict(request))
+    return redirect('/profile/')
+
+
+@login_required
+def move_up_education(request, education_id):
+
+    move_education = Education.objects.get(id=education_id)
+    our_owner = move_education.owner
+
+    siblings = Education.objects.filter(owner=our_owner).order_by('order').exclude(id=education_id)
+
+    # if top
+    if move_education.order < min(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_education_order = move_education.order
+
+    curr_order = -1
+    prev_education = None
+    for sib in siblings:
+        if sib.order < move_education_order:
+            prev_education = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_education.order = prev_education.order + (move_education_order - curr_order)
+    prev_education.save()
+    move_education.order = move_education.order - (move_education_order - curr_order)
+    move_education.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_down_education(request, education_id):
+
+    move_education = Education.objects.get(id=education_id)
+    our_owner = move_education.owner
+
+    siblings = Education.objects.filter(owner=our_owner).order_by('-order').exclude(id=education_id)
+
+    # if top
+    if move_education.order > max(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_education_order = move_education.order
+
+    curr_order = -1
+    prev_education = None
+    for sib in siblings:
+        if sib.order > move_education_order:
+            prev_education = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_education.order = prev_education.order + (move_education_order - curr_order)
+    prev_education.save()
+    move_education.order = move_education.order - (move_education_order - curr_order)
+    move_education.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_up_award(request, award_id):
+
+    move_award = Award.objects.get(id=award_id)
+    our_owner = move_award.owner
+
+    siblings = Award.objects.filter(owner=our_owner).order_by('order').exclude(id=award_id)
+
+    # if top
+    if move_award.order < min(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_award_order = move_award.order
+
+    curr_order = -1
+    prev_award = None
+    for sib in siblings:
+        if sib.order < move_award_order:
+            prev_award = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_award.order = prev_award.order + (move_award_order - curr_order)
+    prev_award.save()
+    move_award.order = move_award.order - (move_award_order - curr_order)
+    move_award.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_down_award(request, award_id):
+
+    move_award = Award.objects.get(id=award_id)
+    our_owner = move_award.owner
+
+    siblings = Award.objects.filter(owner=our_owner).order_by('-order').exclude(id=award_id)
+
+    # if top
+    if move_award.order > max(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_award_order = move_award.order
+
+    curr_order = -1
+    prev_award = None
+    for sib in siblings:
+        if sib.order > move_award_order:
+            prev_award = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_award.order = prev_award.order + (move_award_order - curr_order)
+    prev_award.save()
+    move_award.order = move_award.order - (move_award_order - curr_order)
+    move_award.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_up_skill(request, object_id):
+
+    move_object = Skill.objects.get(id=object_id)
+    our_owner = move_object.owner
+
+    siblings = Skill.objects.filter(owner=our_owner).order_by('order').exclude(id=object_id)
+
+    # if top
+    if move_object.order < min(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_object_order = move_object.order
+
+    curr_order = -1
+    prev_object = None
+    for sib in siblings:
+        if sib.order < move_object_order:
+            prev_object = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_object.order = prev_object.order + (move_object_order - curr_order)
+    prev_object.save()
+    move_object.order = move_object.order - (move_object_order - curr_order)
+    move_object.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_down_skill(request, object_id):
+
+    move_object = Skill.objects.get(id=object_id)
+    our_owner = move_object.owner
+
+    siblings = Skill.objects.filter(owner=our_owner).order_by('-order').exclude(id=object_id)
+
+    # if top
+    if move_object.order > max(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_object_order = move_object.order
+
+    curr_order = -1
+    prev_object = None
+    for sib in siblings:
+        if sib.order > move_object_order:
+            prev_object = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_object.order = prev_object.order + (move_object_order - curr_order)
+    prev_object.save()
+    move_object.order = move_object.order - (move_object_order - curr_order)
+    move_object.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_up_experience(request, object_id):
+
+    move_object = Experience.objects.get(id=object_id)
+    our_owner = move_object.owner
+
+    siblings = Experience.objects.filter(owner=our_owner).order_by('order').exclude(id=object_id)
+
+    # if top
+    if move_object.order < min(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_object_order = move_object.order
+
+    curr_order = -1
+    prev_object = None
+    for sib in siblings:
+        if sib.order < move_object_order:
+            prev_object = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_object.order = prev_object.order + (move_object_order - curr_order)
+    prev_object.save()
+    move_object.order = move_object.order - (move_object_order - curr_order)
+    move_object.save()
+
+    return redirect('/profile/')
+
+
+@login_required
+def move_down_experience(request, object_id):
+
+    move_object = Experience.objects.get(id=object_id)
+    our_owner = move_object.owner
+
+    siblings = Experience.objects.filter(owner=our_owner).order_by('-order').exclude(id=object_id)
+
+    # if top
+    if move_object.order > max(siblings, key=lambda x: x.order).order:
+        return redirect('/profile/')
+
+    # find next smallest number
+    move_object_order = move_object.order
+
+    curr_order = -1
+    prev_object = None
+    for sib in siblings:
+        if sib.order > move_object_order:
+            prev_object = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_object.order = prev_object.order + (move_object_order - curr_order)
+    prev_object.save()
+    move_object.order = move_object.order - (move_object_order - curr_order)
+    move_object.save()
+
+    return redirect('/profile/')
 
 # View my resume (displays all enabled items)
 @login_required
@@ -737,6 +1068,259 @@ def search_resume_results(request):
 
 
 
+
+@login_required
+def move_up_section(request, section_name):
+
+    user_info = request.user.user_info
+
+    if section_name == 'education':
+
+        if user_info.education_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Experience", user_info.experience_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.education_order - 1:
+                    if name == "Experience":
+                        user_info.experience_order = user_info.experience_order + 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order + 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order + 1
+                    user_info.education_order = user_info.education_order - 1
+                    break
+
+    elif section_name == 'experience':
+
+        if user_info.experience_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.experience_order - 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order + 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order + 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order + 1
+                    user_info.experience_order = user_info.experience_order - 1
+                    break
+
+    elif section_name == 'skill':
+
+        if user_info.skill_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Award", user_info.award_order)]:
+                if value == user_info.skill_order - 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order + 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order + 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order + 1
+                    user_info.skill_order = user_info.skill_order - 1
+                    break
+
+    elif section_name == 'award':
+
+        if user_info.award_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Skill", user_info.skill_order)]:
+                if value == user_info.award_order - 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order + 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order + 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order + 1
+                    user_info.award_order = user_info.award_order - 1
+                    break
+
+    user_info.save()
+    return redirect('/profile/')
+
+
+@login_required
+def move_down_section(request, section_name):
+
+    user_info = request.user.user_info
+
+    if section_name == 'education':
+
+        if user_info.education_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Experience", user_info.experience_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.education_order + 1:
+                    if name == "Experience":
+                        user_info.experience_order = user_info.experience_order - 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order - 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order - 1
+                    user_info.education_order = user_info.education_order + 1
+                    break
+
+    elif section_name == 'experience':
+
+        if user_info.experience_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.experience_order + 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order - 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order - 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order - 1
+                    user_info.experience_order = user_info.experience_order + 1
+                    break
+
+    elif section_name == 'skill':
+
+        if user_info.skill_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Award", user_info.award_order)]:
+                if value == user_info.skill_order + 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order - 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order - 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order - 1
+                    user_info.skill_order = user_info.skill_order + 1
+                    break
+
+    elif section_name == 'award':
+
+        if user_info.award_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Skill", user_info.skill_order)]:
+                if value == user_info.award_order + 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order - 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order - 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order - 1
+                    user_info.award_order = user_info.award_order + 1
+                    break
+
+    user_info.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_bp(request, bp_id):
+
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_bp(request, bp_id):
+
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_education(request, bp_id):
+
+    bp = Education.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_education(request, bp_id):
+
+    bp = Education.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_experience(request, bp_id):
+
+    bp = Experience.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_experience(request, bp_id):
+
+    bp = Experience.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_skill(request, bp_id):
+
+    bp = Skill.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_skill(request, bp_id):
+
+    bp = Skill.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_award(request, bp_id):
+
+    bp = Award.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_award(request, bp_id):
+
+    bp = Award.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
 # GET: send information about the relevant commentable resume item 
 #   to the popup box
 # POST: add comments to a resume from the popup box
@@ -814,7 +1398,7 @@ def create_experience(request):
 
             exp.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
 
     # if a GET (or any other method) we'll create a blank form
@@ -850,7 +1434,7 @@ def create_award(request):
 
             award.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
 
     # if a GET (or any other method) we'll create a blank form
@@ -887,7 +1471,7 @@ def create_skill_category(request):
 
             skill_cat.save()
 
-            return render(request, 'profile.html', user_profile_dict(request))
+            return redirect('/profile/')
 
 
     # if a GET (or any other method) we'll create a blank form
@@ -901,14 +1485,28 @@ def create_skill_category(request):
 def user_profile_dict(request, only_enabled=False):
     # get experience bullet points for user
     user_info = request.user.user_info
-    bps = BulletPoint.objects.all().order_by('order')
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent().owner == user_info:
-            if bp.get_parent() in user_bps:
-                user_bps[bp.get_parent()].append(bp)
-            else:
-                user_bps[bp.get_parent()] = [bp]
+
+    if only_enabled:
+
+        bps = BulletPoint.objects.filter(enabled=True).order_by('order')
+        user_bps = {}
+        for bp in bps:
+            if bp.get_parent().owner == user_info:
+                if bp.get_parent() in user_bps:
+                    user_bps[bp.get_parent()].append(bp)
+                else:
+                    user_bps[bp.get_parent()] = [bp]
+
+    else:
+
+        bps = BulletPoint.objects.all().order_by('order')
+        user_bps = {}
+        for bp in bps:
+            if bp.get_parent().owner == user_info:
+                if bp.get_parent() in user_bps:
+                    user_bps[bp.get_parent()].append(bp)
+                else:
+                    user_bps[bp.get_parent()] = [bp]
 
     if only_enabled:
 

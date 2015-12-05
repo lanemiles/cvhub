@@ -19,6 +19,11 @@ class UserInfo(models.Model):
     phone_number = models.CharField(max_length=10)
     website = models.CharField(max_length=128)
 
+    education_order = models.IntegerField(default=1)
+    skill_order = models.IntegerField(default=2)
+    experience_order = models.IntegerField(default=3)
+    award_order = models.IntegerField(default=4)
+
     def __unicode__(self):
         return '{} - {}'.format(self.user.username, self.dob)
 
