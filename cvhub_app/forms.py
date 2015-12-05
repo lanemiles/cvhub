@@ -60,7 +60,7 @@ class BulletPointForm(forms.Form):
         self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user, edu_id=edu_id))
 
     def set_skills(self, user, skill_id=None):
-        self.fields['skill_item_choices'] = forms.ChoiceField(choices=get_skill_category_items(user, skill_id=edu_id))
+        self.fields['skill_item_choices'] = forms.ChoiceField(choices=get_skill_category_items(user, skill_id=skill_id))
 
     bpText = forms.CharField(label='Text', max_length=1000)
     bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
@@ -97,7 +97,7 @@ def get_skill_category_items(user, skill_id=None):
     # put education into choice list format,
     # with pk as the key and school name as the string to display
     for x in skill_objects:
-        choices_list.append((x.pk, x.school))
+        choices_list.append((x.pk, x.category))
 
     return choices_list
 
@@ -144,3 +144,18 @@ class SkillCategoryForm(forms.ModelForm):
     class Meta:
         model = Skill
         fields = ['category', 'enabled']
+
+
+class SkillBulletPointForm(SkillCategoryForm):
+
+    class Meta(SkillCategoryForm.Meta):
+        fields = SkillCategoryForm.Meta.fields
+
+    def __init__(self, user, *args, **kwargs):
+        super(SkillBulletPointForm, self).__init__(*args, **kwargs)
+
+    def add_bp_fields(self, bps):
+        print bps
+        for bp in bps:
+            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+

@@ -51,7 +51,7 @@
 <ul>
 {% for info in skill_category_list %}
 <li>
-	{{info.category}}
+	{{info.category}} ----- {% with info.id|stringformat:"s" as id %}<a href='/add-skill-bp/{{id}}'>Add BP</a> | <a href='/edit-skill/{{id}}'>Edit</a> | <a href='/remove-skill/{{id}}'>Remove</a>{% endwith %}
 		<ul>
 			
 			<li> Enabled: {{info.enabled}}

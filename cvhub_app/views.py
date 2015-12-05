@@ -172,6 +172,53 @@ def edit_education(request, education_id=None):
 
 
 @login_required
+def edit_skill(request, skill_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+
+        form = SkillCategoryForm(request.POST)
+        form2 = SkillCategoryForm(request.POST, instance=Skill.objects.get(id=form.data.get('skill_id')))
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+            bp_dict = {}
+
+            # pull out the BP stuff
+            for thing in request.POST:
+
+                if 'BP' in thing:
+                    bp_dict[thing] = request.POST.get(thing)
+
+            for (id_str, text) in bp_dict.items():
+                bp_id = id_str[2:]
+                bp = BulletPoint.objects.get(id=int(bp_id))
+                bp.text = text
+                bp.save()
+
+        return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        # get associated bullet points
+        bps = BulletPoint.objects.all()
+        skill_bps = []
+        for bp in bps:
+            if bp.get_parent() == Skill.objects.get(id=skill_id):
+                skill_bps.append(bp)
+
+        form = SkillBulletPointForm(skill_bps, instance=Skill.objects.get(id=skill_id))
+        form.add_bp_fields(skill_bps)
+
+    return render(request, 'edit_skill.html', {'form': form, 'skill_id': skill_id})
+
+
+@login_required
 def add_education_bp(request, item_id=None):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
@@ -271,7 +318,7 @@ def add_skill_bp(request, item_id=None):
     else:
 
         form = BulletPointForm(request.user)
-        form.set_education(request.user, item_id)
+        form.set_skills(request.user, item_id)
 
         return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': item_id})
 
