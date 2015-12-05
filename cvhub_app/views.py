@@ -109,8 +109,6 @@ def create_education(request):
 
             return render(request, 'profile.html', user_profile_dict(request))
 
-
-
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EducationForm()
@@ -124,6 +122,7 @@ def remove_education(request, education_id=None):
     Education.objects.get(id=education_id).delete()
 
     return render(request, 'profile.html', user_profile_dict(request))
+
 
 @login_required
 def edit_education(request, education_id=None):
@@ -170,6 +169,7 @@ def edit_education(request, education_id=None):
         form.add_bp_fields(education_bps)
 
     return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
+
 
 @login_required
 def add_education_bp(request, item_id=None):
@@ -222,6 +222,58 @@ def add_education_bp(request, item_id=None):
         form.set_education(request.user, item_id)
 
         return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
+
+@login_required
+def add_skill_bp(request, item_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        form = BulletPointForm(request.user, request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            bp = BulletPoint()
+
+            # get user
+            user_info = request.user.user_info
+
+            # get text of bullet point from form
+            bpText = form.cleaned_data.get('bpText')
+            bp.text = bpText
+
+            # enable/disable the bullet point
+            bpEnabled = form.cleaned_data.get('bpEnabled')
+            bp.enabled = bpEnabled
+
+            # get education from the drop down list in form
+            skill = request.POST.get('skill_id')
+            print request.POST
+
+            # return all bullet points for that education, and find the next number for an ordering
+            order_max = BulletPoint.objects.filter(object_id=skill).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                bp.order = order_max + 1
+            else:
+                bp.order = 1
+
+            # set bullet point's foreign keys to a given education choice
+            skill_type = ContentType.objects.get_for_model(Skill)
+            bp.content_type = skill_type
+            bp.object_id = skill
+
+            # add bullet point to db
+            bp.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        form = BulletPointForm(request.user)
+        form.set_education(request.user, item_id)
+
+        return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': item_id})
 
 # View my resume (displays all enabled items)
 @login_required

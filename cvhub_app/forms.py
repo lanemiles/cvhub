@@ -59,8 +59,12 @@ class BulletPointForm(forms.Form):
     def set_education(self, user, edu_id=None):
         self.fields['education_item_choices'] = forms.ChoiceField(choices=get_education_items(user, edu_id=edu_id))
 
+    def set_skills(self, user, skill_id=None):
+        self.fields['skill_item_choices'] = forms.ChoiceField(choices=get_skill_category_items(user, skill_id=edu_id))
+
     bpText = forms.CharField(label='Text', max_length=1000)
     bpEnabled = forms.BooleanField(label='Enable this bullet point?', required=False)
+
 
 # retrieve all education items for the given user
 def get_education_items(user, edu_id=None):
@@ -75,6 +79,24 @@ def get_education_items(user, edu_id=None):
     # put education into choice list format, 
     # with pk as the key and school name as the string to display
     for x in education_objects:
+        choices_list.append((x.pk, x.school))
+
+    return choices_list
+
+
+# retrieve all education items for the given user
+def get_skill_category_items(user, skill_id=None):
+    user_info = user.user_info
+
+    choices_list = []
+    if not skill_id:
+        skill_objects = Skill.objects.filter(owner=user_info)
+    else:
+        skill_objects = Skill.objects.filter(id=skill_id)
+
+    # put education into choice list format,
+    # with pk as the key and school name as the string to display
+    for x in skill_objects:
         choices_list.append((x.pk, x.school))
 
     return choices_list
