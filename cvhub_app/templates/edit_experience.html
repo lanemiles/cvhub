@@ -1,0 +1,6 @@
+<form action="/edit-experience/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input name='experience_id' type='hidden' value={{experience_id}}></input>
+    <input type="submit" value="Submit" />
+</form>
