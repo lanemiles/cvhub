@@ -109,7 +109,6 @@ def create_education(request):
 
             return render(request, 'profile.html', user_profile_dict(request))
 
-
     # if a GET (or any other method) we'll create a blank form
     else:
         form = EducationForm()
@@ -120,9 +119,16 @@ def create_education(request):
 @login_required
 def remove_education(request, education_id=None):
 
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent() == Education.objects.get(id=education_id):
+            bp.delete()
+
     Education.objects.get(id=education_id).delete()
 
     return render(request, 'profile.html', user_profile_dict(request))
+
 
 @login_required
 def edit_education(request, education_id=None):
@@ -205,6 +211,131 @@ def add_bp(request):
 
     return render(request, 'edit_education.html', {'form': form, 'edu_id': education_id})
 
+
+@login_required
+def edit_skill(request, skill_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+
+        form = SkillCategoryForm(request.POST)
+        form2 = SkillCategoryForm(request.POST, instance=Skill.objects.get(id=form.data.get('skill_id')))
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+            bp_dict = {}
+
+            # pull out the BP stuff
+            for thing in request.POST:
+
+                if 'BP' in thing:
+                    bp_dict[thing] = request.POST.get(thing)
+
+            for (id_str, text) in bp_dict.items():
+                bp_id = id_str[2:]
+                bp = BulletPoint.objects.get(id=int(bp_id))
+                bp.text = text
+                bp.save()
+
+        return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        # get associated bullet points
+        bps = BulletPoint.objects.all()
+        skill_bps = []
+        for bp in bps:
+            if bp.get_parent() == Skill.objects.get(id=skill_id):
+                skill_bps.append(bp)
+
+        form = SkillBulletPointForm(skill_bps, instance=Skill.objects.get(id=skill_id))
+        form.add_bp_fields(skill_bps)
+
+    return render(request, 'edit_skill.html', {'form': form, 'skill_id': skill_id})
+
+
+@login_required
+def remove_skill(request, skill_id=None):
+
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent() == Skill.objects.get(id=skill_id):
+            bp.delete()
+
+    Skill.objects.get(id=skill_id).delete()
+
+    return render(request, 'profile.html', user_profile_dict(request))
+
+
+
+@login_required
+def edit_experience(request, experience_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        user_info = request.user.user_info
+
+        form = ExperienceForm(request.POST)
+        form2 = ExperienceForm(request.POST, instance=Experience.objects.get(id=form.data.get('experience_id')))
+
+        # check whether it's valid:
+        if form2.is_valid():
+            # process the data in form.cleaned_data as required
+
+            form2.save()
+            bp_dict = {}
+
+            # pull out the BP stuff
+            for thing in request.POST:
+
+                if 'BP' in thing:
+                    bp_dict[thing] = request.POST.get(thing)
+                    print request.POST.get(thing)
+
+            for (id_str, text) in bp_dict.items():
+                bp_id = id_str[2:]
+                bp = BulletPoint.objects.get(id=int(bp_id))
+                bp.text = text
+                bp.save()
+
+        return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        # get associated bullet points
+        bps = BulletPoint.objects.all()
+        experience_bps = []
+        for bp in bps:
+            if bp.get_parent() == Experience.objects.get(id=experience_id):
+                experience_bps.append(bp)
+
+        form = ExperienceBulletPointForm(experience_bps, instance=Experience.objects.get(id=experience_id))
+        form.add_bp_fields(experience_bps)
+
+    return render(request, 'edit_experience.html', {'form': form, 'experience_id': experience_id})
+
+
+@login_required
+def remove_experience(request, experience_id=None):
+
+    bps = BulletPoint.objects.all()
+    user_bps = {}
+    for bp in bps:
+        if bp.get_parent() == Experience.objects.get(id=experience_id):
+            bp.delete()
+
+    Experience.objects.get(id=experience_id).delete()
+
+    return render(request, 'profile.html', user_profile_dict(request))
+
 @login_required
 def add_education_bp(request, item_id=None):
     # if this is a POST request we need to process the form data
@@ -256,6 +387,208 @@ def add_education_bp(request, item_id=None):
         form.set_education(request.user, item_id)
 
         return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
+
+
+@login_required
+def add_skill_bp(request, item_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        form = BulletPointForm(request.user, request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            bp = BulletPoint()
+
+            # get user
+            user_info = request.user.user_info
+
+            # get text of bullet point from form
+            bpText = form.cleaned_data.get('bpText')
+            bp.text = bpText
+
+            # enable/disable the bullet point
+            bpEnabled = form.cleaned_data.get('bpEnabled')
+            bp.enabled = bpEnabled
+
+            # get education from the drop down list in form
+            skill = request.POST.get('skill_id')
+            print request.POST
+
+            # return all bullet points for that education, and find the next number for an ordering
+            order_max = BulletPoint.objects.filter(object_id=skill).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                bp.order = order_max + 1
+            else:
+                bp.order = 1
+
+            # set bullet point's foreign keys to a given education choice
+            skill_type = ContentType.objects.get_for_model(Skill)
+            bp.content_type = skill_type
+            bp.object_id = skill
+
+            # add bullet point to db
+            bp.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        form = BulletPointForm(request.user)
+        form.set_skills(request.user, item_id)
+
+        return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': item_id})
+
+
+@login_required
+def add_experience_bp(request, item_id=None):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        form = BulletPointForm(request.user, request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            bp = BulletPoint()
+
+            # get user
+            user_info = request.user.user_info
+
+            # get text of bullet point from form
+            bpText = form.cleaned_data.get('bpText')
+            bp.text = bpText
+
+            # enable/disable the bullet point
+            bpEnabled = form.cleaned_data.get('bpEnabled')
+            bp.enabled = bpEnabled
+
+            # get education from the drop down list in form
+            experience = request.POST.get('experience_id')
+            print request.POST
+
+            # return all bullet points for that education, and find the next number for an ordering
+            order_max = BulletPoint.objects.filter(object_id=experience).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                bp.order = order_max + 1
+            else:
+                bp.order = 1
+
+            # set bullet point's foreign keys to a given education choice
+            experience_type = ContentType.objects.get_for_model(Experience)
+            bp.content_type = experience_type
+            bp.object_id = experience
+
+            # add bullet point to db
+            bp.save()
+
+            return render(request, 'profile.html', user_profile_dict(request))
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+
+        form = BulletPointForm(request.user)
+        form.set_experience(request.user, item_id)
+
+        return render(request, 'add_experience_bp.html', {'form': form, 'experience_id': item_id})
+
+
+@login_required
+def remove_bp(request, bp_id):
+
+    BulletPoint.objects.get(id=bp_id).delete()
+    return render(request, 'profile.html', user_profile_dict(request))
+
+
+@login_required
+def move_up_bp(request, bp_id):
+
+    move_bp = BulletPoint.objects.get(id=bp_id)
+    parent = move_bp.get_parent()
+
+    siblings = []
+
+    for bp in BulletPoint.objects.all().order_by('order'):
+
+        if bp.get_parent() == parent and bp != move_bp:
+
+            siblings.append(bp)
+
+    print siblings
+
+    # if top
+    if move_bp.order < min(siblings, key=lambda x: x.order).order:
+        return render(request, 'profile.html', user_profile_dict(request))
+
+    # find next smallest number
+    move_bp_order = move_bp.order
+
+    sorted(siblings, key=lambda x: x.order)
+    for sib in siblings:
+        print sib.order
+
+    curr_order = -1
+    prev_bp = None
+    for sib in siblings:
+        print "COMPARING", sib.order, move_bp_order
+        if sib.order < move_bp_order:
+            print sib.order, sib.text
+            prev_bp = sib
+            curr_order = sib.order
+        else:
+            break
+
+    prev_bp.order = prev_bp.order + (move_bp_order - curr_order)
+    prev_bp.save()
+    move_bp.order = move_bp.order - (move_bp_order - curr_order)
+    move_bp.save()
+
+    return render(request, 'profile.html', user_profile_dict(request))
+
+
+@login_required
+def move_down_bp(request, bp_id):
+
+    move_bp = BulletPoint.objects.get(id=bp_id)
+    parent = move_bp.get_parent()
+
+    siblings = []
+
+    for bp in BulletPoint.objects.all().order_by('-order'):
+
+        if bp.get_parent() == parent and bp != move_bp:
+
+            siblings.append(bp)
+
+    print siblings
+
+    # if bottom
+    if move_bp.order > max(siblings, key=lambda x: x.order).order:
+        return render(request, 'profile.html', user_profile_dict(request))
+
+    # find next largest number
+    move_bp_order = move_bp.order
+    for sib in siblings:
+        print sib.order
+
+    curr_order = -1
+    next_bp = None
+    for sib in siblings:
+        if sib.order > move_bp_order:
+            print sib.order, sib.text
+            next_bp = sib
+            curr_order = sib.order
+        else:
+            break
+
+    next_bp.order = next_bp.order + (move_bp_order - curr_order)
+    next_bp.save()
+    move_bp.order = move_bp.order - (move_bp_order - curr_order)
+    move_bp.save()
+
+    return render(request, 'profile.html', user_profile_dict(request))
 
 # View my resume (displays all enabled items)
 @login_required
@@ -460,7 +793,7 @@ def create_skill_category(request):
 def user_profile_dict(request, only_enabled=False):
     # get experience bullet points for user
     user_info = request.user.user_info
-    bps = BulletPoint.objects.all()
+    bps = BulletPoint.objects.all().order_by('order')
     user_bps = {}
     for bp in bps:
         if bp.get_parent().owner == user_info:
