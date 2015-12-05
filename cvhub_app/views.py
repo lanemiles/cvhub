@@ -614,6 +614,14 @@ def choose_resume_to_edit(request):
 
                 user_info = UserInfo.objects.order_by('?').first()
 
+            # start with size of table
+            # choose a random factor between 1 and log_2 of the size
+            # divide by that many
+            # c
+
+            # TODO: most popular (most commented resume)
+
+
             # Find the num_resumes_to_return resumes most relevant to keywords
             elif request.POST.get("search_resumes"):
                 print "search resumes button pressed"
@@ -675,7 +683,9 @@ def choose_resume_to_edit(request):
                     results_list.append((top_hits, top_hit_user))
 
                 # redirect to results page, with search results
-                return render(request, 'search_resume_results.html', {'form':form, 'results_list': results_list})
+                print "in post", results_list
+                form = SearchResumeResultsForm()
+                return render(request, 'search_resume_results.html', {'form':form})
 
             # redirect to results page
             return render(request, 'comment_resume.html', {'user': user_info.user.username, \
@@ -721,6 +731,7 @@ def search_resume_results(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = SearchResumeResultsForm(results_list='results_list')
+        print form
 
     return render(request, 'search_resume_results.html', {'form': form})
 
