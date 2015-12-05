@@ -7,7 +7,6 @@ from django.contrib.auth import logout
 from django.db.models import Max
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
-<<<<<<< HEAD
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 import os
@@ -16,9 +15,7 @@ from django.template import Context
 from django.template.loader import get_template
 import datetime
 from xhtml2pdf import pisa
-=======
-from django.core.exceptions import ObjectDoesNotExist
->>>>>>> d620dae9d106c0df85c2a91cab9536bf1067dc05
+
 
 
 def index(request):
@@ -35,12 +32,8 @@ def create_user(request):
             # process the data in form.cleaned_data as required
 
             # make the User object
-<<<<<<< HEAD
             user = User.objects.create_user(form.cleaned_data.get('email'), \
                 form.cleaned_data.get('email'), form.cleaned_data.get('password'))
-=======
-            user = User.objects.create_user(form.cleaned_data.get('email'), form.cleaned_data.get('email'), form.cleaned_data.get('password'))
->>>>>>> d620dae9d106c0df85c2a91cab9536bf1067dc05
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
@@ -80,23 +73,7 @@ def thanks(request):
 @login_required
 def user_profile(request):
 
-<<<<<<< HEAD
     return render(request, 'profile.html', user_profile_dict(request))
-=======
-    # get education bullet points for user
-    user = request.user.user_info
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent().owner == user:
-            if bp.get_parent() in user_bps:
-                user_bps[bp.get_parent()].append(bp)
-            else:
-                user_bps[bp.get_parent()] = [bp]
-
-    return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
->>>>>>> d620dae9d106c0df85c2a91cab9536bf1067dc05
-
 
 def logout_view(request):
     logout(request)
@@ -130,24 +107,8 @@ def create_education(request):
 
             education.save()
 
-<<<<<<< HEAD
             return render(request, 'profile.html', user_profile_dict(request))
 
-
-=======
-            # get education bullet points for user
-            user = request.user.user_info
-            bps = BulletPoint.objects.all()
-            user_bps = {}
-            for bp in bps:
-                if bp.get_parent().owner == user:
-                    if bp.get_parent() in user_bps:
-                        user_bps[bp.get_parent()].append(bp)
-                    else:
-                        user_bps[bp.get_parent()] = [bp]
-
-            return render(request, 'profile.html', {'user': request.user, 'education_list': Education.objects.filter(owner=request.user.user_info).order_by('order'), 'bps': user_bps})
->>>>>>> d620dae9d106c0df85c2a91cab9536bf1067dc05
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -301,34 +262,8 @@ def add_education_bp(request, item_id=None):
 def view_my_resume(request):
 
     # we pass in user and user info
-
-<<<<<<< HEAD
     return render(request, 'view-my-resume.html', user_profile_dict(request, True))
-=======
-    # get education objects
-    try:
 
-        education_list = Education.objects.filter(owner=request.user.user_info, enabled=True)
-
-    except ObjectDoesNotExist:
-
-        education_list = {}
-
-    # then we need to get education items
-    # get education bullet points for user
-    user = request.user.user_info
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent().owner == user:
-            if bp.get_parent() in user_bps:
-                user_bps[bp.get_parent()].append(bp)
-            else:
-                user_bps[bp.get_parent()] = [bp]
-
-
-    return render(request, 'view-my-resume.html', {'user': request.user, 'user_info': request.user.user_info, 'education_list': education_list, 'bps': user_bps})
->>>>>>> d620dae9d106c0df85c2a91cab9536bf1067dc05
 
 @login_required
 def choose_resume_to_edit(request):
