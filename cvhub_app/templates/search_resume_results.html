@@ -1,0 +1,9 @@
+<form action="/search-resume-results/" method="post">
+    {% csrf_token %}
+    <h1>Search Results</h1>
+    {{ form }}
+    <input type="submit" name="choose_resume" value="Comment Resume" />
+    <br>
+    <br>
+    <input type="submit" name="back_to_choose_resume" value="<Back to Search">
+</form>

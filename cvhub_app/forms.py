@@ -126,12 +126,10 @@ def get_experience_items(user, experience_id=None):
 # Form to choose a user's resume to edit
 class ChooseResumeToEditForm(forms.Form):
 
-    # TODO: add a button to choose a random resume
-
     # dynamically generate dropdown box of users
     def __init__(self, *args, **kwargs):
         super(ChooseResumeToEditForm, self).__init__(*args, **kwargs)
-        self.fields['user_choice'] = forms.ChoiceField(choices=get_all_users())
+        #self.fields['user_choice'] = forms.ChoiceField(choices=get_all_users())
 
 # retrieve a list of all the users
 def get_all_users():
@@ -145,6 +143,15 @@ def get_all_users():
         choices_list.append((x.pk, x.user.username))
 
     return choices_list
+
+# Resume search results
+class SearchResumeResultsForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        results_list = kwargs.pop('results_list')
+        super(SearchResumeResultsForm, self).__init__(*args, **kwargs)
+        self.fields['results_list'] = forms.ChoiceField(choices=results_list)
+
 
 # add experience
 class ExperienceForm(forms.ModelForm):
