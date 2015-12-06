@@ -1559,11 +1559,10 @@ def user_profile_dict(request, only_enabled=False):
 
 
 
-
-
 def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request, True))
 
+# turns a Query Set into a Values List for easier use
 def queryset_to_valueslist(query_set):
 
     # first, QuerySet to dictionary
