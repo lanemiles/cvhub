@@ -974,14 +974,15 @@ def choose_resume_to_edit(request):
             # Find the num_resumes_to_return resumes most relevant to keywords
             elif request.POST.get("search_resumes"):
 
+                # Search terms; default is empty string
                 keywords = request.POST.get('keywords')
+                keywords = ("" if None else keywords)
+
+                # Search terms; default is 5
                 num_resumes_to_return = request.POST.get('num_resumes_to_return')
+                num_resumes_to_return = (5 if None else num_resumes_to_return)
 
-                # if the user pressed search without any values, just return all resumes
-                if keywords is None:
-                    keywords = ""
-
-                # Search all enabled information for the keywords, and find relevant resume owners' ids
+                # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search 
                 id_results = []
 
                 # See if user's contact information or name matches
@@ -1015,17 +1016,22 @@ def choose_resume_to_edit(request):
                     bp_owner_ids.append(bp.get_parent().owner.pk)
                 id_results += bp_owner_ids
 
+                # Count and order by how many times the keyword appeared per user, 
+                c = collections.Counter(id_results).most_common()
+                
+                # turn list of tuples (immutable) --> list of lists
+                c_1 = map(list, c)
 
-                # To return the num_resumes_to_return most relevant resumes, 
-                # we count how many times the keyword appeared per user
-                num_resumes_to_return = 2
-                c = collections.Counter(id_results).most_common(num_resumes_to_return)
+                # adjust each user's ranking based on rep score
+                for x in c_1:
+                    points = UserInfo.objects.get(id=x[0]).points
+                    # no one ever loses points for low rep score
+                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                    x[1] += points_bonus
 
-                # flat list of most num_resumes_to_return most relevant resumes
-                top_hits = []
-                for x in c:
-                    top_hits.append(x[0])
-
+                # return a flat list of num_resumes_to_return users in new ranking order
+                sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
+                top_hits = [item[0] for item in sorted_c]
 
                 # make the choice list of tuples (user id, user's display name)
                 results_list = []
