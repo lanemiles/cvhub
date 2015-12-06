@@ -1,6 +1,14 @@
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
     {{form}}
+
+    Logged in as {{user.user_info.display_name}} <br>
+    <input type="submit" name="mm-my-profile" value="My Profile">
+    <input type="submit" name="mm-view-my-resume" value="Display My Resume">
+    <input type="submit" name="mm-pdf-my-resume" value="PDF My Resume">
+    <input type="submit" name="mm-comment-resume" value="Comment a Resume">
+    <input type="submit" name="mm-logout" value="Logout"><br>
+
     <h1>Search Resumes</h1>
   	Keywords: <input type="text" name="keywords"><br>
     Number of results: <input type="number" name="num_resumes_to_return" value="5" min = 1><br>

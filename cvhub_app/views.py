@@ -70,7 +70,8 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-
+    if request.method == 'POST':
+        return main_menu(request)
     return render(request, 'profile.html', user_profile_dict(request))
 
 
@@ -967,6 +968,9 @@ def choose_resume_to_edit(request):
                 user_index = random.randint(0,upper_limit)
                 user_info = UserInfo.objects.order_by('-points')[user_index]
 
+                # comment randomly chosen resume
+                return render(request, 'comment_resume.html', {'user': user_info.user.username, \
+                    'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
             # TODO: most popular (most commented resume)
 
@@ -1044,9 +1048,8 @@ def choose_resume_to_edit(request):
                 form.set_resumes_to_display(results_list)
                 return render(request, 'search_resume_results.html', {'form':form})
 
-            # redirect to results page
-            return render(request, 'comment_resume.html', {'user': user_info.user.username, \
-                'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+            else: # main toolbar selected
+                return main_menu(request)
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1558,9 +1561,10 @@ def user_profile_dict(request, only_enabled=False):
     return dictionary
 
 
-
+@login_required
 def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+
 
 # turns a Query Set into a Values List for easier use
 def queryset_to_valueslist(query_set):
@@ -1572,3 +1576,19 @@ def queryset_to_valueslist(query_set):
 
     # next, only return values in dictionary
     return id_results.values()
+
+
+@login_required
+def main_menu(request):
+    if request.POST.get("mm-view-my-resume"):
+        return redirect('/view-my-resume/')
+    elif request.POST.get("mm-comment-resume"):
+        return redirect('/choose-resume-to-edit/')
+    elif request.POST.get("mm-logout"):
+        return redirect('/logout/')
+    elif request.POST.get("mm-my-profile"):
+        return redirect('/profile/')
+    elif request.POST.get("mm-pdf-my-resume"):
+        return redirect('/generate-pdf/')
+    else:
+        return redirect('/profile/')
