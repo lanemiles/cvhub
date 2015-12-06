@@ -1,5 +1,6 @@
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
+    {{form}}
     <br>
     <h1>Search Resumes</h1>
   	Keywords: <input type="text" name="keywords"><br>

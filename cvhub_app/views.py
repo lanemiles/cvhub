@@ -17,6 +17,8 @@ import datetime
 from xhtml2pdf import pisa
 from django.db.models import Q
 import collections
+import random
+import math
 
 
 def index(request):
@@ -940,25 +942,40 @@ def choose_resume_to_edit(request):
         # check whether it's valid:
         if form.is_valid():
 
-            # randomly choose a user & resume to view
+            # Randomly choose a user & resume to view, giving priority to users with more rep points
+            # Priority depends on rep points compared to other users, not absolute rep points
+            # The general idea is that higher ranked users will be more likely to remain
+            # in the pool of resumes to be randomly chosen from
             if request.POST.get("random_resume"):
 
-                user_info = UserInfo.objects.order_by('?').first()
+                # size of table
+                num_users = UserInfo.objects.count()
 
-            # start with size of table
-            # choose a random factor between 1 and log_2 of the size
-            # divide by that many
-            # c
+                if num_users < 6:
+                    upper_limit = num_users-1
+                else:
+                    # randomly determine how many users to exclude
+                    # the top priority_users percent of users, or the top 5 users, 
+                    # whichever is greater, will never be excluded
+                    safe_users = .05
+                    s = num_users*safe_users
+                    s = (6 if (s<6) else s)
+                    upper_limit = random.randint(s,num_users-1)
+
+                # from remaining users, randomly choose a resume
+                # resumes are ordered from highest points [0] to lowest points [upper_limit]
+                user_index = random.randint(0,upper_limit)
+                user_info = UserInfo.objects.order_by('-points')[user_index]
+
 
             # TODO: most popular (most commented resume)
 
 
             # Find the num_resumes_to_return resumes most relevant to keywords
             elif request.POST.get("search_resumes"):
-                print "search resumes button pressed"
 
-                keywords = form.cleaned_data.get('keywords')
-                num_resumes_to_return = form.cleaned_data.get('num_resumes_to_return')
+                keywords = request.POST.get('keywords')
+                num_resumes_to_return = request.POST.get('num_resumes_to_return')
 
                 # if the user pressed search without any values, just return all resumes
                 if keywords is None:
@@ -998,24 +1015,27 @@ def choose_resume_to_edit(request):
                     bp_owner_ids.append(bp.get_parent().owner.pk)
                 id_results += bp_owner_ids
 
+
                 # To return the num_resumes_to_return most relevant resumes, 
                 # we count how many times the keyword appeared per user
                 num_resumes_to_return = 2
                 c = collections.Counter(id_results).most_common(num_resumes_to_return)
 
+                # flat list of most num_resumes_to_return most relevant resumes
                 top_hits = []
                 for x in c:
                     top_hits.append(x[0])
+
 
                 # make the choice list of tuples (user id, user's display name)
                 results_list = []
                 for x in top_hits:
                     top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
-                    results_list.append((top_hits, top_hit_user))
+                    results_list.append((x, top_hit_user))
 
                 # redirect to results page, with search results
-                print "in post", results_list
                 form = SearchResumeResultsForm()
+                form.set_resumes_to_display(results_list)
                 return render(request, 'search_resume_results.html', {'form':form})
 
             # redirect to results page
@@ -1044,7 +1064,8 @@ def search_resume_results(request):
             if request.POST.get("choose_resume"):
 
                 # get resume owner's id
-                selected_resume = request.POST.get('user_choice')
+                print request.POST
+                selected_resume = request.POST.get('results_list')
 
                 print selected_resume
 
@@ -1061,10 +1082,8 @@ def search_resume_results(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        form = SearchResumeResultsForm(results_list='results_list')
-        print form
-
-    return render(request, 'search_resume_results.html', {'form': form})
+        form = ChooseResumeToEditForm()
+        return render(request, 'choose_resume_to_edit.html', {'form': form})
 
 
 

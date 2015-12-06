@@ -147,10 +147,8 @@ def get_award_items(user, award_id=None):
 # Form to choose a user's resume to edit
 class ChooseResumeToEditForm(forms.Form):
 
-    # dynamically generate dropdown box of users
     def __init__(self, *args, **kwargs):
         super(ChooseResumeToEditForm, self).__init__(*args, **kwargs)
-        #self.fields['user_choice'] = forms.ChoiceField(choices=get_all_users())
 
 # retrieve a list of all the users
 def get_all_users():
@@ -169,9 +167,12 @@ def get_all_users():
 class SearchResumeResultsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        results_list = kwargs.pop('results_list')
+        #results_list = kwargs.pop('results_list')
         super(SearchResumeResultsForm, self).__init__(*args, **kwargs)
-        self.fields['results_list'] = forms.ChoiceField(choices=results_list)
+        #self.fields['results_list'] = forms.ChoiceField(choices=results_list)
+
+    def set_resumes_to_display(self, resume_list):
+        self.fields['results_list'] = forms.ChoiceField(choices=resume_list)
 
 
 # add experience
