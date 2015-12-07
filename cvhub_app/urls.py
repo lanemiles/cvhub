@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^add-experience-bp', views.add_experience_bp, name='add_experience_bp'),
     url(r'^add-award-bp/(?P<item_id>[0-9]+)', views.add_award_bp, name='add_award_bp'),
     url(r'^add-award-bp', views.add_award_bp, name='add_award_bp'),
+    url(r'^review-comments', views.review_comments, name='review_comments'),
     url(r'^view-my-resume', views.view_my_resume, name='view_my_resume'),
     url(r'^generate-pdf', views.generate_pdf, name='generate_pdf'),
     url(r'^choose-resume-to-edit', views.choose_resume_to_edit, name='choose_resume_to_edit'),

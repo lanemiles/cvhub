@@ -2,12 +2,11 @@
     {% csrf_token %}
     {{form}}
 
-    Logged in as {{user.user_info.display_name}} <br>
-    <input type="submit" name="mm-my-profile" value="My Profile">
-    <input type="submit" name="mm-view-my-resume" value="Display My Resume">
-    <input type="submit" name="mm-pdf-my-resume" value="PDF My Resume">
-    <input type="submit" name="mm-comment-resume" value="Comment a Resume">
-    <input type="submit" name="mm-logout" value="Logout"><br>
+    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
+    <br>
+    <a href='/view-my-resume/'>View My Resume</a> | 
+    <a href='/generate-pdf/'>PDF My Resume</a> |
+    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
 
     <h1>Search Resumes</h1>
   	Keywords: <input type="text" name="keywords"><br>

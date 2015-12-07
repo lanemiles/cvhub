@@ -151,7 +151,7 @@ class Comment(models.Model):
 
         super(Comment, self).save(*args, **kwargs)
 
-    # return the parent object of the bullet point
+    # return the parent object of the comment
     def get_parent(self):
 
         if str(self.content_type) == 'education':

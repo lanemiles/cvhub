@@ -72,8 +72,7 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-    if request.method == 'POST':
-        return main_menu(request)
+   
     return render(request, 'profile.html', user_profile_dict(request))
 
 
@@ -1050,8 +1049,6 @@ def choose_resume_to_edit(request):
                 form.set_resumes_to_display(results_list)
                 return render(request, 'search_resume_results.html', {'form':form})
 
-            else: # main toolbar selected
-                return main_menu(request)
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1840,9 +1837,10 @@ def create_skill_category(request):
 # method called whenever we want to render profile.html
 # gets user's info, education, skills, experience, and awards
 def user_profile_dict(request, only_enabled=False):
-    # get experience bullet points for user
+    
     user_info = request.user.user_info
 
+    # get bullet points for user
     if only_enabled:
 
         bps = BulletPoint.objects.filter(enabled=True).order_by('order')
@@ -1888,6 +1886,7 @@ def user_profile_dict(request, only_enabled=False):
                         'bps': user_bps}
 
     return dictionary
+
 
 
 @login_required
@@ -2005,6 +2004,13 @@ def downvote_comment(request, comment_id):
 
     return redirect('/view-my-resume/')
 
+def review_comments(request):
+
+    # get all enabled commentable resume items for this user
+    user_dict = user_profile_dict(request, True)
+
+    return render(request, 'review_comments.html', user_dict)
+
 
 # turns a Query Set into a Values List for easier use
 def queryset_to_valueslist(query_set):
@@ -2016,20 +2022,3 @@ def queryset_to_valueslist(query_set):
 
     # next, only return values in dictionary
     return id_results.values()
-
-
-
-@login_required
-def main_menu(request):
-    if request.POST.get("mm-view-my-resume"):
-        return redirect('/view-my-resume/')
-    elif request.POST.get("mm-comment-resume"):
-        return redirect('/choose-resume-to-edit/')
-    elif request.POST.get("mm-logout"):
-        return redirect('/logout/')
-    elif request.POST.get("mm-my-profile"):
-        return redirect('/profile/')
-    elif request.POST.get("mm-pdf-my-resume"):
-        return redirect('/generate-pdf/')
-    else:
-        return redirect('/profile/')
