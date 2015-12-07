@@ -13,6 +13,7 @@
 
 span:hover {
 	color: blue;
+	cursor: pointer;
 }
 
 .title {
