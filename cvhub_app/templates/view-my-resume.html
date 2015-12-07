@@ -451,53 +451,7 @@ blockquote p {
 
 
 
-			$("#results").html('')
-		    the_id = window.bullet_id
-		    url = "/get-comments-for-bp/".concat(the_id)
-		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
-		    $.get(url, function( data ) {
-
-		    	$("#bp_text").html(data['bp_info'])
-
-
-			 $.each(data['comments'], function(index, value) {
-
-
-			 	if (value[0][3] == true) {
-
-			 		if (value[1] == 2) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-				 	} else if(value[1] == 0) {
-				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-				 	} else if(value[1] == 1){
-				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-			 	}
-
-
-			 	} else {
-
-
-			 		if (value[1] == 2) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	} else if(value[1] == 0) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	} else if(value[1] == 1){
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	}
-
-			 	}
-
-			 	
-
-			 	
-
-
-
-			 });
-			
-
-			});
-			$("#key").click()
+			update_modal()
 
 			});
 
@@ -538,8 +492,16 @@ blockquote p {
 			      var url = $(e.target).attr('href');
 				   $.get(url, function(data) {
 				   	
+				   	update_modal()
+			
 
-			$("#results").html('')
+				    });
+
+		 });
+
+
+	function update_modal() {
+		$("#results").html('')
 		    the_id = window.bullet_id
 		    url = "/get-comments-for-bp/".concat(the_id)
 		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
@@ -550,30 +512,70 @@ blockquote p {
 
 			 $.each(data['comments'], function(index, value) {
 
+			 	console.log(value)
+
 
 			 	if (value[0][3] == true) {
 
-			 		if (value[1] == 2) {
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			if (value[1] == 2) {
 			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
 				 	} else if(value[1] == 0) {
-				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
 				 	} else if(value[1] == 1){
-				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 		$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 		}
+
+			 		
 			 	}
 
 
-			 	} else {
+			 	} 
 
 
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Rejected</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 		
 			 		if (value[1] == 2) {
 			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 			 	} else if(value[1] == 0) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 			 	} else if(value[1] == 1){
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 			 	}
 
 			 	}
+
+			 }
 
 			 	
 
@@ -586,67 +588,15 @@ blockquote p {
 
 			});
 			$("#key").click()
-
-				    });
-
-		 });
+	}
 
 			
 
 
 
 		$("#container li").click(function (e) {
-			console.log("HERE")
 			window.bullet_id = $(e.target).attr("database_id");
-			$("#results").html('')
-		    the_id = $(e.target).attr("database_id")
-		    url = "/get-comments-for-bp/".concat(the_id)
-		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
-		    $.get(url, function( data ) {
-
-		    	console.log(data)
-
-		    	$("#bp_text").html(data['bp_info'])
-
-
-			 $.each(data['comments'], function(index, value) {
-
-
-			 	if (value[0][3] == true) {
-
-			 		if (value[1] == 2) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-				 	} else if(value[1] == 0) {
-				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-				 	} else if(value[1] == 1){
-				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-			 	}
-
-
-			 	} else {
-
-
-			 		if (value[1] == 2) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	} else if(value[1] == 0) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	} else if(value[1] == 1){
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	}
-
-			 	}
-
-			 	
-
-			 	
-
-
-
-			 });
-			
-
-			});
-			$("#key").click()
+			update_modal()
 		});
 
 		

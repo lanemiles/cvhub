@@ -1944,7 +1944,7 @@ def get_comments_for_bp(request, bp_id):
     comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(BulletPoint), object_id=bp_id).order_by('-vote_total')
 
     # make into a list of lists
-    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion] for comment in comments]
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
 
     votes = []
     for comment in comments:
