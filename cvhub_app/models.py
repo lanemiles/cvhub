@@ -141,15 +141,13 @@ class Comment(models.Model):
     is_suggestion = models.BooleanField()
     status = enum.EnumField(CommentStatus, default=CommentStatus.PENDING)
 
+    vote_total = models.IntegerField(default=0)
+
     class Meta:
         unique_together = ("author", "content_type", "object_id", "timestamp")
 
     # every time we save a comment, check if we have a suggestion 
     def save(self, *args, **kwargs):
-
-        # check if in progress
-        if self.suggestion is not None:
-            self.is_suggestion = True
 
         super(Comment, self).save(*args, **kwargs)
 
