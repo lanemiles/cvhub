@@ -302,6 +302,7 @@ def remove_experience(request, experience_id=None):
 
     return redirect('/profile/')
 
+
 @login_required
 def add_education_bp(request, item_id=None):
     # if this is a POST request we need to process the form data
@@ -330,11 +331,13 @@ def add_education_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
                 bp.order = 1
+
+            print bp.order
 
             # set bullet point's foreign keys to a given education choice
             education_type = ContentType.objects.get_for_model(Education)
@@ -445,7 +448,7 @@ def add_skill_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.filter(object_id=skill).aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
@@ -498,7 +501,7 @@ def add_experience_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.filter(object_id=experience).aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
@@ -551,7 +554,7 @@ def add_award_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.filter(object_id=award).aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
@@ -1932,7 +1935,7 @@ def add_bp_comment(request, bp_id=None):
 
         new_comment.save()
 
-        return redirect('/view-my-resume/')
+        return HttpResponse('')
 
 
 def get_comments_for_bp(request, bp_id):
@@ -1983,7 +1986,7 @@ def upvote_comment(request, comment_id):
     comment.save()
     print comment
 
-    return redirect('/view-my-resume/')
+    return HttpResponse('')
 
 
 def downvote_comment(request, comment_id):
@@ -2002,7 +2005,7 @@ def downvote_comment(request, comment_id):
     comment.save()
     print comment
 
-    return redirect('/view-my-resume/')
+    return HttpResponse('')
 
 def review_comments(request):
 

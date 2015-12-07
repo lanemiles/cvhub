@@ -308,7 +308,7 @@ blockquote p {
 							{% if key == info %}
 							{% for text in value %}
 
-							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}} id={{text.pk}}>
 							{{text.text}}
 							</span></li>
 
@@ -369,7 +369,7 @@ blockquote p {
 							{% if key == info %}
 							{% for text in value %}
 
-							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}} id={{text.pk}}>
 							{{text.text}}
 							</span></li>
 
@@ -413,40 +413,191 @@ blockquote p {
   <div id='results'>
   </div>
   <h2 class='comment_header'>Add a Comment:</h2>
+  <div id='new_comment'>
   <form id='add_comment' method='POST'>
-  <label>Comment: </label><input style='width: 300px;' type='text' name='comment_text' placeholder='Your thoughts...'><br>
-  <label>Suggestion: </label><input style='width: 300px;' type='text' name='suggestion_text' placeholder='(Optional) What would you replace it with?'><br>
+  <label>Comment: </label><input style='width: 300px;' id='comment_text' type='text' name='comment_text' placeholder='Your thoughts...'><br>
+  <label>Suggestion: </label><input style='width: 300px;' id='suggestion_text' type='text' name='suggestion_text' placeholder='(Optional) What would you replace it with?'><br>
   {% csrf_token %}
-  <input type='submit'>
+  <input type='button' id='submit_button' value='Submit'>
   </form>
-
+  </div>
   </div>
 
   <!-- Link to open the modal -->
   <p><a id='key' href="#ex1" rel="modal:open" style='display:none'>Open Modal</a></p>
+  <a href="#close" id ='close_key' rel="modal:close" style='display: none;'>Close window</a>
 
 	<script type="text/javascript">
 
+	$( "#submit_button" ).click(function( e ) {
+
+			
+			e.preventDefault()
+			var url = $("#add_comment").attr('action');
+
+
+			var comment_text = $("#comment_text").val()
+			var suggestion_text = $("#suggestion_text").val()
+
+
+		    var csrftoken = getCookie('csrftoken');
+
+
+			$.post(url, {comment_text: comment_text, suggestion_text: suggestion_text, csrfmiddlewaretoken: csrftoken}, function() {
+
+			var comment_text = $("#comment_text").val('')
+			var suggestion_text = $("#suggestion_text").val('')
+
+
+
+
+			$("#results").html('')
+		    the_id = window.bullet_id
+		    url = "/get-comments-for-bp/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['bp_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[1] == 2) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	} else if(value[1] == 0) {
+				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	} else if(value[1] == 1){
+				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 	}
+
+
+			 	} else {
+
+
+			 		if (value[1] == 2) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	} else if(value[1] == 0) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	} else if(value[1] == 1){
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	}
+
+			 	}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+
+			});
+
+
+
+			
+
+			
+
+				    });
+
+
 			function getCookie(name) {
-		    var cookieValue = null;
-		    if (document.cookie && document.cookie != '') {
-		        var cookies = document.cookie.split(';');
-		        for (var i = 0; i < cookies.length; i++) {
-		            var cookie = jQuery.trim(cookies[i]);
-		            // Does this cookie string begin with the name we want?
-		            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-		                break;
-		            }
-		        }
-		    }
-		    return cookieValue;
-		}
-		var csrftoken = getCookie('csrftoken');
+			    var cookieValue = null;
+			    if (document.cookie && document.cookie != '') {
+			        var cookies = document.cookie.split(';');
+			        for (var i = 0; i < cookies.length; i++) {
+			            var cookie = jQuery.trim(cookies[i]);
+			            // Does this cookie string begin with the name we want?
+			            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+			                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+			                break;
+			            }
+			        }
+			    }
+			    return cookieValue;
+			}
+
+
+
+	$('#results').click(function (e){
+
+			console.log("A CLICK")
+			console.log(e) 
+
+				e.preventDefault()
+			     e.stopImmediatePropagation()
+			      var url = $(e.target).attr('href');
+				   $.get(url, function(data) {
+				   	
+
+			$("#results").html('')
+		    the_id = window.bullet_id
+		    url = "/get-comments-for-bp/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['bp_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[1] == 2) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	} else if(value[1] == 0) {
+				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	} else if(value[1] == 1){
+				 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 	}
+
+
+			 	} else {
+
+
+			 		if (value[1] == 2) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	} else if(value[1] == 0) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	} else if(value[1] == 1){
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	}
+
+			 	}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+
+				    });
+
+		 });
+
+			
 
 
 
 		$("#container li").click(function (e) {
+			console.log("HERE")
+			window.bullet_id = $(e.target).attr("database_id");
 			$("#results").html('')
 		    the_id = $(e.target).attr("database_id")
 		    url = "/get-comments-for-bp/".concat(the_id)
@@ -497,6 +648,8 @@ blockquote p {
 			});
 			$("#key").click()
 		});
+
+		
 
 
 	</script>	
