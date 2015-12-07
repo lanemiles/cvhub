@@ -11,8 +11,9 @@
 	background: gray;
 }
 
-span:hover {
+#container span:hover {
 	color: blue;
+	cursor: pointer;
 }
 
 .title {
