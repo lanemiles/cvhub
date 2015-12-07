@@ -59,5 +59,10 @@ urlpatterns = [
     url(r'^enable-skill/(?P<bp_id>[0-9]+)', views.enable_skill, name='enable_skill'),
     url(r'^disable-skill/(?P<bp_id>[0-9]+)', views.disable_skill, name='disable_skill'),
     url(r'^enable-award/(?P<bp_id>[0-9]+)', views.enable_award, name='enable_award'),
-    url(r'^disable-award/(?P<bp_id>[0-9]+)', views.disable_award, name='disable_award')
+    url(r'^disable-award/(?P<bp_id>[0-9]+)', views.disable_award, name='disable_award'),
+    url(r'^add-bp-comment/(?P<bp_id>[0-9]+)', views.add_bp_comment, name='add_bp_comment'),
+    url(r'^get-comments-for-bp/(?P<bp_id>[0-9]+)', views.get_comments_for_bp, name='get_comments_for_bp'),
+    url(r'^upvote-comment/(?P<comment_id>[0-9]+)', views.upvote_comment, name='upvote_comment'),
+    url(r'^downvote-comment/(?P<comment_id>[0-9]+)', views.downvote_comment, name='downvote_comment'),
+
 ]

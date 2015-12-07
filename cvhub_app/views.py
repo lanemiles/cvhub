@@ -15,6 +15,8 @@ from django.template import Context
 from django.template.loader import get_template
 import datetime
 from xhtml2pdf import pisa
+from django.core import serializers
+import json
 
 
 def index(request):
@@ -927,7 +929,7 @@ def view_my_resume(request):
 
     # we pass in user and user info
 
-    return render(request, 'view-my-resume.html', user_profile_dict(request, True))
+    return render(request, 'view-my-resume.html', user_profile_dict(request, only_enabled=True))
 
 @login_required
 def choose_resume_to_edit(request):
@@ -1430,3 +1432,250 @@ def user_profile_dict(request, only_enabled=False):
 
 def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = AwardForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            award = Award(**form.cleaned_data)
+            award.owner = user_info
+            
+            # set order to last item
+            order_max = Award.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                award.order = order_max + 1
+            else:
+                award.order = 1
+
+            award.save()
+
+            return redirect('/profile/')
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = AwardForm()
+
+    return render(request, 'add_award.html', {'form': form})
+
+# Add a skill category
+# (User should list individual skills as bullet points under a category)
+@login_required
+def create_skill_category(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SkillCategoryForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+
+            # process the data in form.cleaned_data as required
+            # get user
+            user_info = request.user.user_info
+            
+            # create experience
+            skill_cat = Skill(**form.cleaned_data)
+            skill_cat.owner = user_info
+            
+            # set order to last item
+            order_max = Skill.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
+            if order_max is not None:
+                skill_cat.order = order_max + 1
+            else:
+                skill_cat.order = 1
+
+            skill_cat.save()
+
+            return redirect('/profile/')
+
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SkillCategoryForm()
+
+    return render(request, 'add-skill-category.html', {'form': form})
+
+# method called whenever we want to render profile.html
+# gets user's info, education, skills, experience, and awards
+def user_profile_dict(request, only_enabled=False):
+    # get experience bullet points for user
+    user_info = request.user.user_info
+
+    if only_enabled:
+
+        bps = BulletPoint.objects.filter(enabled=True).order_by('order')
+        user_bps = {}
+        for bp in bps:
+            if bp.get_parent().owner == user_info:
+                if bp.get_parent() in user_bps:
+                    user_bps[bp.get_parent()].append(bp)
+                else:
+                    user_bps[bp.get_parent()] = [bp]
+
+    else:
+
+        bps = BulletPoint.objects.all().order_by('order')
+        user_bps = {}
+        for bp in bps:
+            if bp.get_parent().owner == user_info:
+                if bp.get_parent() in user_bps:
+                    user_bps[bp.get_parent()].append(bp)
+                else:
+                    user_bps[bp.get_parent()] = [bp]
+
+    if only_enabled:
+
+        # create dictionary
+        dictionary = {'user': request.user, \
+                        'user_info': request.user.user_info, \
+                        'education_list': Education.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'skill_category_list': Skill.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'experience_list': Experience.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'award_list': Award.objects.filter(owner=user_info, enabled=True).order_by('order'), \
+                        'bps': user_bps}
+
+    else:
+
+        # create dictionary
+        dictionary = {'user': request.user, \
+                        'user_info': request.user.user_info, \
+                        'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
+                        'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
+                        'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
+                        'award_list': Award.objects.filter(owner=user_info).order_by('order'), \
+                        'bps': user_bps}
+
+    return dictionary
+
+
+@login_required
+def add_bp_comment(request, bp_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+        else:
+
+            new_comment.is_suggestion = False
+
+        print new_comment.is_suggestion
+
+        # get bp parent
+        bp = BulletPoint.objects.get(id=bp_id)
+        parent = bp.get_parent()
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
+        new_comment.object_id = bp_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+
+        new_comment.save()
+
+        return redirect('/view-my-resume/')
+
+
+def get_comments_for_bp(request, bp_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(BulletPoint), object_id=bp_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['bp_info'] = BulletPoint.objects.get(id=bp_id).text
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+def upvote_comment(request, comment_id):
+
+    # assuming they haven't voted before
+    vote = Vote()
+    vote.user = request.user.user_info
+    vote.comment = Comment.objects.get(id=comment_id)
+    vote.vote_type = VoteType.UP
+    vote.save()
+    print vote
+
+    # update total on comment
+    comment = Comment.objects.get(id=comment_id)
+    comment.vote_total = comment.vote_total + 1
+    comment.save()
+    print comment
+
+    return redirect('/view-my-resume/')
+
+
+def downvote_comment(request, comment_id):
+
+    # assuming they haven't voted before
+    vote = Vote()
+    vote.user = request.user.user_info
+    vote.comment = Comment.objects.get(id=comment_id)
+    vote.vote_type = VoteType.DOWN
+    vote.save()
+    print vote
+
+    # update total on comment
+    comment = Comment.objects.get(id=comment_id)
+    comment.vote_total = comment.vote_total - 1
+    comment.save()
+    print comment
+
+    return redirect('/view-my-resume/')
+
+
+def generate_pdf(request):
+    return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+
+def queryset_to_valueslist(query_set):
+
+    # first, QuerySet to dictionary
+    id_results = {}
+    for x in query_set:
+        id_results.update(x)
+
+    # next, only return values in dictionary
+    return id_results.values()
