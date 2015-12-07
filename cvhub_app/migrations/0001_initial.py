@@ -51,6 +51,7 @@ class Migration(migrations.Migration):
                 ('suggestion', models.CharField(max_length=1024, null=True, blank=True)),
                 ('is_suggestion', models.BooleanField()),
                 ('status', models.IntegerField(default=0)),
+                ('vote_total', models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
