@@ -69,7 +69,7 @@ Logged in as {{user.user_info.display_name}} <br>
 			{% endfor %}
 			{% endif %}
 			{% endfor %}
-			<li><a href='/add-education-bp/{{id}}'>Add Detail Bullet Point</a></li>
+			<li><a href='/add-education-bp/{{info.id}}'>Add Detail Bullet Point</a></li>
 			<br>
 		</ul>
 	
@@ -115,7 +115,7 @@ Logged in as {{user.user_info.display_name}} <br>
 			{% endif %}
 			{% endfor %}
 			<li>
-			<a href='/add-skill-bp/{{id}}'>Add Skill</a>
+			<a href='/add-skill-bp/{{info.id}}'>Add Skill</a>
 			</li>
 			<br>
 		</ul>
@@ -172,7 +172,7 @@ Logged in as {{user.user_info.display_name}} <br>
 			{% endfor %}
 			{% endif %}
 			{% endfor %}
-			<li><a href='/add-experience-bp/{{id}}'>Add Detail Bullet Point</a></li>
+			<li><a href='/add-experience-bp/{info.{id}}'>Add Detail Bullet Point</a></li>
 			<br>
 		</ul>
 </li>
@@ -221,7 +221,7 @@ Logged in as {{user.user_info.display_name}} <br>
 			{% endfor %}
 			{% endif %}
 			{% endfor %}
-			<li><a href='/add-award-bp/{{id}}'>Add Detail Bullet Point</a></li>
+			<li><a href='/add-award-bp/{{info.id}}'>Add Detail Bullet Point</a></li>
 			<br>
 		</ul>
 </li>
