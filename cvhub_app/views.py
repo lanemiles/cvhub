@@ -302,7 +302,6 @@ def remove_experience(request, experience_id=None):
 
     return redirect('/profile/')
 
-
 @login_required
 def add_education_bp(request, item_id=None):
     # if this is a POST request we need to process the form data
@@ -331,13 +330,11 @@ def add_education_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
                 bp.order = 1
-
-            print bp.order
 
             # set bullet point's foreign keys to a given education choice
             education_type = ContentType.objects.get_for_model(Education)
@@ -448,7 +445,7 @@ def add_skill_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.filter(object_id=skill).aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
@@ -501,7 +498,7 @@ def add_experience_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.filter(object_id=experience).aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
@@ -554,7 +551,7 @@ def add_award_bp(request, item_id=None):
             print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
-            order_max = BulletPoint.objects.all().aggregate(Max('order')).get('order__max')
+            order_max = BulletPoint.objects.filter(object_id=award).aggregate(Max('order')).get('order__max')
             if order_max is not None:
                 bp.order = order_max + 1
             else:
@@ -1897,6 +1894,7 @@ def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request, True))
 
 
+# TODO rep points
 def add_bp_comment(request, bp_id=None):
 
     if request.method == 'POST':
@@ -1935,7 +1933,7 @@ def add_bp_comment(request, bp_id=None):
 
         new_comment.save()
 
-        return HttpResponse('')
+        return redirect('/view-my-resume/')
 
 
 def get_comments_for_bp(request, bp_id):
@@ -1973,6 +1971,7 @@ def get_comments_for_bp(request, bp_id):
 def upvote_comment(request, comment_id):
 
     # assuming they haven't voted before
+    # TODO rep points
     vote = Vote()
     vote.user = request.user.user_info
     vote.comment = Comment.objects.get(id=comment_id)
@@ -1986,12 +1985,13 @@ def upvote_comment(request, comment_id):
     comment.save()
     print comment
 
-    return HttpResponse('')
+    return redirect('/view-my-resume/')
 
 
 def downvote_comment(request, comment_id):
 
     # assuming they haven't voted before
+    # TODO rep points
     vote = Vote()
     vote.user = request.user.user_info
     vote.comment = Comment.objects.get(id=comment_id)
@@ -2005,14 +2005,60 @@ def downvote_comment(request, comment_id):
     comment.save()
     print comment
 
-    return HttpResponse('')
+    return redirect('/view-my-resume/')
 
 def review_comments(request):
 
-    # get all enabled commentable resume items for this user
-    user_dict = user_profile_dict(request, True)
+    return render(request, 'review_comments.html', user_profile_dict(request, True))
 
-    return render(request, 'review_comments.html', user_dict)
+def accept_comment(request, comment_id):
+
+    # retrieve the relevant comment
+    comment = Comment.objects.get(id=comment_id)
+
+    # rep points for commenter
+    rp = 5
+    
+    # if accepted suggestion, need to replace bp text
+    # suggestions can only be made to bullet points
+    if comment.is_suggestion:
+
+        # replace bp text
+        bp = BulletPoint.objects.get(id=object_id)
+        bp.text = comment.suggestion
+        bp.save()
+
+        # award more rp for comment + suggestion than just a comment
+        rp += 2
+
+        # reject all other pending suggestions on this bp
+        reject_suggestions = Comment.objects.filter(object_id=bp.id, is_suggestion=True, status=CommentStatus.PENDING).values('id')
+        for rs in reject_suggestions:
+            reject_comment(request, rs)
+
+    # prevent getting negative rp from an accepted comment
+    vote_total = 1 if comment.vote_total == 0 else comment.vote_total
+    
+    # award rp to commenter
+    commenter = UserInfo.objects.get(id=comment.author)
+    commenter.points = commenter.points + (rp*comment.vote_total)
+    commenter.save()
+
+    # update comment's status
+    comment.status = CommentStatus.ACCEPTED
+    comment.save()
+
+    return render(request, 'review_comments.html', user_profile_dict(request, True))
+
+def reject_comment(request, comment_id):
+
+    # retrieve the relevant comment
+    comment = Comment.objects.get(id=comment_id)
+    comment.status = CommentStatus.DECLINE
+
+    return render(request, 'review_comments.html', user_profile_dict(request, True))
+
+
 
 
 # turns a Query Set into a Values List for easier use
