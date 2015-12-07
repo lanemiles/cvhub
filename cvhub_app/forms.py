@@ -147,12 +147,8 @@ def get_award_items(user, award_id=None):
 # Form to choose a user's resume to edit
 class ChooseResumeToEditForm(forms.Form):
 
-    # TODO: add a button to choose a random resume
-
-    # dynamically generate dropdown box of users
     def __init__(self, *args, **kwargs):
         super(ChooseResumeToEditForm, self).__init__(*args, **kwargs)
-        self.fields['user_choice'] = forms.ChoiceField(choices=get_all_users())
 
 # retrieve a list of all the users
 def get_all_users():
@@ -166,6 +162,18 @@ def get_all_users():
         choices_list.append((x.pk, x.user.username))
 
     return choices_list
+
+# Resume search results
+class SearchResumeResultsForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        #results_list = kwargs.pop('results_list')
+        super(SearchResumeResultsForm, self).__init__(*args, **kwargs)
+        #self.fields['results_list'] = forms.ChoiceField(choices=results_list)
+
+    def set_resumes_to_display(self, resume_list):
+        self.fields['results_list'] = forms.ChoiceField(choices=resume_list)
+
 
 # add experience
 class ExperienceForm(forms.ModelForm):
@@ -229,9 +237,3 @@ class AwardBulletPointForm(AwardForm):
         print bps
         for bp in bps:
             self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
-
-
-
-
-
-

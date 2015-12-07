@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^view-my-resume', views.view_my_resume, name='view_my_resume'),
     url(r'^generate-pdf', views.generate_pdf, name='generate_pdf'),
     url(r'^choose-resume-to-edit', views.choose_resume_to_edit, name='choose_resume_to_edit'),
+    url(r'^search-resume-results', views.search_resume_results, name='search_resume_results'),
     url(r'^comment-resume', views.comment_resume, name='comment_resume'),
     url(r'^add-experience/', views.create_experience, name='create_experience'),
     url(r'^edit-experience/(?P<experience_id>[0-9]+)', views.edit_experience, name='edit_experience'),
@@ -64,5 +65,4 @@ urlpatterns = [
     url(r'^get-comments-for-bp/(?P<bp_id>[0-9]+)', views.get_comments_for_bp, name='get_comments_for_bp'),
     url(r'^upvote-comment/(?P<comment_id>[0-9]+)', views.upvote_comment, name='upvote_comment'),
     url(r'^downvote-comment/(?P<comment_id>[0-9]+)', views.downvote_comment, name='downvote_comment'),
-
 ]

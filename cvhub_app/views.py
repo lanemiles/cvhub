@@ -15,6 +15,10 @@ from django.template import Context
 from django.template.loader import get_template
 import datetime
 from xhtml2pdf import pisa
+from django.db.models import Q
+import collections
+import random
+import math
 from django.core import serializers
 import json
 
@@ -68,7 +72,8 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-
+    if request.method == 'POST':
+        return main_menu(request)
     return render(request, 'profile.html', user_profile_dict(request))
 
 
@@ -928,8 +933,8 @@ def move_down_experience(request, object_id):
 def view_my_resume(request):
 
     # we pass in user and user info
-
     return render(request, 'view-my-resume.html', user_profile_dict(request, only_enabled=True))
+
 
 @login_required
 def choose_resume_to_edit(request):
@@ -940,17 +945,147 @@ def choose_resume_to_edit(request):
         # check whether it's valid:
         if form.is_valid():
 
-            if request.POST.get("choose_user"):
+            # Randomly choose a user & resume to view, giving priority to users with more rep points
+            # Priority depends on rep points compared to other users, not absolute rep points
+            # The general idea is that higher ranked users will be more likely to remain
+            # in the pool of resumes to be randomly chosen from
+            if request.POST.get("random_resume"):
 
-                # get selected user's id
-                selected_user = form.cleaned_data.get('user_choice')
+                # size of table
+                num_users = UserInfo.objects.count()
 
-                # get UserInfo object from the id
-                user_info = UserInfo.objects.get(id=selected_user)
+                if num_users < 6:
+                    upper_limit = num_users-1
+                else:
+                    # randomly determine how many users to exclude
+                    # the top priority_users percent of users, or the top 5 users, 
+                    # whichever is greater, will never be excluded
+                    safe_users = .05
+                    s = num_users*safe_users
+                    s = (6 if (s<6) else s)
+                    upper_limit = random.randint(s,num_users-1)
 
-            # randomly choose a user & resume to view
-            elif request.POST.get("random_resume"):
-                user_info = UserInfo.objects.order_by('?').first()
+                # from remaining users, randomly choose a resume
+                # resumes are ordered from highest points [0] to lowest points [upper_limit]
+                user_index = random.randint(0,upper_limit)
+                user_info = UserInfo.objects.order_by('-points')[user_index]
+
+                # comment randomly chosen resume
+                return render(request, 'comment_resume.html', {'user': user_info.user.username, \
+                    'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+
+            # TODO: most popular (most commented resume)
+
+
+            # Find the num_resumes_to_return resumes most relevant to keywords
+            elif request.POST.get("search_resumes"):
+
+                # Search terms; default is empty string
+                keywords = request.POST.get('keywords')
+                keywords = ("" if None else keywords)
+
+                # Search terms; default is 5
+                num_resumes_to_return = request.POST.get('num_resumes_to_return')
+                num_resumes_to_return = (5 if None else num_resumes_to_return)
+
+                # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search 
+                id_results = []
+
+                # See if user's contact information or name matches
+                id_results += queryset_to_valueslist(UserInfo.objects.filter( \
+                    Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
+                    Q(website__icontains=keywords)).values('id'))
+
+                # Attempts to search in email commented out here.
+                # UserInfo and User id's are not the same. We are using the UserInfo id's,
+                # so if a User matches, we have to fetch the UserInfo id
+                # matching_users = User.objects.filter(email__icontains=keywords)
+                # for x in matching_users:
+                #     print x
+                #     id_results.append(x.user_info.id)
+
+                # Search in Education, Skill categories, Experience, and Awards
+                id_results += queryset_to_valueslist(Education.objects.filter(Q(enabled=True), \
+                    Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+                id_results += queryset_to_valueslist(Skill.objects.filter(Q(enabled=True), \
+                    Q(category__icontains=keywords)).values('owner'))
+                id_results += queryset_to_valueslist(Experience.objects.filter(Q(enabled=True), \
+                    Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+                id_results += queryset_to_valueslist(Award.objects.filter(Q(enabled=True), \
+                    Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
+
+                # Search in Bullet Points. BP's only know about their parent objects,
+                # so we get the bp's parent's owner's id
+                bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
+                bp_owner_ids = []
+                for bp in bp_results:
+                    bp_owner_ids.append(bp.get_parent().owner.pk)
+                id_results += bp_owner_ids
+
+                # Count and order by how many times the keyword appeared per user, 
+                c = collections.Counter(id_results).most_common()
+                
+                # turn list of tuples (immutable) --> list of lists
+                c_1 = map(list, c)
+
+                # adjust each user's ranking based on rep score
+                for x in c_1:
+                    points = UserInfo.objects.get(id=x[0]).points
+                    # no one ever loses points for low rep score
+                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                    x[1] += points_bonus
+
+                # return a flat list of num_resumes_to_return users in new ranking order
+                sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
+                top_hits = [item[0] for item in sorted_c]
+
+                # make the choice list of tuples (user id, user's display name)
+                results_list = []
+                for x in top_hits:
+                    top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
+                    results_list.append((x, top_hit_user))
+
+                # redirect to results page, with search results
+                form = SearchResumeResultsForm()
+                form.set_resumes_to_display(results_list)
+                return render(request, 'search_resume_results.html', {'form':form})
+
+            else: # main toolbar selected
+                return main_menu(request)
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ChooseResumeToEditForm()
+
+    return render(request, 'choose_resume_to_edit.html', {'form': form})
+
+
+@login_required
+def search_resume_results(request):
+
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request:
+        form = SearchResumeResultsForm(request.POST)
+
+        # check whether it's valid:
+        if form.is_valid():
+
+            if request.POST.get("choose_resume"):
+
+                # get resume owner's id
+                print request.POST
+                selected_resume = request.POST.get('results_list')
+
+                print selected_resume
+
+                # get UserInfo object about resume owner
+                user_info = UserInfo.objects.get(id=selected_resume)
+
+            # go back to choose/search resume screen
+            elif request.POST.get("back_to_choose_resume"):
+                return render(request, 'choose_resume_to_edit.html', {'form': form})
 
             # redirect to the page for commenting resumes
             return render(request, 'comment_resume.html', {'user': user_info.user.username, \
@@ -959,8 +1094,262 @@ def choose_resume_to_edit(request):
     # if a GET (or any other method) we'll create a blank form
     else:
         form = ChooseResumeToEditForm()
+        return render(request, 'choose_resume_to_edit.html', {'form': form})
 
-    return render(request, 'choose_resume_to_edit.html', {'form': form})
+
+
+
+@login_required
+def move_up_section(request, section_name):
+
+    user_info = request.user.user_info
+
+    if section_name == 'education':
+
+        if user_info.education_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Experience", user_info.experience_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.education_order - 1:
+                    if name == "Experience":
+                        user_info.experience_order = user_info.experience_order + 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order + 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order + 1
+                    user_info.education_order = user_info.education_order - 1
+                    break
+
+    elif section_name == 'experience':
+
+        if user_info.experience_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.experience_order - 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order + 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order + 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order + 1
+                    user_info.experience_order = user_info.experience_order - 1
+                    break
+
+    elif section_name == 'skill':
+
+        if user_info.skill_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Award", user_info.award_order)]:
+                if value == user_info.skill_order - 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order + 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order + 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order + 1
+                    user_info.skill_order = user_info.skill_order - 1
+                    break
+
+    elif section_name == 'award':
+
+        if user_info.award_order == 1:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Skill", user_info.skill_order)]:
+                if value == user_info.award_order - 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order + 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order + 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order + 1
+                    user_info.award_order = user_info.award_order - 1
+                    break
+
+    user_info.save()
+    return redirect('/profile/')
+
+
+@login_required
+def move_down_section(request, section_name):
+
+    user_info = request.user.user_info
+
+    if section_name == 'education':
+
+        if user_info.education_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Experience", user_info.experience_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.education_order + 1:
+                    if name == "Experience":
+                        user_info.experience_order = user_info.experience_order - 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order - 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order - 1
+                    user_info.education_order = user_info.education_order + 1
+                    break
+
+    elif section_name == 'experience':
+
+        if user_info.experience_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Skill", user_info.skill_order), ("Award", user_info.award_order)]:
+                if value == user_info.experience_order + 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order - 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order - 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order - 1
+                    user_info.experience_order = user_info.experience_order + 1
+                    break
+
+    elif section_name == 'skill':
+
+        if user_info.skill_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Award", user_info.award_order)]:
+                if value == user_info.skill_order + 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order - 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order - 1
+                    elif name == "Award":
+                        user_info.award_order = user_info.award_order - 1
+                    user_info.skill_order = user_info.skill_order + 1
+                    break
+
+    elif section_name == 'award':
+
+        if user_info.award_order == 4:
+            return redirect('/profile/')
+        else:
+            # find next smallest
+            next_smallest = None
+            for (name, value) in [("Education", user_info.education_order), ("Experience", user_info.experience_order), ("Skill", user_info.skill_order)]:
+                if value == user_info.award_order + 1:
+                    if name == "Education":
+                        user_info.education_order = user_info.education_order - 1
+                    elif name == "Experience":
+                        user_info.experience_order = user_info.experience_order - 1
+                    elif name == "Skill":
+                        user_info.skill_order = user_info.skill_order - 1
+                    user_info.award_order = user_info.award_order + 1
+                    break
+
+    user_info.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_bp(request, bp_id):
+
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_bp(request, bp_id):
+
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_education(request, bp_id):
+
+    bp = Education.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_education(request, bp_id):
+
+    bp = Education.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_experience(request, bp_id):
+
+    bp = Experience.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_experience(request, bp_id):
+
+    bp = Experience.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_skill(request, bp_id):
+
+    bp = Skill.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_skill(request, bp_id):
+
+    bp = Skill.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def enable_award(request, bp_id):
+
+    bp = Award.objects.get(id=bp_id)
+    bp.enabled = True
+    bp.save()
+    return redirect('/profile/')
+
+
+@login_required
+def disable_award(request, bp_id):
+
+    bp = Award.objects.get(id=bp_id)
+    bp.enabled = False
+    bp.save()
+    return redirect('/profile/')
+
 
 
 @login_required
@@ -1374,60 +1763,6 @@ def create_skill_category(request):
 
     return render(request, 'add-skill-category.html', {'form': form})
 
-# method called whenever we want to render profile.html
-# gets user's info, education, skills, experience, and awards
-def user_profile_dict(request, only_enabled=False):
-    # get experience bullet points for user
-    user_info = request.user.user_info
-
-    if only_enabled:
-
-        bps = BulletPoint.objects.filter(enabled=True).order_by('order')
-        user_bps = {}
-        for bp in bps:
-            if bp.get_parent().owner == user_info:
-                if bp.get_parent() in user_bps:
-                    user_bps[bp.get_parent()].append(bp)
-                else:
-                    user_bps[bp.get_parent()] = [bp]
-
-    else:
-
-        bps = BulletPoint.objects.all().order_by('order')
-        user_bps = {}
-        for bp in bps:
-            if bp.get_parent().owner == user_info:
-                if bp.get_parent() in user_bps:
-                    user_bps[bp.get_parent()].append(bp)
-                else:
-                    user_bps[bp.get_parent()] = [bp]
-
-    if only_enabled:
-
-        # create dictionary
-        dictionary = {'user': request.user, \
-                        'user_info': request.user.user_info, \
-                        'education_list': Education.objects.filter(owner=user_info, enabled=True).order_by('order'), \
-                        'skill_category_list': Skill.objects.filter(owner=user_info, enabled=True).order_by('order'), \
-                        'experience_list': Experience.objects.filter(owner=user_info, enabled=True).order_by('order'), \
-                        'award_list': Award.objects.filter(owner=user_info, enabled=True).order_by('order'), \
-                        'bps': user_bps}
-
-    else:
-
-        # create dictionary
-        dictionary = {'user': request.user, \
-                        'user_info': request.user.user_info, \
-                        'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
-                        'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
-                        'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
-                        'award_list': Award.objects.filter(owner=user_info).order_by('order'), \
-                        'bps': user_bps}
-
-    return dictionary
-
-
-
 
 
 def generate_pdf(request):
@@ -1556,6 +1891,10 @@ def user_profile_dict(request, only_enabled=False):
 
 
 @login_required
+def generate_pdf(request):
+    return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+
+
 def add_bp_comment(request, bp_id=None):
 
     if request.method == 'POST':
@@ -1667,9 +2006,7 @@ def downvote_comment(request, comment_id):
     return redirect('/view-my-resume/')
 
 
-def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request, True))
-
+# turns a Query Set into a Values List for easier use
 def queryset_to_valueslist(query_set):
 
     # first, QuerySet to dictionary
@@ -1679,3 +2016,20 @@ def queryset_to_valueslist(query_set):
 
     # next, only return values in dictionary
     return id_results.values()
+
+
+
+@login_required
+def main_menu(request):
+    if request.POST.get("mm-view-my-resume"):
+        return redirect('/view-my-resume/')
+    elif request.POST.get("mm-comment-resume"):
+        return redirect('/choose-resume-to-edit/')
+    elif request.POST.get("mm-logout"):
+        return redirect('/logout/')
+    elif request.POST.get("mm-my-profile"):
+        return redirect('/profile/')
+    elif request.POST.get("mm-pdf-my-resume"):
+        return redirect('/generate-pdf/')
+    else:
+        return redirect('/profile/')
