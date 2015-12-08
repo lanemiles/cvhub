@@ -932,7 +932,14 @@ def move_down_experience(request, object_id):
 def view_my_resume(request):
 
     # we pass in user and user info
-    return render(request, 'view-my-resume.html', user_profile_dict(request, only_enabled=True))
+    return render(request, 'view-my-resume.html', user_profile_dict(request.user, only_enabled=True))
+
+
+def view_user_resume(request, user_id):
+
+    # we pass in user and user info
+    return render(request, 'resume_pdf_template.html', user_profile_dict(User.objects.get(id=user_id), only_enabled=True))
+
 
 
 @login_required
@@ -1836,9 +1843,9 @@ def create_skill_category(request):
 
 # method called whenever we want to render profile.html
 # gets user's info, education, skills, experience, and awards
-def user_profile_dict(request, only_enabled=False):
-    
-    user_info = request.user.user_info
+def user_profile_dict(user, only_enabled=False):
+
+    user_info = user.user_info
 
     # get bullet points for user
     if only_enabled:
@@ -1866,8 +1873,8 @@ def user_profile_dict(request, only_enabled=False):
     if only_enabled:
 
         # create dictionary
-        dictionary = {'user': request.user, \
-                        'user_info': request.user.user_info, \
+        dictionary = {'user': user, \
+                        'user_info': user_info, \
                         'education_list': Education.objects.filter(owner=user_info, enabled=True).order_by('order'), \
                         'skill_category_list': Skill.objects.filter(owner=user_info, enabled=True).order_by('order'), \
                         'experience_list': Experience.objects.filter(owner=user_info, enabled=True).order_by('order'), \
@@ -1877,8 +1884,8 @@ def user_profile_dict(request, only_enabled=False):
     else:
 
         # create dictionary
-        dictionary = {'user': request.user, \
-                        'user_info': request.user.user_info, \
+        dictionary = {'user': user, \
+                        'user_info': user_info, \
                         'education_list': Education.objects.filter(owner=user_info).order_by('order'), \
                         'skill_category_list': Skill.objects.filter(owner=user_info).order_by('order'), \
                         'experience_list': Experience.objects.filter(owner=user_info).order_by('order'), \
@@ -2007,23 +2014,21 @@ def downvote_comment(request, comment_id):
 
     return redirect('/view-my-resume/')
 
+
 def review_comments(request):
 
     return render(request, 'review_comments.html', user_profile_dict(request, True))
 
-def accept_comment(request, comment_id):
 
+def accept_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
-
     # rep points for commenter
     rp = 5
-    
+
     # if accepted suggestion, need to replace bp text
     # suggestions can only be made to bullet points
     if comment.is_suggestion:
-
-        print "we have a suggestion!"
 
         # replace bp text
         bp = BulletPoint.objects.get(id=comment.object_id)
@@ -2049,18 +2054,15 @@ def accept_comment(request, comment_id):
     commenter = UserInfo.objects.get(id=comment.author.id)
     commenter.points = commenter.points + (rp*vote_total)
     commenter.save()
-    print "updated commenter's rp"
 
     # update comment's status
     comment.status = CommentStatus.ACCEPTED
     comment.save()
-    print "updatd comment"
 
     return render(request, 'review_comments.html', user_profile_dict(request, True))
 
 
 def reject_comment(request, comment_id):
-
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
     comment.status = CommentStatus.DECLINE

@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^accept-comment/(?P<comment_id>[0-9]+)', views.accept_comment, name='accept_comment'),
     url(r'^reject-comment/(?P<comment_id>[0-9]+)', views.reject_comment, name='reject_comment'),
     url(r'^view-my-resume', views.view_my_resume, name='view_my_resume'),
+    url(r'^view-user-resume/(?P<user_id>[0-9]+)', views.view_user_resume, name='view_user_resume'),
     url(r'^generate-pdf', views.generate_pdf, name='generate_pdf'),
     url(r'^choose-resume-to-edit', views.choose_resume_to_edit, name='choose_resume_to_edit'),
     url(r'^search-resume-results', views.search_resume_results, name='search_resume_results'),
