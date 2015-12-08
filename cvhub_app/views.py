@@ -73,7 +73,7 @@ def thanks(request):
 @login_required
 def user_profile(request):
    
-    return render(request, 'profile.html', user_profile_dict(request))
+    return render(request, 'profile.html', user_profile_dict(request.user))
 
 
 def logout_view(request):
@@ -1770,7 +1770,7 @@ def create_skill_category(request):
 
 
 def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+    return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
 
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -1898,7 +1898,7 @@ def user_profile_dict(user, only_enabled=False):
 
 @login_required
 def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request, True))
+    return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
 
 
 # TODO rep points
@@ -2017,7 +2017,7 @@ def downvote_comment(request, comment_id):
 
 def review_comments(request):
 
-    return render(request, 'review_comments.html', user_profile_dict(request, True))
+    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 
 def accept_comment(request, comment_id):
@@ -2059,7 +2059,7 @@ def accept_comment(request, comment_id):
     comment.status = CommentStatus.ACCEPTED
     comment.save()
 
-    return render(request, 'review_comments.html', user_profile_dict(request, True))
+    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 
 def reject_comment(request, comment_id):
@@ -2068,7 +2068,7 @@ def reject_comment(request, comment_id):
     comment.status = CommentStatus.DECLINE
     comment.save()
 
-    return render(request, 'review_comments.html', user_profile_dict(request, True))
+    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 
 # turns a Query Set into a flat list of values for easier use
