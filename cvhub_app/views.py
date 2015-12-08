@@ -977,8 +977,7 @@ def choose_resume_to_edit(request):
                 user_info = UserInfo.objects.order_by('-points')[user_index]
 
                 # comment randomly chosen resume
-                return render(request, 'comment_resume.html', {'user': user_info.user.username, \
-                    'education_list': Education.objects.filter(owner=user_info).order_by('order')})
+                return render(request, 'comment_resume.html', user_profile_dict(user_info.user, True))
 
             # TODO: most popular (most commented resume)
 
@@ -998,7 +997,7 @@ def choose_resume_to_edit(request):
                 id_results = []
 
                 # See if user's contact information or name matches
-                id_results += queryset_to_valueslist(UserInfo.objects.filter( \
+                id_results += queryset_to_valueslist("id", UserInfo.objects.filter( \
                     Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
                     Q(website__icontains=keywords)).values('id'))
 
@@ -1011,13 +1010,13 @@ def choose_resume_to_edit(request):
                 #     id_results.append(x.user_info.id)
 
                 # Search in Education, Skill categories, Experience, and Awards
-                id_results += queryset_to_valueslist(Education.objects.filter(Q(enabled=True), \
-                    Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
-                id_results += queryset_to_valueslist(Skill.objects.filter(Q(enabled=True), \
+                id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
+                    Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
+                id_results += queryset_to_valueslist("owner", Skill.objects.filter(Q(enabled=True), \
                     Q(category__icontains=keywords)).values('owner'))
-                id_results += queryset_to_valueslist(Experience.objects.filter(Q(enabled=True), \
+                id_results += queryset_to_valueslist("owner", Experience.objects.filter(Q(enabled=True), \
                     Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
-                id_results += queryset_to_valueslist(Award.objects.filter(Q(enabled=True), \
+                id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
                     Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
 
                 # Search in Bullet Points. BP's only know about their parent objects,
@@ -1078,22 +1077,19 @@ def search_resume_results(request):
 
             if request.POST.get("choose_resume"):
 
-                # get resume owner's id
-                print request.POST
+                # get owner of resume selected in drop down box
                 selected_resume = request.POST.get('results_list')
-
-                print selected_resume
 
                 # get UserInfo object about resume owner
                 user_info = UserInfo.objects.get(id=selected_resume)
 
+                # redirect to the page to comment the chosen resume
+                return render(request, 'comment_resume.html', user_profile_dict(user_info.user, True))
+            
             # go back to choose/search resume screen
             elif request.POST.get("back_to_choose_resume"):
                 return render(request, 'choose_resume_to_edit.html', {'form': form})
 
-            # redirect to the page for commenting resumes
-            return render(request, 'comment_resume.html', {'user': user_info.user.username, \
-                'education_list': Education.objects.filter(owner=user_info).order_by('order')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1102,7 +1098,6 @@ def search_resume_results(request):
 
 
 
-
 @login_required
 def move_up_section(request, section_name):
 
@@ -1607,55 +1602,13 @@ def disable_award(request, bp_id):
     bp.save()
     return redirect('/profile/')
 
-
-# GET: send information about the relevant commentable resume item 
-#   to the popup box
-# POST: add comments to a resume from the popup box
-# add comments to a resume
 @login_required
 def comment_resume(request):
 
+    # we pass in user and user info
+    return render(request, 'comment_resume.html', user_profile_dict(request.user, only_enabled=True))
 
-    # TODO: change depending on what form looks like
-    if request.method == 'POST':
-        form = CommentResumeForm(request.POST, user=user)
-        if form.is_valid():
 
-            # if the user tried to submit a comment
-            if request.POST.get("submit_comment"):
-
-                # new comment with comment and suggestion text from form
-                new_comment = Comment()
-                new_comment.text = form.cleaned_data.get('comment_text')
-                new_comment.suggestion = form.cleaned_data.get('suggestion_text')
-                new_comment.author = request.user.user_info
-
-                # set comment's foreign key to the selected item
-                education_type = ContentType.objects.get_for_model(Education)
-                new_comment.content_type = education_type
-                education_item = form.cleaned_data.get('commentable_resume_item')
-                new_comment.object_id = education_item
-            
-                # put new comment into the database
-                new_comment.save()
-                # return redirect('thanks.html') 
-                # TODO: return success code here?  
-
-    # GET method
-    # given a div id, return information in JSON format 
-    else:
-
-        # get commentable resume item
-        item_id = request.GET.get('id')
-
-        # return all pending comments (status is 0) related to that resume item
-        item_comments = Comments.objects.filter(object_id=item_id, status=CommentStatus.PENDING)
-
-        # turn QuerySet into JSON
-        json_comments = serializers.serialize("json", item_comments)
-
-        # return JSON of existing comments for the given item
-        return HttpResponse(json_comments)
 
 
 # Add your experience
@@ -1923,9 +1876,19 @@ def add_bp_comment(request, bp_id=None):
 
             new_comment.is_suggestion = True
 
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
         else:
 
             new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
 
         print new_comment.is_suggestion
 
@@ -1937,8 +1900,9 @@ def add_bp_comment(request, bp_id=None):
         new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
         new_comment.object_id = bp_id
         new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
-
         new_comment.save()
+
+        author.save()
 
         return redirect('/view-my-resume/')
 
@@ -1978,7 +1942,6 @@ def get_comments_for_bp(request, bp_id):
 def upvote_comment(request, comment_id):
 
     # assuming they haven't voted before
-    # TODO rep points
     vote = Vote()
     vote.user = request.user.user_info
     vote.comment = Comment.objects.get(id=comment_id)
@@ -1992,13 +1955,18 @@ def upvote_comment(request, comment_id):
     comment.save()
     print comment
 
+    # rep points for comment author
+    UPVOTED_COMMENT_RP = 3
+    comment_author = UserInfo.objects.get(id = comment.author.id)
+    comment_author.points = comment_author.points + UPVOTED_COMMENT_RP
+    comment_author.save()
+
     return redirect('/view-my-resume/')
 
 
 def downvote_comment(request, comment_id):
 
     # assuming they haven't voted before
-    # TODO rep points
     vote = Vote()
     vote.user = request.user.user_info
     vote.comment = Comment.objects.get(id=comment_id)
@@ -2012,9 +1980,15 @@ def downvote_comment(request, comment_id):
     comment.save()
     print comment
 
+    # negative rep points for comment author
+    DOWNVOTED_COMMENT_RP = -1
+    comment_author = UserInfo.objects.get(id = comment.author.id)
+    comment_author.points = comment_author.points + DOWNVOTED_COMMENT_RP
+    comment_author.save()
+
     return redirect('/view-my-resume/')
 
-
+# Resume owner reviews comments on their resume
 def review_comments(request):
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
@@ -2024,7 +1998,9 @@ def accept_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
     # rep points for commenter
-    rp = 5
+    ACCEPTED_COMMENT_RP = 20
+    ACCEPTED_SUGGESTION_RP = 30
+    rp = ACCEPTED_COMMENT_RP
 
     # if accepted suggestion, need to replace bp text
     # suggestions can only be made to bullet points
@@ -2036,23 +2012,20 @@ def accept_comment(request, comment_id):
         bp.save()
 
         # award more rp for comment + suggestion than just a comment
-        rp += 2
+        rp = ACCEPTED_SUGGESTION_RP
 
         # reject all other pending suggestions on this bp
-        reject_suggestions = queryset_to_valueslist(Comment.objects.filter(object_id=bp.id, \
+        reject_suggestions = queryset_to_valueslist('id',Comment.objects.filter(object_id=bp.id, \
             is_suggestion=True, status=CommentStatus.PENDING).exclude(id=comment_id).values('id'))
         for rs_id in reject_suggestions:
             rs = Comment.objects.get(id=rs_id)
             rs.status = CommentStatus.DECLINE
             rs.save()
             print "successfully rejected", rs.text
-
-    # prevent getting negative rp from an accepted comment
-    vote_total = 1 if (comment.vote_total < 1) else comment.vote_total
     
     # award rp to commenter
     commenter = UserInfo.objects.get(id=comment.author.id)
-    commenter.points = commenter.points + (rp*vote_total)
+    commenter.points = commenter.points + rp
     commenter.save()
 
     # update comment's status
@@ -2061,7 +2034,7 @@ def accept_comment(request, comment_id):
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
-
+# note there is no rp penalty for rejected comment
 def reject_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
@@ -2072,12 +2045,12 @@ def reject_comment(request, comment_id):
 
 
 # turns a Query Set into a flat list of values for easier use
-def queryset_to_valueslist(query_set):
+def queryset_to_valueslist(key, query_set):
 
     # for every key-value pair in the dictionary, get the value
     id_results = []
     for x in query_set:
-        id_results.append(x['id'])
+        id_results.append(x[key])
         print x
 
     return id_results
