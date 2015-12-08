@@ -976,8 +976,11 @@ def choose_resume_to_edit(request):
                 user_index = random.randint(0,upper_limit)
                 user_info = UserInfo.objects.order_by('-points')[user_index]
 
+                user_dictionary = user_profile_dict(user_info.user, True)
+                user_dictionary.update({'header_user': request.user})
+
                 # comment randomly chosen resume
-                return render(request, 'comment_resume.html', user_profile_dict(user_info.user, True))
+                return render(request, 'comment_resume.html', user_dictionary)
 
             # TODO: most popular (most commented resume)
 
@@ -1083,8 +1086,11 @@ def search_resume_results(request):
                 # get UserInfo object about resume owner
                 user_info = UserInfo.objects.get(id=selected_resume)
 
+                user_dictionary = user_profile_dict(user_info.user, True)
+                user_dictionary.update({'header_user': request.user})
+
                 # redirect to the page to comment the chosen resume
-                return render(request, 'comment_resume.html', user_profile_dict(user_info.user, True))
+                return render(request, 'comment_resume.html', user_dictionary)
             
             # go back to choose/search resume screen
             elif request.POST.get("back_to_choose_resume"):
@@ -1608,9 +1614,6 @@ def comment_resume(request):
     # we pass in user and user info
     return render(request, 'comment_resume.html', user_profile_dict(request.user, only_enabled=True))
 
-
-
-
 # Add your experience
 @login_required
 def create_experience(request):
@@ -1879,7 +1882,8 @@ def add_bp_comment(request, bp_id=None):
             # add rep points for a suggestion to the author
             MADE_SUGGESTION_RP = 15
             author = UserInfo.objects.get(id=new_comment.author.id)
-            author.points = author.points + MADE_COMMENT_RP
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
 
         else:
 
