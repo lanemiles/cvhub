@@ -2023,8 +2023,10 @@ def accept_comment(request, comment_id):
     # suggestions can only be made to bullet points
     if comment.is_suggestion:
 
+        print "we have a suggestion!"
+
         # replace bp text
-        bp = BulletPoint.objects.get(id=object_id)
+        bp = BulletPoint.objects.get(id=comment.object_id)
         bp.text = comment.suggestion
         bp.save()
 
@@ -2032,42 +2034,49 @@ def accept_comment(request, comment_id):
         rp += 2
 
         # reject all other pending suggestions on this bp
-        reject_suggestions = Comment.objects.filter(object_id=bp.id, is_suggestion=True, status=CommentStatus.PENDING).values('id')
-        for rs in reject_suggestions:
-            reject_comment(request, rs)
+        reject_suggestions = queryset_to_valueslist(Comment.objects.filter(object_id=bp.id, \
+            is_suggestion=True, status=CommentStatus.PENDING).exclude(id=comment_id).values('id'))
+        for rs_id in reject_suggestions:
+            rs = Comment.objects.get(id=rs_id)
+            rs.status = CommentStatus.DECLINE
+            rs.save()
+            print "successfully rejected", rs.text
 
     # prevent getting negative rp from an accepted comment
-    vote_total = 1 if comment.vote_total == 0 else comment.vote_total
+    vote_total = 1 if (comment.vote_total < 1) else comment.vote_total
     
     # award rp to commenter
-    commenter = UserInfo.objects.get(id=comment.author)
-    commenter.points = commenter.points + (rp*comment.vote_total)
+    commenter = UserInfo.objects.get(id=comment.author.id)
+    commenter.points = commenter.points + (rp*vote_total)
     commenter.save()
+    print "updated commenter's rp"
 
     # update comment's status
     comment.status = CommentStatus.ACCEPTED
     comment.save()
+    print "updatd comment"
 
     return render(request, 'review_comments.html', user_profile_dict(request, True))
+
 
 def reject_comment(request, comment_id):
 
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
     comment.status = CommentStatus.DECLINE
+    comment.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request, True))
 
 
-
-
-# turns a Query Set into a Values List for easier use
+# turns a Query Set into a flat list of values for easier use
 def queryset_to_valueslist(query_set):
 
-    # first, QuerySet to dictionary
-    id_results = {}
+    # for every key-value pair in the dictionary, get the value
+    id_results = []
     for x in query_set:
-        id_results.update(x)
+        id_results.append(x['id'])
+        print x
 
-    # next, only return values in dictionary
-    return id_results.values()
+    return id_results
+
