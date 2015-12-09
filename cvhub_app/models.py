@@ -19,6 +19,11 @@ class UserInfo(models.Model):
     phone_number = models.CharField(max_length=10)
     website = models.CharField(max_length=128)
 
+    education_order = models.IntegerField(default=1)
+    skill_order = models.IntegerField(default=2)
+    experience_order = models.IntegerField(default=3)
+    award_order = models.IntegerField(default=4)
+
     def __unicode__(self):
         return '{} - {}'.format(self.user.username, self.dob)
 
@@ -68,6 +73,7 @@ class BulletPoint(CommentableResumeItem):
             return Experience.objects.get(id=self.object_id)
         elif str(self.content_type) == 'award':
             return Award.objects.get(id=self.object_id)
+
 
 class Education(ResumeItem):
 
@@ -135,19 +141,17 @@ class Comment(models.Model):
     is_suggestion = models.BooleanField()
     status = enum.EnumField(CommentStatus, default=CommentStatus.PENDING)
 
+    vote_total = models.IntegerField(default=0)
+
     class Meta:
         unique_together = ("author", "content_type", "object_id", "timestamp")
 
     # every time we save a comment, check if we have a suggestion 
     def save(self, *args, **kwargs):
 
-        # check if in progress
-        if self.suggestion is not None:
-            self.is_suggestion = True
-
         super(Comment, self).save(*args, **kwargs)
 
-    # return the parent object of the bullet point
+    # return the parent object of the comment
     def get_parent(self):
 
         if str(self.content_type) == 'education':

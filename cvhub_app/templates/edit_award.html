@@ -1,0 +1,6 @@
+<form action="/edit-award/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input name='award_id' type='hidden' value={{award_id}}></input>
+    <input type="submit" value="Submit" />
+</form>

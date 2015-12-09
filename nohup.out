@@ -3617,3 +3617,190 @@ AttributeError: 'NoneType' object has no attribute 'select'
 [30/Nov/2015 04:17:01] "GET /view-my-resume HTTP/1.1" 500 174063
 [30/Nov/2015 04:17:17] "GET /view-my-resume HTTP/1.1" 200 4930
 [30/Nov/2015 04:17:18] "GET /resume_template_css.css HTTP/1.1" 404 4328
+[01/Dec/2015 08:47:28] "GET /profile HTTP/1.1" 200 610
+[01/Dec/2015 08:47:29] "GET /profile HTTP/1.1" 200 610
+[01/Dec/2015 08:47:44] "GET /profile HTTP/1.1" 200 1771
+[01/Dec/2015 08:47:48] "GET /edit-education/2 HTTP/1.1" 200 1006
+[01/Dec/2015 08:47:50] "GET /edit-education/3 HTTP/1.1" 200 1012
+[01/Dec/2015 08:47:52] "GET /edit-education/10 HTTP/1.1" 200 992
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 08:47:19
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 08:51:34] "GET /profile HTTP/1.1" 500 54306
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 08:49:37
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 08:58:13] "GET /profile HTTP/1.1" 200 610
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 08:52:52
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:01:22] "GET /view-my-resume HTTP/1.1" 200 1507
+[01/Dec/2015 09:01:22] "GET /static/cvhub_app/resume_template_css.css HTTP/1.1" 304 0
+[01/Dec/2015 09:01:34] "GET /add-experience HTTP/1.1" 200 1109
+[01/Dec/2015 09:02:42] "POST /add-experience/ HTTP/1.1" 200 795
+[01/Dec/2015 09:02:52] "GET /add-experience/ HTTP/1.1" 200 1109
+[01/Dec/2015 09:03:19] "POST /add-experience/ HTTP/1.1" 200 976
+[01/Dec/2015 09:03:41] "GET /profile HTTP/1.1" 200 983
+[01/Dec/2015 09:03:52] "GET /profile HTTP/1.1" 200 985
+[01/Dec/2015 09:04:03] "GET /profile HTTP/1.1" 200 991
+[01/Dec/2015 09:04:31] "GET /profile HTTP/1.1" 200 991
+[01/Dec/2015 09:04:43] "GET /profile HTTP/1.1" 200 991
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 08:59:11
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:08:03] "GET /add-bp HTTP/1.1" 200 686
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:05:20
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:08:49] "GET /add-award HTTP/1.1" 500 96012
+[01/Dec/2015 09:09:22] "GET /add-award HTTP/1.1" 200 712
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:08:31
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:15:38] "GET /profile HTTP/1.1" 200 1004
+[01/Dec/2015 09:16:00] "POST /add-award/ HTTP/1.1" 200 1151
+[01/Dec/2015 09:16:18] "GET /profile HTTP/1.1" 200 1139
+[01/Dec/2015 09:16:18] "GET /profile HTTP/1.1" 200 1139
+[01/Dec/2015 09:16:32] "GET /profile HTTP/1.1" 200 1150
+[01/Dec/2015 09:16:44] "GET /profile HTTP/1.1" 200 1148
+[01/Dec/2015 09:16:59] "GET /add-award HTTP/1.1" 200 712
+[01/Dec/2015 09:17:19] "POST /add-award/ HTTP/1.1" 200 1297
+[01/Dec/2015 09:17:29] "GET /add-award/ HTTP/1.1" 200 712
+[01/Dec/2015 09:18:02] "POST /add-award/ HTTP/1.1" 200 1443
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:09:27
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:18:43] "GET /add-award/ HTTP/1.1" 200 712
+[01/Dec/2015 09:19:46] "POST /add-award/ HTTP/1.1" 200 1618
+[01/Dec/2015 09:22:09] "GET /profile HTTP/1.1" 200 1681
+[01/Dec/2015 09:24:36] "GET /view-my-resume HTTP/1.1" 200 1507
+[01/Dec/2015 09:24:36] "GET /static/cvhub_app/resume_template_css.css HTTP/1.1" 304 0
+[01/Dec/2015 09:25:37] "GET /profile HTTP/1.1" 200 1894
+[01/Dec/2015 09:26:24] "GET /profile HTTP/1.1" 200 1832
+[01/Dec/2015 09:26:35] "GET /profile HTTP/1.1" 200 1837
+[01/Dec/2015 09:26:58] "GET /profile HTTP/1.1" 200 1848
+[01/Dec/2015 09:27:27] "GET /profile HTTP/1.1" 200 1831
+[01/Dec/2015 09:27:33] "GET /profile HTTP/1.1" 200 1826
+[01/Dec/2015 09:28:13] "GET /view-my-resume HTTP/1.1" 200 1507
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:18:32
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:32:11] "GET /profile HTTP/1.1" 500 110674
+[01/Dec/2015 09:32:38] "GET /profile HTTP/1.1" 200 1826
+[01/Dec/2015 09:32:54] "GET /add-skill-category HTTP/1.1" 200 456
+[01/Dec/2015 09:32:59] "POST /add-award/ HTTP/1.1" 200 907
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:29:14
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:33:20] "POST /add-award/ HTTP/1.1" 200 907
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:33:18
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:33:54] "POST /add-award/ HTTP/1.1" 200 907
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:33:29
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:34:29] "GET /add-skill-category HTTP/1.1" 200 465
+[01/Dec/2015 09:34:33] "POST /add-skill-category/ HTTP/1.1" 200 1826
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:34:04
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:37:22] "GET /profile HTTP/1.1" 200 1826
+[01/Dec/2015 09:38:06] "GET /profile HTTP/1.1" 200 1839
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:35:10
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:40:32] "GET /profile HTTP/1.1" 500 109781
+[01/Dec/2015 09:40:46] "GET /profile HTTP/1.1" 200 1918
+[01/Dec/2015 09:41:13] "GET /add-skill-category HTTP/1.1" 200 465
+[01/Dec/2015 09:41:19] "POST /add-skill-category/ HTTP/1.1" 200 1839
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:38:32
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:41:48] "GET /profile HTTP/1.1" 200 2005
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:41:37
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:44:07] "GET /add-skill-category/ HTTP/1.1" 200 465
+[01/Dec/2015 09:44:13] "POST /add-skill-category/ HTTP/1.1" 200 2089
+[01/Dec/2015 09:44:21] "GET /profile HTTP/1.1" 200 2089
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 01, 2015 - 09:42:05
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8001/
+Quit the server with CONTROL-C.
+[01/Dec/2015 09:47:18] "GET /profile HTTP/1.1" 302 0
+[01/Dec/2015 09:47:18] "GET /login?next=/profile HTTP/1.1" 301 0
+[01/Dec/2015 09:47:18] "GET /login/?next=/profile HTTP/1.1" 200 685
+[01/Dec/2015 09:47:34] "GET /add-skill-category HTTP/1.1" 200 465
+[01/Dec/2015 09:47:45] "GET /add-award HTTP/1.1" 200 712
+[01/Dec/2015 09:47:55] "GET /add-skill-category HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /profile HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /add-experience HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /add-award HTTP/1.1" 302 0
+[01/Dec/2015 09:47:55] "GET /login?next=/add-skill-category HTTP/1.1" 301 0
+[01/Dec/2015 09:47:55] "GET /login?next=/profile HTTP/1.1" 301 0
+[01/Dec/2015 09:47:55] "GET /login?next=/add-experience HTTP/1.1" 301 0
+[01/Dec/2015 09:47:55] "GET /login?next=/add-award HTTP/1.1" 301 0
