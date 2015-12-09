@@ -1,0 +1,323 @@
+{% load staticfiles %}
+
+<html>
+
+	<head>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<link rel='stylesheet' href='{% static "cvhub_app/resume-pdf-css.css" %}' />
+		<script src="{% static "cvhub_app/html2canvas.js" %}"></script>
+		<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+		
+
+	</head>
+
+	<body>
+
+		<div id='container'>
+
+
+			<h1 class='title small_caps'>{{user_info.display_name}}</h1>
+
+			<div class='contact'>
+				<span class='email'>{{user.email}}</span>
+				<span class='divider_pipe'> | </span>
+				<span class='phone'>{{user_info.phone_number}}</span>
+				<span class='divider_pipe'> | </span>
+				<span class='url'>{{user_info.website}}</span>
+			</div>
+
+			<!-- <div class='summary'>
+				<span class='summary_text italics'>
+					A fast-learning and self-motivated student leader passionate about computer science, politics, and their intersections
+				</span>
+			</div> -->
+
+			{% if education_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>EDUCATION:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in education_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.school}}</span>, <span class='item_sub_title'>{{info.location}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						{% if info.in_progress %}
+						<span class='item_date italics'>Expected Graduation: {{info.end_date}}</span>
+						{% else %}
+						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
+						{% endif %}
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+			{% if skill_category_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>SKILLS:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in skill_category_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.category}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+			{% if experience_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>EXPERIENCE:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in experience_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.employer}}</span>, <span class='item_sub_title'>{{info.title}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						{% if info.current %}
+						<span class='item_date italics'>{{info.start_date}} - Present</span>
+						{% else %}
+						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
+						{% endif %}
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+			{% if award_list %}
+			<div class='section'>
+
+				<span class='section_name small_caps bold'>EXPERIENCE:</span>
+
+				<hr class='section_hr'>
+
+				{% for info in award_list %}
+				{% if info.enabled == True %}
+
+				<div class='item'>
+
+					<div class='main_row'>
+
+						<span class='row_left'>
+
+						<span class='item_title bold'>{{info.name}}</span>, <span class='item_sub_title'>{{info.issuer}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						
+						<span class='item_date italics'>{{info.date_awarded}}</span>
+						</span>
+
+					</div>
+
+					<div class='row_clear'></div>
+
+					<div class='bullet_points'>
+
+						<ul class='bullet_point_ul'>
+
+							{% for key, value in bps.items %}
+							{% if key == info %}
+							{% for text in value %}
+
+							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endfor %}
+							{% endif %}
+							{% endfor %}
+
+							
+							
+
+						</ul>
+
+					</div>
+
+				</div>
+
+				{% endif %}
+				{% endfor %}
+
+			</div>
+			{% endif %}
+
+
+
+		</div>
+
+		<div id='pdf'>
+		<center>
+		</center>
+		</div>
+
+		<script type='text/javascript'>
+
+		$(document).ready(function(){
+		
+			// html2canvas($('#container'), {
+			// 	onrendered: function(canvas) {
+			// 		// document.getElementById("pdf").appendChild(canvas);
+			// 	// var pdf = new jsPDF()
+			// 	// pdf.addImage(canvas.toDataURL("image/jpeg"))
+			// 	console.log(canvas.toDataURL("image/jpeg"))
+
+			// },
+			// });
+
+			html2canvas($('#container'), {
+				  onrendered: function(canvas) {
+				    var pdf = new jsPDF()
+				    pdf.addImage(canvas.toDataURL("image/jpeg"),"jpeg",0,0)
+				    window.location=pdf.output("datauristring")
+				  }
+				});
+
+
+});
+
+		</script>
+
+	</body>
+
+</html>

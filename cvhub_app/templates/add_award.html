@@ -1,3 +1,10 @@
+    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
+    <br>
+    <a href='/view-my-resume/'>View My Resume</a> | 
+    <a href='/review-comments/'>Review Comments</a> |     
+    <a href='/generate-pdf/'>PDF My Resume</a> |
+    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
+<h2> Add an Award</h2>
 <form action="/add-award/" method="post">
     {% csrf_token %}
     {{ form }}
