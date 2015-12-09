@@ -3804,3 +3804,18 @@ Quit the server with CONTROL-C.
 [01/Dec/2015 09:47:55] "GET /login?next=/profile HTTP/1.1" 301 0
 [01/Dec/2015 09:47:55] "GET /login?next=/add-experience HTTP/1.1" 301 0
 [01/Dec/2015 09:47:55] "GET /login?next=/add-award HTTP/1.1" 301 0
+[09/Dec/2015 04:58:47] "GET /profile HTTP/1.1" 200 9697
+[09/Dec/2015 04:58:48] "GET /edit-information/ HTTP/1.1" 200 829
+[09/Dec/2015 04:58:59] "GET / HTTP/1.1" 500 86898
+[09/Dec/2015 05:01:44] "GET / HTTP/1.1" 500 87210
+[09/Dec/2015 05:01:44] "GET /favicon.ico HTTP/1.1" 404 15481
+[09/Dec/2015 05:02:41] "GET / HTTP/1.1" 500 87210
+[09/Dec/2015 05:02:42] "GET / HTTP/1.1" 500 87210
+[09/Dec/2015 05:02:43] "GET / HTTP/1.1" 500 87210
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 09, 2015 - 05:01:41
+Django version 1.8.5, using settings 'cvhub.settings'
+Starting development server at http://0.0.0.0:8005/
+Quit the server with CONTROL-C.
