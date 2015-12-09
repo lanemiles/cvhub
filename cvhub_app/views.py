@@ -2059,3 +2059,30 @@ def queryset_to_valueslist(key, query_set):
 
     return id_results
 
+def edit_information(request):
+
+   # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        form = EditInformationForm(request.POST)
+        
+        if form.is_valid():
+
+            # update user_info object per new information from form
+            user_info = request.user.user_info
+            user_info.dob = form.cleaned_data.get('dob')
+            user_info.display_name = form.cleaned_data.get('display_name')
+            user_info.phone_number = form.cleaned_data.get('phone_number')
+            user_info.website = form.cleaned_data.get('website')
+            user_info.save()
+
+        return redirect('/profile/')
+
+    # if a GET 
+    else:
+        
+        # return form to edit information
+        form = EditInformationForm(instance=request.user.user_info)
+
+        return render(request, 'edit_information.html', {'form': form})
+
