@@ -2,10 +2,9 @@
 
 <html>
 
-    <p align=right>Logged in as <a href='/profile/'>{{header_user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
+    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
     <br>
     <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/review-comments/'>Review Comments</a> |     
     <a href='/generate-pdf/'>PDF My Resume</a> |
     <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
 
@@ -29,9 +28,9 @@
 			margin-bottom: 10px;
 		}
 
-		.column-left{ float: left; width: 130px; }
+		.column-left{ float: left; width: 200px; }
 .column-right{ float: right; width: 0%; }
-.column-center{ display: inline-block; width: 70%; padding-left: 20px; border-left: 1px solid black;}
+.column-center{ display: inline-block;  padding-left: 20px; border-left: 1px solid black;}
 
 		.blocker {
   position: fixed;
@@ -409,18 +408,9 @@ blockquote p {
 
   <!-- Modal HTML embedded directly into document -->
   <div id="ex1" style="display:none;">
-  <h2 class='comment_header'>Comment on:</h2> <blockquote id='bp_text'></blockquote>
-  <h2 class='comment_header'>Previous Comments:</h3>
+  <h2 class='comment_header'>Comments On:</h2> <blockquote id='bp_text'></blockquote>
+  <h2 class='comment_header'>Comment Status:</h3>
   <div id='results'>
-  </div>
-  <h2 class='comment_header'>Add a Comment:</h2>
-  <div id='new_comment'>
-  <form id='add_comment' method='POST'>
-  <label>Comment: </label><input style='width: 300px;' id='comment_text' type='text' name='comment_text' placeholder='Your thoughts...'><br>
-  <label>Suggestion: </label><input style='width: 300px;' id='suggestion_text' type='text' name='suggestion_text' placeholder='(Optional) What would you replace it with?'><br>
-  {% csrf_token %}
-  <input type='button' id='submit_button' value='Submit'>
-  </form>
   </div>
   </div>
 
@@ -532,13 +522,9 @@ blockquote p {
 			 		else {
 
 
-			 			if (value[1] == 2) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-				 	} else if(value[1] == 0) {
-				 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You +1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-				 	} else if(value[1] == 1){
-				 		$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>You -1'd</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
-
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
 
 			 		}
 
@@ -546,7 +532,7 @@ blockquote p {
 			 	}
 
 
-			 	} 
+			 	
 
 
 			 	else {
@@ -564,19 +550,11 @@ blockquote p {
 
 			 		else {
 
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 
-			 		
-			 		if (value[1] == 2) {
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	} else if(value[1] == 0) {
-			 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	} else if(value[1] == 1){
-			 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
-			 	}
-
-			 	}
 
 			 }
+			}
 
 			 	
 

@@ -1,11 +1,11 @@
     <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
     <br>
     <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/review-comment/'>Review Comments</a> |     
+    <a href='/review-comments/'>Review Comments</a> |     
     <a href='/generate-pdf/'>PDF My Resume</a> |
     <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
-    <h2> Add Education </h2>
-<form action="/add-education/" method="post">
+<h2> Add a Skill Category</h2>
+<form action="/add-skill-category/" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit" />
