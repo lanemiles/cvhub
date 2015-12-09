@@ -239,3 +239,10 @@ class AwardBulletPointForm(AwardForm):
         print bps
         for bp in bps:
             self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+
+
+class EditInformationForm(forms.ModelForm):
+
+    class Meta:
+        model = UserInfo
+        fields = ['dob', 'display_name', 'phone_number', 'website']

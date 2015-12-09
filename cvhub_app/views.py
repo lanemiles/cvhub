@@ -72,8 +72,8 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-   
-    return render(request, 'profile.html', user_profile_dict(request.user))
+
+    return render(request, 'profile.html', user_profile_dict(request.user, only_enabled=False))
 
 
 def logout_view(request):
@@ -1790,12 +1790,12 @@ def create_skill_category(request):
 
             return redirect('/profile/')
 
-
     # if a GET (or any other method) we'll create a blank form
     else:
         form = SkillCategoryForm()
 
     return render(request, 'add-skill-category.html', {'form': form})
+
 
 # method called whenever we want to render profile.html
 # gets user's info, education, skills, experience, and awards
@@ -1900,6 +1900,10 @@ def add_bp_comment(request, bp_id=None):
         bp = BulletPoint.objects.get(id=bp_id)
         parent = bp.get_parent()
 
+        # increment num pending
+        bp.num_pending_comments = bp.num_pending_comments + 1
+        bp.save()
+
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
         new_comment.object_id = bp_id
@@ -1992,10 +1996,11 @@ def downvote_comment(request, comment_id):
 
     return redirect('/view-my-resume/')
 
+
 # Resume owner reviews comments on their resume
 def review_comments(request):
 
-    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
+    return render(request, 'review_comments.html', user_profile_dict(request.user, only_enabled=True))
 
 
 def accept_comment(request, comment_id):
@@ -2006,12 +2011,18 @@ def accept_comment(request, comment_id):
     ACCEPTED_SUGGESTION_RP = 30
     rp = ACCEPTED_COMMENT_RP
 
+    # get bp
+    bp = BulletPoint.objects.get(id=comment.object_id)
+
+    # decrement pending
+    bp.num_pending_comments = bp.num_pending_comments - 1
+    bp.save()
+
     # if accepted suggestion, need to replace bp text
     # suggestions can only be made to bullet points
     if comment.is_suggestion:
 
         # replace bp text
-        bp = BulletPoint.objects.get(id=comment.object_id)
         bp.text = comment.suggestion
         bp.save()
 
@@ -2021,12 +2032,21 @@ def accept_comment(request, comment_id):
         # reject all other pending suggestions on this bp
         reject_suggestions = queryset_to_valueslist('id',Comment.objects.filter(object_id=bp.id, \
             is_suggestion=True, status=CommentStatus.PENDING).exclude(id=comment_id).values('id'))
+
         for rs_id in reject_suggestions:
             rs = Comment.objects.get(id=rs_id)
             rs.status = CommentStatus.DECLINE
             rs.save()
+
+            # get bp
+            bp = BulletPoint.objects.get(id=rs.object_id)
+
+            # decrement pending
+            bp.num_pending_comments = bp.num_pending_comments - 1
+            bp.save()
+
             print "successfully rejected", rs.text
-    
+
     # award rp to commenter
     commenter = UserInfo.objects.get(id=comment.author.id)
     commenter.points = commenter.points + rp
@@ -2038,12 +2058,20 @@ def accept_comment(request, comment_id):
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
+
 # note there is no rp penalty for rejected comment
 def reject_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
     comment.status = CommentStatus.DECLINE
     comment.save()
+
+    # get bp
+    bp = BulletPoint.objects.get(id=comment.object_id)
+
+    # decrement pending
+    bp.num_pending_comments = bp.num_pending_comments - 1
+    bp.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
@@ -2058,4 +2086,31 @@ def queryset_to_valueslist(key, query_set):
         print x
 
     return id_results
+
+def edit_information(request):
+
+   # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+
+        form = EditInformationForm(request.POST)
+        
+        if form.is_valid():
+
+            # update user_info object per new information from form
+            user_info = request.user.user_info
+            user_info.dob = form.cleaned_data.get('dob')
+            user_info.display_name = form.cleaned_data.get('display_name')
+            user_info.phone_number = form.cleaned_data.get('phone_number')
+            user_info.website = form.cleaned_data.get('website')
+            user_info.save()
+
+        return redirect('/profile/')
+
+    # if a GET 
+    else:
+        
+        # return form to edit information
+        form = EditInformationForm(instance=request.user.user_info)
+
+        return render(request, 'edit_information.html', {'form': form})
 

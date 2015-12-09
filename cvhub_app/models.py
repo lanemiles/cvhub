@@ -62,6 +62,9 @@ class BulletPoint(CommentableResumeItem):
     object_id = models.PositiveIntegerField(null=True)
     parent_item = GenericForeignKey('content_type', 'object_id')
 
+    # number of pending comments
+    num_pending_comments = models.IntegerField(default=0)
+
     # return the parent object of the bullet point
     def get_parent(self):
 
