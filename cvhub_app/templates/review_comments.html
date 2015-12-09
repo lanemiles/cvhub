@@ -11,7 +11,7 @@
 	<head>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-		<link rel='stylesheet' href='{% static "cvhub_app/resume_template_css.css" %}' />
+		<link rel='stylesheet' href='{% static "cvhub_app/review_comments_css.css" %}' />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.js"></script>
 
 
@@ -182,11 +182,20 @@ blockquote p {
 
 							{% for key, value in bps.items %}
 							{% if key == info %}
-							{% for text in value %}
 
-							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							{% for text in value %}
+							{% if text.num_pending_comments > 0 %}
+
+							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
 							{{text.text}}
 							</span></li>
+
+							{% else %}
+							<li class='bullet_point_li' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endif %}
 
 							{% endfor %}
 							{% endif %}
@@ -243,10 +252,18 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+							{% if text.num_pending_comments > 0 %}
 
-							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}}>
+							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
 							{{text.text}}
 							</span></li>
+
+							{% else %}
+							<li class='bullet_point_li' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endif %}
 
 							{% endfor %}
 							{% endif %}
@@ -307,10 +324,18 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+							{% if text.num_pending_comments > 0 %}
 
-							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}} id={{text.pk}}>
+							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
 							{{text.text}}
 							</span></li>
+
+							{% else %}
+							<li class='bullet_point_li' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endif %}
 
 							{% endfor %}
 							{% endif %}
@@ -368,10 +393,18 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+							{% if text.num_pending_comments > 0 %}
 
-							<li class='bullet_point_li'><span class='bullet_point_item' database_id={{text.pk}} id={{text.pk}}>
+							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
 							{{text.text}}
 							</span></li>
+
+							{% else %}
+							<li class='bullet_point_li' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
+							{{text.text}}
+							</span></li>
+
+							{% endif %}
 
 							{% endfor %}
 							{% endif %}
@@ -419,6 +452,22 @@ blockquote p {
   <a href="#close" id ='close_key' rel="modal:close" style='display: none;'>Close window</a>
 
 	<script type="text/javascript">
+
+
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 	$( "#submit_button" ).click(function( e ) {
 
@@ -481,10 +530,11 @@ blockquote p {
 				e.preventDefault()
 			     e.stopImmediatePropagation()
 			      var url = $(e.target).attr('href');
+			      var bp_id = window.bullet_id
 				   $.get(url, function(data) {
 				   	
-				   	update_modal()
-			
+				   	window.location.replace("/review-comments/?bullet_id="+bp_id);
+					
 
 				    });
 
@@ -574,9 +624,22 @@ blockquote p {
 
 
 		$("#container li").click(function (e) {
+			console.log(e.target)
 			window.bullet_id = $(e.target).attr("database_id");
 			update_modal()
 		});
+
+
+	$(document).ready(function() {
+
+		var tech = getUrlParameter('bullet_id');
+		var li = $('#'+tech)
+		var span = li.children()[0]
+		span.click()
+		console.log()
+   
+});
+
 
 		
 

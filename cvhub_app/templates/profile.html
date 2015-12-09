@@ -16,19 +16,23 @@
 
 
 <div id=0>
-<h2>Your Information</h2>
+<h2>Your Information -- <a href='/edit-information/'>Edit</a></h2>
 <ul>
-	<li> Reputation Points: {{user.user_info.points}}
-	</li>
-	<li> Resume URL: {{user.user_info.resume_url}}
+	<li> Name: {{user.user_info.display_name}}
 	</li>
 	<li> Email: {{user}}
+	</li>
+	<li> {{user.user_info.points}} Rep Points
+	</li>
+	<li> Member since {{user.date_joined}}
 	</li>
 	<li> Phone: {{user.user_info.phone_number}}
 	</li>
 	<li> Website: {{user.user_info.website}}
 	</li>
 	<li> DOB: {{user.user_info.dob}}
+	</li>
+	<li> Resume URL: {{user.user_info.resume_url}}
 	</li>
 </ul>
 </div>
