@@ -23,6 +23,8 @@ from django.core import serializers
 import json
 
 
+
+
 def index(request):
     return render(request, 'current_time.html', {'question': 'his'})
 
@@ -353,7 +355,6 @@ def add_education_bp(request, item_id=None):
         form.set_education(request.user, item_id)
 
         return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
-
 
 @login_required
 def edit_award(request, award_id=None):
@@ -1847,39 +1848,49 @@ def create_skill_category(request):
 
 @login_required
 def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
 
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = AwardForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
+    # create the resumePDF
+    pdf = ResumePDF()
 
-            # process the data in form.cleaned_data as required
-            # get user
-            user_info = request.user.user_info
-            
-            # create experience
-            award = Award(**form.cleaned_data)
-            award.owner = user_info
-            
-            # set order to last item
-            order_max = Award.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
-            if order_max is not None:
-                award.order = order_max + 1
-            else:
-                award.order = 1
+    # get user id
+    user_id = str(request.user.pk)
+    pdf.user = request.user.user_info
 
-            award.save()
+    # generate file id
+    random_int = str(random.randint(00000001, 99999999))
+    pdf.path = random_int
 
-            return redirect('/profile/')
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
-
-    # if a GET (or any other method) we'll create a blank form
+    # get last version number
+    last_max = ResumePDF.objects.filter(user=request.user.user_info).aggregate(Max('version_number')).get('version_number__max')
+    if last_max is not None:
+        pdf.version_number = last_max + 1
     else:
-        form = AwardForm()
+        pdf.version_number = 1
 
-    return render(request, 'add_award.html', {'form': form})
+    pdf.save()
+
+    os.system(command)
+    return redirect('/profile/')
+
+
+@login_required
+def coverflow(request):
+
+    return render(request, 'coverflow.html', {})
+
+
+@login_required
+def view_pdf(request):
+
+    # get user
+    user = request.user.user_info
+
+    # get last resumePDF
+    last_pdf = ResumePDF.objects.filter(user=user).order_by('-created_at')[0]
+
+    return redirect('/static/cvhub_app/'+str(last_pdf.path)+'.pdf')
 
 # Add a skill category
 # (User should list individual skills as bullet points under a category)
@@ -1970,13 +1981,6 @@ def user_profile_dict(user, only_enabled=False):
                         'bps': user_bps}
 
     return dictionary
-
-
-
-@login_required
-def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
-
 
 
 @login_required

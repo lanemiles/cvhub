@@ -62,6 +62,9 @@ class BulletPoint(CommentableResumeItem):
     object_id = models.PositiveIntegerField(null=True)
     parent_item = GenericForeignKey('content_type', 'object_id')
 
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
+
     # return the parent object of the bullet point
     def get_parent(self):
 
@@ -205,6 +208,7 @@ class ResumePDF(models.Model):
     path = models.CharField(max_length=512)
     user = models.ForeignKey(UserInfo)
     version_number = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         unique_together = ("user", "version_number")

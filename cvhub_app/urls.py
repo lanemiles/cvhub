@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^create-user', views.create_user, name='create_user'),
     url(r'^thanks', views.thanks, name='thanks'),
+    url(r'^coverflow/', views.coverflow, name='coverflow'),
     url(r'^$', views.user_profile, name='user_profile'),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
     url(r'^profile', views.user_profile, name='user_profile'),
@@ -32,6 +33,7 @@ urlpatterns = [
     url(r'^edit-information/', views.edit_information, name='edit_information'),
     url(r'^view-user-resume/(?P<user_id>[0-9]+)', views.view_user_resume, name='view_user_resume'),
     url(r'^generate-pdf', views.generate_pdf, name='generate_pdf'),
+    url(r'^view-pdf', views.view_pdf, name='view_pdf'),
     url(r'^choose-resume-to-edit', views.choose_resume_to_edit, name='choose_resume_to_edit'),
     url(r'^search-resume-results', views.search_resume_results, name='search_resume_results'),
     url(r'^mrc-resumes', views.most_recently_commented_resumes, name='mrc_resumes'),
