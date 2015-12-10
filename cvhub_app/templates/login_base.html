@@ -1,0 +1,91 @@
+{% load staticfiles %}
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel='stylesheet' href='{% static "cvhub_app/header_css.css" %}' />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/0.1.11/slideout.min.js"></script>
+
+<title>{% block title %}{% endblock %}</title>
+        {% block extra_head %}{% endblock %}
+
+</head>
+<body>
+
+<nav id="menu">
+  <header>
+     
+
+  </header>
+  
+  	<h3 class='link_header'>Manage</h3>
+  	<hr class='menu_hr'>
+<a href="/profile/" class='menu_link'>Edit Content</a>
+<a href="/view-my-resume/" class='menu_link'>View Resume</a>
+<a href="/review-comments/" class='menu_link'>Review Comments</a>
+<a href="/generate-pdf/" class='menu_link'>PDF</a>
+  
+
+
+
+<h3 class='link_header'>Explore</h3>
+<hr class='menu_hr'>
+<a href="/mp-resumes/" class='menu_link'>Top</a>
+<a href="/mrc-resumes/" class='menu_link'>Recent</a>
+<a href="/choose-resume-to-edit/" class='menu_link'>Search</a>
+<a href="/random-resume/" class='menu_link'>Random</a>
+
+
+<h3 class='link_header'>Your URL</h3>
+<hr class='menu_hr'>
+<span class='url'>{{request.user.user_info.resume_url}}</span>
+
+</nav>
+
+<main id="panel">
+
+
+<div id='header'>
+	 <span class="toggle-button">&#9776;</span>
+	<div id='logo'><span class='logo_title'>cvHub</span>
+	</div>
+
+	<h1 class='page_title'>{% block page_title %}{% endblock %}</h1>
+
+
+
+	<div class='login'>
+	 <p align=right> </p>
+	</div>
+</div>
+
+<div id='outer_container'>
+<div id='container'>
+<div id='0'>
+{% block content %}
+{% endblock %}
+</div>
+</div>
+</div>
+<script>
+  var slideout = new Slideout({
+    'panel': document.getElementById('panel'),
+    'menu': document.getElementById('menu'),
+    'padding': 256,
+    'tolerance': 70
+  });
+
+  document.querySelector('.toggle-button').addEventListener('click', function() {
+        slideout.toggle();
+        if (window.is_set == 1) {
+        	$(".slideout-menu").css('z-index', '0')
+        	window.is_set = 0
+        } else {
+        	window.is_set = 1
+        	$(".slideout-menu").css('z-index', '7')
+        }
+        
+
+      });
+</script>
+</main>
+</body>
+</html>
