@@ -1806,6 +1806,7 @@ def create_award(request):
 
     return render(request, 'add_award.html', {'form': form})
 
+
 # Add a skill category
 # (User should list individual skills as bullet points under a category)
 @login_required
@@ -1844,7 +1845,7 @@ def create_skill_category(request):
     return render(request, 'add-skill-category.html', {'form': form})
 
 
-
+@login_required
 def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
 
@@ -1977,7 +1978,8 @@ def generate_pdf(request):
     return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
 
 
-# TODO rep points
+
+@login_required
 def add_bp_comment(request, bp_id=None):
 
     if request.method == 'POST':
@@ -2031,6 +2033,7 @@ def add_bp_comment(request, bp_id=None):
         return redirect('/view-my-resume/')
 
 
+@login_required
 def get_comments_for_bp(request, bp_id):
 
     # get all the comments
@@ -2063,6 +2066,7 @@ def get_comments_for_bp(request, bp_id):
     return HttpResponse(output, content_type='application/json')
 
 
+@login_required
 def upvote_comment(request, comment_id):
 
     # assuming they haven't voted before
@@ -2088,6 +2092,7 @@ def upvote_comment(request, comment_id):
     return redirect('/view-my-resume/')
 
 
+@login_required
 def downvote_comment(request, comment_id):
 
     # assuming they haven't voted before
@@ -2112,12 +2117,14 @@ def downvote_comment(request, comment_id):
 
     return redirect('/view-my-resume/')
 
+
 # Resume owner reviews comments on their resume
+@login_required
 def review_comments(request):
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
-
+@login_required
 def accept_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
@@ -2159,6 +2166,7 @@ def accept_comment(request, comment_id):
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 # note there is no rp penalty for rejected comment
+@login_required
 def reject_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
@@ -2179,6 +2187,7 @@ def queryset_to_valueslist(key, query_set):
 
     return id_results
 
+@login_required
 def edit_information(request):
 
    # if this is a POST request we need to process the form data

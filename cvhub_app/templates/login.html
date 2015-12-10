@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div id='form'>
+<div id='shorter_form'>
 
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
@@ -26,10 +26,17 @@
             </tr>
        </table>
 
-       <input type="submit" value="login" />
+       <input type="submit" style="width:60px; height:100px;" value="login" />
        <input type="hidden" name="next" value="{{ next }}" />
    </form>
+  <form method="get" action="/create-user/">
+      {% csrf_token %}
+       <input style="width:60px; height:100px;" type="submit" value="sign up" />
+
+     </form>
 </div>
+
+
 {% endblock %}
 
 

@@ -15,6 +15,14 @@
     text-align:center;
 }
 
+#shorter_form {
+    height: 200px;
+    width: 600px;
+    margin: 0 auto;
+    padding: 0px;
+    text-align:center;
+}
+
 label {
     width: 200px;
     margin-top: 10px;
