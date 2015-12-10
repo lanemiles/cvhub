@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} Recent Resumes{% endblock %}
+{% block page_title %} Recent Resumes{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
+<form action="/mrc-resumes/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" style="width:150px; height:100px;" value="Comment this Resume" />
+</form>
+</div>
+{% endblock %}

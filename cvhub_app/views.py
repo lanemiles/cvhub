@@ -951,45 +951,8 @@ def choose_resume_to_edit(request):
         # check whether it's valid:
         if form.is_valid():
 
-            # Randomly choose a user & resume to view, giving priority to users with more rep points
-            # Priority depends on rep points compared to other users, not absolute rep points
-            # The general idea is that higher ranked users will be more likely to remain
-            # in the pool of resumes to be randomly chosen from
-            if request.POST.get("random_resume"):
-
-                # size of table
-                num_users = UserInfo.objects.count()
-
-                if num_users < 6:
-                    upper_limit = num_users-1
-                else:
-                    # randomly determine how many users to exclude
-                    # the top priority_users percent of users, or the top 5 users, 
-                    # whichever is greater, will never be excluded
-                    safe_users = .05
-                    s = num_users*safe_users
-                    s = (6 if (s<6) else s)
-                    upper_limit = random.randint(s,num_users-1)
-
-                # from remaining users, randomly choose a resume
-                # resumes are ordered from highest points [0] to lowest points [upper_limit]
-                # subtract 1 from upper limit because we exclude our own resume from the search
-                user_index = random.randint(0,upper_limit-1)
-                user_info = UserInfo.objects.order_by('-points').exclude(id=request.user.user_info.id)[user_index]
-
-                user_dictionary = user_profile_dict(user_info.user, True)
-                user_dictionary.update({'header_user': request.user})
-
-                # comment randomly chosen resume
-                return render(request, 'comment_resume.html', user_dictionary)
-
-            # TODO: most popular (most commented resume)
-
-            # TODO: most recently commented resumes
-
-
             # Find the num_resumes_to_return resumes most relevant to keywords
-            elif request.POST.get("search_resumes"):
+            if request.POST.get("search_resumes"):
 
                 # Search terms; default is empty string
                 keywords = request.POST.get('keywords')
@@ -1086,54 +1049,141 @@ def choose_resume_to_edit(request):
 # Get most recently commented resumes
 @login_required
 def most_recently_commented_resumes(request):
-    NUM_RESUMES_TO_RETURN = 5
-    
-    # get all comments
-    comments = Comment.objects.order_by('timestamp').exclude(id=request.user.user_info.id)
 
-    mrc_resumes_list = []
+    if request.method == 'POST':
 
-    # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
-    for c in comments:
+        form = MostRecentlyCommentedResumesForm(request.POST)
 
-        # the owner of the resume item this comment is on (aka recipient of comment)
-        recipient = c.get_header_level_parent().owner
+        # check whether it's valid:
+        if form.is_valid():
 
-        # append (user id, user's display name) to list of results
-        if (recipient.id, recipient.display_name) not in mrc_resumes_list:
-            mrc_resumes_list.append((recipient.id, recipient.display_name))
+            # get selected resume/user
+            userinfo_id = request.POST.get("Resumes")
+            user_info = UserInfo.objects.get(id=userinfo_id)
+            user_dictionary = user_profile_dict(user_info.user, True)
+            user_dictionary.update({'header_user': request.user})
 
-        # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
-        if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
-            break
+            # comment chosen resume
+            return render(request, 'comment_resume.html', user_dictionary)
 
-    return mrc_resumes_list
+
+    # get method
+    else:
+        NUM_RESUMES_TO_RETURN = 5
+        
+        # get all comments
+        comments = Comment.objects.order_by('timestamp').exclude(id=request.user.user_info.id)
+
+        mrc_resumes_list = []
+
+        # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
+        for c in comments:
+
+            # the owner of the resume item this comment is on (aka recipient of comment)
+            recipient = c.get_header_level_parent().owner
+
+            # append (user id, user's display name) to list of results
+            if (recipient.id, recipient.display_name) not in mrc_resumes_list:
+                mrc_resumes_list.append((recipient.id, recipient.display_name))
+
+            # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
+            if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
+                break
+
+        # create and populate form with choices of mrc resumes
+        form = MostRecentlyCommentedResumesForm()
+        form.set_mrc_resumes(mrc_resumes_list)
+
+        return render(request, 'mrc_resumes.html', {'form': form})
 
 
 def most_popular_resumes(request):
-    
-    # list of most popular resumes
-    mp_resumes_list = []
 
-    # list of all users
-    all_userinfos = UserInfo.objects.all()
+    if request.method == 'POST':
 
-    # initialize count of comments for each resume to 0
-    comment_count_per_ui = {}
-    for ui in all_userinfos:
-        comment_count_per_ui[ui.id] = 0
+        form = MostRecentlyCommentedResumesForm(request.POST)
 
-    # count the number of comments per resume/user
-    comments = Comment.objects.all()
-    for c in comments:
+        # check whether it's valid:
+        if form.is_valid():
 
-        # id of the owner of the resume item this comment is on (aka id of comment's recipient)
-        recipient_id = c.get_header_level_parent().owner.id
+            # get selected resume/user
+            userinfo_id = request.POST.get("Resumes")
+            user_info = UserInfo.objects.get(id=userinfo_id)
+            user_dictionary = user_profile_dict(user_info.user, True)
+            user_dictionary.update({'header_user': request.user})
+
+            # comment chosen resume
+            return render(request, 'comment_resume.html', user_dictionary)
+
+    # get request
+    else:
+        NUM_RESUMES_TO_RETURN = 5
+
+
+        # list of all users
+        all_userinfos = UserInfo.objects.all()
+
+        # initialize count of comments for each resume to 0
+        comment_count_per_ui = {}
+        for ui in all_userinfos:
+            comment_count_per_ui[ui.id] = 0
+
+        # count the number of comments per resume/user
+        comments = Comment.objects.all()
+        for c in comments:
+
+            # id of the owner of the resume item this comment is on (aka id of comment's recipient)
+            recipient_id = c.get_header_level_parent().owner.id
+            
+            # increment number of comments attributed to that resume
+            comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+
+        # return the NUM_RESUMES_TO_RETURN most commented resumes
+        sorted_top_resumes = sorted(comment_count_per_ui, key=comment_count_per_ui.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
         
-        # increment number of comments attributed to that resume
-        comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+        mp_resumes_list = []
+        for x in sorted_top_resumes:
+            mp_resumes_list.append((x, UserInfo.objects.get(id=x).display_name))
 
-    return mp_resumes_list
+
+        # create and populate form with choices of mrc resumes
+        form = MostPopularResume()
+        form.set_mp_resumes(mp_resumes_list)
+
+        return render(request, 'most_popular_resumes.html', {'form': form})
+
+
+# Randomly choose a user/resume to view, giving priority to users with more rep points
+# Priority depends on rep points compared to other users, not absolute rep points
+# The general idea is that higher ranked users will be more likely to remain
+# in the pool of resumes to be randomly chosen from@login_required
+def random_resume(request):
+
+    # size of table
+    num_users = UserInfo.objects.count()
+
+    if num_users < 6:
+        upper_limit = num_users-1
+    else:
+        # randomly determine how many users to exclude
+        # the top priority_users percent of users, or the top 5 users, 
+        # whichever is greater, will never be excluded
+        safe_users = .05
+        s = num_users*safe_users
+        s = (6 if (s<6) else s)
+        upper_limit = random.randint(s,num_users-1)
+
+    # from remaining users, randomly choose a resume
+    # resumes are ordered from highest points [0] to lowest points [upper_limit]
+    # subtract 1 from upper limit because we exclude our own resume from the search
+    user_index = random.randint(0,upper_limit-1)
+    user_info = UserInfo.objects.order_by('-points').exclude(id=request.user.user_info.id)[user_index]
+
+    user_dictionary = user_profile_dict(user_info.user, True)
+    user_dictionary.update({'header_user': request.user})
+
+    # comment randomly chosen resume
+    return render(request, 'comment_resume.html', user_dictionary)
 
 
 @login_required

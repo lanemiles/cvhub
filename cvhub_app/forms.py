@@ -150,14 +150,6 @@ class ChooseResumeToEditForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(ChooseResumeToEditForm, self).__init__(*args, **kwargs)
 
-    # set most recently commented resumes
-    def set_mrc_resumes(self, mrc_resume_list):
-        self.fields['mrc_results_list'] = forms.ChoiceField(choices=mrc_resume_list)
-
-    # most popular resumes
-    def set_mp_resumes(self, mp_resume_list):
-        self.fields['mp_results_list'] = forms.ChoiceField(choices=mp_resume_list)
-
 # retrieve a list of all the users
 def get_all_users():
 
@@ -180,6 +172,26 @@ class SearchResumeResultsForm(forms.Form):
     def set_resumes_to_display(self, resume_list):
         self.fields['results_list'] = forms.ChoiceField(choices=resume_list)
 
+
+# Most recently commented resumes
+class MostRecentlyCommentedResumesForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(MostRecentlyCommentedResumesForm, self).__init__(*args, **kwargs)
+
+   # set most recently commented resumes
+    def set_mrc_resumes(self, mrc_resume_list):
+        self.fields['Resumes'] = forms.ChoiceField(choices=mrc_resume_list)
+
+# Most recently commented resumes
+class MostPopularResume(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(MostPopularResume, self).__init__(*args, **kwargs)
+
+   # most popular resumes
+    def set_mp_resumes(self, mp_resume_list):
+        self.fields['Resumes'] = forms.ChoiceField(choices=mp_resume_list)
 
 # add experience
 class ExperienceForm(forms.ModelForm):

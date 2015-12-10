@@ -1,24 +1,23 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Search Resumes{% endblock %}
+{% block page_title %}Search Resumes {% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/profile_css.css" %}' />
+
+{% endblock %}
+
+
+{% block content %}
+<div id='form'>
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
-
-    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
+    <br> <br>
+  	Keywords: <input type="text" name="keywords"> <br>
+    Number of results: <input type="number" name="num_resumes_to_return" value="5" min = 1> 
     <br>
-    <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/review-comments/'>Review Comments</a> |     
-    <a href='/generate-pdf/'>PDF My Resume</a> |
-    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
-
-
-    <h1>Search Resumes</h1>
-  	Keywords: <input type="text" name="keywords"><br>
-    Number of results: <input type="number" name="num_resumes_to_return" value="5" min = 1><br>
   	<input type="submit" name="search_resumes" value="Search">
-    <br>
-    <br>
-    <h3>Feeling Lucky?</h3>
-    <input type="submit" name="random_resume" value="Random Resume">
-    <br> <br> 
 
-    <h3> Most Recently Commented Resumes <h3>
-    {{form}}
 </form>
+</div>
+{% endblock %}

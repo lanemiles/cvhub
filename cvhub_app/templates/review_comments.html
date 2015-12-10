@@ -110,6 +110,7 @@ blockquote p {
   -ms-border-radius: 8px;
   border-radius: 8px;
 }</style>
+
 {% endblock %}
 
 
@@ -243,6 +244,7 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+
 							{% if text.num_pending_comments > 0 %}
 
 							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
@@ -315,6 +317,7 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+
 							{% if text.num_pending_comments > 0 %}
 
 							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
@@ -384,6 +387,7 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+
 							{% if text.num_pending_comments > 0 %}
 
 							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
@@ -521,6 +525,7 @@ function getUrlParameter(sParam) {
 				e.preventDefault()
 			     e.stopImmediatePropagation()
 			      var url = $(e.target).attr('href');
+
 			      var bp_id = window.bullet_id
 				   $.get(url, function(data) {
 				   	
@@ -615,6 +620,7 @@ function getUrlParameter(sParam) {
 
 
 		$("#container li").click(function (e) {
+
 			console.log(e.target)
 			window.bullet_id = $(e.target).attr("database_id");
 			update_modal()
@@ -636,4 +642,5 @@ function getUrlParameter(sParam) {
 
 
 	</script>	
+
 {% endblock %}
