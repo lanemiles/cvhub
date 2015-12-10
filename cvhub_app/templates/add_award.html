@@ -1,12 +1,20 @@
-    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
-    <br>
-    <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/review-comments/'>Review Comments</a> |     
-    <a href='/generate-pdf/'>PDF My Resume</a> |
-    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
-<h2> Add an Award</h2>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Add Award{% endblock %}
+{% block page_title %}Add Award{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
 <form action="/add-award/" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit" />
 </form>
+</div>
+{% endblock %}
+
+

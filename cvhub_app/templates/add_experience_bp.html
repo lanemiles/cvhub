@@ -1,6 +1,23 @@
+
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Add Detail{% endblock %}
+{% block page_title %}Add Detail{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
 <form action="/add-experience-bp/" method="post">
     {% csrf_token %}
     {{ form }}
     <input name='experience_id' type='hidden' value={{experience_id}}></input>
     <input type="submit" value="Submit" />
 </form>
+</div>
+{% endblock %}
+
+
