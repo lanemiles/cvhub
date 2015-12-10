@@ -1,16 +1,25 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} Recent Resumes{% endblock %}
+{% block page_title %} Recent Resumes{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
 <form action="/search-resume-results/" method="post">
     {% csrf_token %}
     
-    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
-    <br>
-    <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/generate-pdf/'>PDF My Resume</a> |
-    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
-
-    <h1>Search Results</h1>
+   
     {{ form }}
     <input type="submit" name="choose_resume" value="Comment Resume" />
     <br>
     <br>
     <input type="submit" name="back_to_choose_resume" value="<Back to Search">
 </form>
+
+</div>
+{% endblock %}

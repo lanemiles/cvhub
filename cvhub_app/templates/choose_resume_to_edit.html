@@ -4,7 +4,7 @@
 {% block page_title %}Search Resumes {% endblock %}
 {% block extra_head %}
 <link rel='stylesheet' href='{% static "cvhub_app/profile_css.css" %}' />
-
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
 {% endblock %}
 
 
@@ -13,8 +13,8 @@
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
     <br> <br>
-  	Keywords: <input type="text" name="keywords"> <br>
-    Number of results: <input type="number" name="num_resumes_to_return" value="5" min = 1> 
+  	<label for='keywords'>Keywords:</label> <input type="text" name="keywords"> <br>
+    <label for='num_resumes_to_return'>Number of results:</label> <input type="number" name="num_resumes_to_return" value="5" min = 1> 
     <br>
   	<input type="submit" name="search_resumes" value="Search">
 

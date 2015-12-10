@@ -21,7 +21,9 @@
 <a href="/profile/" class='menu_link'>Edit Content</a>
 <a href="/view-my-resume/" class='menu_link'>View Resume</a>
 <a href="/review-comments/" class='menu_link'>Review Comments</a>
-<a href="/generate-pdf/" class='menu_link'>PDF</a>
+<a href="/view-pdf/" class='menu_link'>View as PDF</a>
+<a href="/generate-pdf/" class='menu_link'>Save Current Version</a>
+
   
 
 
@@ -53,7 +55,7 @@
 
 
 	<div class='login'>
-	 <p align=right>{{user.user_info.display_name}} | <a href='/logout/'>Logout</a> </p>
+	 <p align=right>{{request.user.user_info.display_name}} | <a href='/logout/'>Logout</a> </p>
 	</div>
 </div>
 
