@@ -1,6 +1,21 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Add Skill{% endblock %}
+{% block page_title %}Add Skill{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
 <form action="/add-skill-bp/" method="post">
     {% csrf_token %}
     {{ form }}
     <input name='skill_id' type='hidden' value={{skill_id}}></input>
     <input type="submit" value="Submit" />
 </form>
+</div>
+{% endblock %}
+
+

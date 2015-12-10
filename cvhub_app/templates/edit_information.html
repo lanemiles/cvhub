@@ -1,5 +1,17 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Edit Your Information{% endblock %}
+{% block page_title %}Edit Your Information{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
 <form action="/edit-information/" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit" />
 </form>
+</div>
+{% endblock %}

@@ -1,6 +1,18 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Edit Award{% endblock %}
+{% block page_title %}Edit Award{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
 <form action="/edit-award/" method="post">
     {% csrf_token %}
     {{ form }}
     <input name='award_id' type='hidden' value={{award_id}}></input>
     <input type="submit" value="Submit" />
 </form>
+</div>
+{% endblock %}
