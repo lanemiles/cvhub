@@ -41,7 +41,7 @@ class CommentableResumeItem(models.Model):
 
 class ResumeItem(CommentableResumeItem):
     """
-    We shall see
+    Superclass for Experience, Education, Skill, Award
     """
 
     owner = models.ForeignKey(UserInfo)
@@ -52,7 +52,7 @@ class ResumeItem(CommentableResumeItem):
 
 class BulletPoint(CommentableResumeItem):
     """
-    TODO
+    Text that goes under a ResumeItem
     """
 
     text = models.CharField(max_length=1024)
@@ -61,9 +61,6 @@ class BulletPoint(CommentableResumeItem):
     content_type = models.ForeignKey(ContentType, null=True)
     object_id = models.PositiveIntegerField(null=True)
     parent_item = GenericForeignKey('content_type', 'object_id')
-
-    # number of pending comments
-    num_pending_comments = models.IntegerField(default=0)
 
     # return the parent object of the bullet point
     def get_parent(self):
@@ -76,6 +73,10 @@ class BulletPoint(CommentableResumeItem):
             return Experience.objects.get(id=self.object_id)
         elif str(self.content_type) == 'award':
             return Award.objects.get(id=self.object_id)
+
+    def get_user_info(self):
+
+        return self.get_parent().owner
 
 
 class Education(ResumeItem):
@@ -154,7 +155,7 @@ class Comment(models.Model):
 
         super(Comment, self).save(*args, **kwargs)
 
-    # return the parent object of the comment
+    # return the parent commental resume item of the comment
     def get_parent(self):
 
         if str(self.content_type) == 'education':
@@ -165,6 +166,23 @@ class Comment(models.Model):
             return Experience.objects.get(id=self.object_id)
         elif str(self.content_type) == 'award':
             return Award.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'bullet point':
+            return BulletPoint.objects.get(id=self.object_id)
+
+    # return the header-level parent resume item of the comment
+    # that is, if the target cri is a BP, get the BP's owner
+    def get_header_level_parent(self):
+
+        if str(self.content_type) == 'education':
+            return Education.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'skill':
+            return Skill.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'experience':
+            return Experience.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'award':
+            return Award.objects.get(id=self.object_id)
+        elif str(self.content_type) == 'bullet point':
+            return BulletPoint.objects.get(id=self.object_id).get_parent()
 
 
 class VoteType(enum.Enum):

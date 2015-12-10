@@ -72,8 +72,8 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-
-    return render(request, 'profile.html', user_profile_dict(request.user, only_enabled=False))
+   
+    return render(request, 'profile.html', user_profile_dict(request.user))
 
 
 def logout_view(request):
@@ -973,8 +973,9 @@ def choose_resume_to_edit(request):
 
                 # from remaining users, randomly choose a resume
                 # resumes are ordered from highest points [0] to lowest points [upper_limit]
-                user_index = random.randint(0,upper_limit)
-                user_info = UserInfo.objects.order_by('-points')[user_index]
+                # subtract 1 from upper limit because we exclude our own resume from the search
+                user_index = random.randint(0,upper_limit-1)
+                user_info = UserInfo.objects.order_by('-points').exclude(id=request.user.user_info.id)[user_index]
 
                 user_dictionary = user_profile_dict(user_info.user, True)
                 user_dictionary.update({'header_user': request.user})
@@ -983,6 +984,8 @@ def choose_resume_to_edit(request):
                 return render(request, 'comment_resume.html', user_dictionary)
 
             # TODO: most popular (most commented resume)
+
+            # TODO: most recently commented resumes
 
 
             # Find the num_resumes_to_return resumes most relevant to keywords
@@ -1036,12 +1039,26 @@ def choose_resume_to_edit(request):
                 # turn list of tuples (immutable) --> list of lists
                 c_1 = map(list, c)
 
-                # adjust each user's ranking based on rep score
+                own_resume = None
+
+                # for every user
                 for x in c_1:
-                    points = UserInfo.objects.get(id=x[0]).points
-                    # no one ever loses points for low rep score
-                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
-                    x[1] += points_bonus
+
+                    # if the user's own resume showed up in the search,
+                    # remember it so we can remove it from the results
+                    if x[0] == request.user.user_info.id:
+                        own_resume = x
+
+                    # normal behavior: adjust each user's ranking based on rep score
+                    else:
+                        points = UserInfo.objects.get(id=x[0]).points
+                        # no one ever loses points for low rep score
+                        points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                        x[1] += points_bonus
+
+                # if user's own resume showed up in search
+                if own_resume is not None:
+                    c_1.remove(own_resume)
 
                 # return a flat list of num_resumes_to_return users in new ranking order
                 sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
@@ -1061,9 +1078,62 @@ def choose_resume_to_edit(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
+
         form = ChooseResumeToEditForm()
 
     return render(request, 'choose_resume_to_edit.html', {'form': form})
+
+# Get most recently commented resumes
+@login_required
+def most_recently_commented_resumes(request):
+    NUM_RESUMES_TO_RETURN = 5
+    
+    # get all comments
+    comments = Comment.objects.order_by('timestamp').exclude(id=request.user.user_info.id)
+
+    mrc_resumes_list = []
+
+    # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
+    for c in comments:
+
+        # the owner of the resume item this comment is on (aka recipient of comment)
+        recipient = c.get_header_level_parent().owner
+
+        # append (user id, user's display name) to list of results
+        if (recipient.id, recipient.display_name) not in mrc_resumes_list:
+            mrc_resumes_list.append((recipient.id, recipient.display_name))
+
+        # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
+        if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
+            break
+
+    return mrc_resumes_list
+
+
+def most_popular_resumes(request):
+    
+    # list of most popular resumes
+    mp_resumes_list = []
+
+    # list of all users
+    all_userinfos = UserInfo.objects.all()
+
+    # initialize count of comments for each resume to 0
+    comment_count_per_ui = {}
+    for ui in all_userinfos:
+        comment_count_per_ui[ui.id] = 0
+
+    # count the number of comments per resume/user
+    comments = Comment.objects.all()
+    for c in comments:
+
+        # id of the owner of the resume item this comment is on (aka id of comment's recipient)
+        recipient_id = c.get_header_level_parent().owner.id
+        
+        # increment number of comments attributed to that resume
+        comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+
+    return mp_resumes_list
 
 
 @login_required
@@ -1094,7 +1164,7 @@ def search_resume_results(request):
             
             # go back to choose/search resume screen
             elif request.POST.get("back_to_choose_resume"):
-                return render(request, 'choose_resume_to_edit.html', {'form': form})
+                return redirect('/choose-resume-to-edit')
 
 
     # if a GET (or any other method) we'll create a blank form
@@ -1790,12 +1860,12 @@ def create_skill_category(request):
 
             return redirect('/profile/')
 
+
     # if a GET (or any other method) we'll create a blank form
     else:
         form = SkillCategoryForm()
 
     return render(request, 'add-skill-category.html', {'form': form})
-
 
 # method called whenever we want to render profile.html
 # gets user's info, education, skills, experience, and awards
@@ -1900,10 +1970,6 @@ def add_bp_comment(request, bp_id=None):
         bp = BulletPoint.objects.get(id=bp_id)
         parent = bp.get_parent()
 
-        # increment num pending
-        bp.num_pending_comments = bp.num_pending_comments + 1
-        bp.save()
-
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
         new_comment.object_id = bp_id
@@ -1996,11 +2062,10 @@ def downvote_comment(request, comment_id):
 
     return redirect('/view-my-resume/')
 
-
 # Resume owner reviews comments on their resume
 def review_comments(request):
 
-    return render(request, 'review_comments.html', user_profile_dict(request.user, only_enabled=True))
+    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 
 def accept_comment(request, comment_id):
@@ -2011,18 +2076,12 @@ def accept_comment(request, comment_id):
     ACCEPTED_SUGGESTION_RP = 30
     rp = ACCEPTED_COMMENT_RP
 
-    # get bp
-    bp = BulletPoint.objects.get(id=comment.object_id)
-
-    # decrement pending
-    bp.num_pending_comments = bp.num_pending_comments - 1
-    bp.save()
-
     # if accepted suggestion, need to replace bp text
     # suggestions can only be made to bullet points
     if comment.is_suggestion:
 
         # replace bp text
+        bp = BulletPoint.objects.get(id=comment.object_id)
         bp.text = comment.suggestion
         bp.save()
 
@@ -2032,21 +2091,12 @@ def accept_comment(request, comment_id):
         # reject all other pending suggestions on this bp
         reject_suggestions = queryset_to_valueslist('id',Comment.objects.filter(object_id=bp.id, \
             is_suggestion=True, status=CommentStatus.PENDING).exclude(id=comment_id).values('id'))
-
         for rs_id in reject_suggestions:
             rs = Comment.objects.get(id=rs_id)
             rs.status = CommentStatus.DECLINE
             rs.save()
-
-            # get bp
-            bp = BulletPoint.objects.get(id=rs.object_id)
-
-            # decrement pending
-            bp.num_pending_comments = bp.num_pending_comments - 1
-            bp.save()
-
             print "successfully rejected", rs.text
-
+    
     # award rp to commenter
     commenter = UserInfo.objects.get(id=comment.author.id)
     commenter.points = commenter.points + rp
@@ -2058,20 +2108,12 @@ def accept_comment(request, comment_id):
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
-
 # note there is no rp penalty for rejected comment
 def reject_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
     comment.status = CommentStatus.DECLINE
     comment.save()
-
-    # get bp
-    bp = BulletPoint.objects.get(id=comment.object_id)
-
-    # decrement pending
-    bp.num_pending_comments = bp.num_pending_comments - 1
-    bp.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
