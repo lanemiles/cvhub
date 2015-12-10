@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Add Detail{% endblock %}
+{% block page_title %}Add Detail{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/coverflow.css" %}' />
+
+{% endblock %}
+
+{% block content %}
+
+<script src="{% static 'cvhub_app/coverflow.js' %}"></script>
+<script>
+    $(function() {
+		// and kick off
+        $('#coverflow').coverflow();
+    });
+</script>
+
+<div class="demo">
+		<div class="wrapper">
+			<div class="coverflow">
+	            <img src="https://en.wikipedia.org/wiki/Tree#/media/File:Ash_Tree_-_geograph.org.uk_-_590710.jpg" data-artist="Gorillaz" data-album="Plastic Beach"/>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+
+
+
