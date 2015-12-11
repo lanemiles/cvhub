@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}Add Skill Category{% endblock %}
-{% block page_title %}Add Skill Category{% endblock %}
+{% block title %}Add Education{% endblock %}
+{% block page_title %}Add Education{% endblock %}
 {% block extra_head %}
 <link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+
 {% endblock %}
 
 {% block content %}
 <div id='form'>
-
+<table>
 <form action="/add-skill-category/" method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Submit" />
+    <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
+</table>
+
 </div>
 {% endblock %}
-

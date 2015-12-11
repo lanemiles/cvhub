@@ -72,7 +72,7 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-   
+
     return render(request, 'profile.html', user_profile_dict(request.user))
 
 
@@ -166,7 +166,7 @@ def edit_education(request, education_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all()
+        bps = BulletPoint.objects.all().order_by('order')
         education_bps = []
         for bp in bps:
             if bp.get_parent() == Education.objects.get(id=education_id):
@@ -353,7 +353,6 @@ def add_education_bp(request, item_id=None):
         form.set_education(request.user, item_id)
 
         return render(request, 'add_education_bp.html', {'form': form, 'edu_id': item_id})
-
 
 @login_required
 def edit_award(request, award_id=None):
@@ -580,6 +579,7 @@ def add_award_bp(request, item_id=None):
 def remove_bp(request, bp_id):
 
     BulletPoint.objects.get(id=bp_id).delete()
+
     return redirect('/profile/')
 
 
@@ -951,45 +951,8 @@ def choose_resume_to_edit(request):
         # check whether it's valid:
         if form.is_valid():
 
-            # Randomly choose a user & resume to view, giving priority to users with more rep points
-            # Priority depends on rep points compared to other users, not absolute rep points
-            # The general idea is that higher ranked users will be more likely to remain
-            # in the pool of resumes to be randomly chosen from
-            if request.POST.get("random_resume"):
-
-                # size of table
-                num_users = UserInfo.objects.count()
-
-                if num_users < 6:
-                    upper_limit = num_users-1
-                else:
-                    # randomly determine how many users to exclude
-                    # the top priority_users percent of users, or the top 5 users, 
-                    # whichever is greater, will never be excluded
-                    safe_users = .05
-                    s = num_users*safe_users
-                    s = (6 if (s<6) else s)
-                    upper_limit = random.randint(s,num_users-1)
-
-                # from remaining users, randomly choose a resume
-                # resumes are ordered from highest points [0] to lowest points [upper_limit]
-                # subtract 1 from upper limit because we exclude our own resume from the search
-                user_index = random.randint(0,upper_limit-1)
-                user_info = UserInfo.objects.order_by('-points').exclude(id=request.user.user_info.id)[user_index]
-
-                user_dictionary = user_profile_dict(user_info.user, True)
-                user_dictionary.update({'header_user': request.user})
-
-                # comment randomly chosen resume
-                return render(request, 'comment_resume.html', user_dictionary)
-
-            # TODO: most popular (most commented resume)
-
-            # TODO: most recently commented resumes
-
-
             # Find the num_resumes_to_return resumes most relevant to keywords
-            elif request.POST.get("search_resumes"):
+            if request.POST.get("search_resumes"):
 
                 # Search terms; default is empty string
                 keywords = request.POST.get('keywords')
@@ -1070,70 +1033,166 @@ def choose_resume_to_edit(request):
                     top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
                     results_list.append((x, top_hit_user))
 
-                # redirect to results page, with search results
-                form = SearchResumeResultsForm()
-                form.set_resumes_to_display(results_list)
-                return render(request, 'search_resume_results.html', {'form':form})
+                # if we have search results, redirect to results page
+                if len(results_list) > 0:
+                    form = SearchResumeResultsForm()
+                    form.set_resumes_to_display(results_list)
+                    return render(request, 'search_resume_results.html', {'form':form})
 
+                # if no search results returned, redirect to search page
+                else:
+                    form = ChooseResumeToEditForm()
+                    return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
 
     # if a GET (or any other method) we'll create a blank form
     else:
 
         form = ChooseResumeToEditForm()
 
-    return render(request, 'choose_resume_to_edit.html', {'form': form})
+    return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': False})
 
 # Get most recently commented resumes
 @login_required
 def most_recently_commented_resumes(request):
-    NUM_RESUMES_TO_RETURN = 5
-    
-    # get all comments
-    comments = Comment.objects.order_by('timestamp').exclude(id=request.user.user_info.id)
 
-    mrc_resumes_list = []
+    if request.method == 'POST':
 
-    # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
-    for c in comments:
+        form = MostRecentlyCommentedResumesForm(request.POST)
 
-        # the owner of the resume item this comment is on (aka recipient of comment)
-        recipient = c.get_header_level_parent().owner
+        # check whether it's valid:
+        if form.is_valid():
+            # get selected resume/user
+            userinfo_id = request.POST.get("Resumes")
+            user_info = UserInfo.objects.get(id=userinfo_id)
+            user_dictionary = user_profile_dict(user_info.user, True)
+            user_dictionary.update({'header_user': request.user})
 
-        # append (user id, user's display name) to list of results
-        if (recipient.id, recipient.display_name) not in mrc_resumes_list:
-            mrc_resumes_list.append((recipient.id, recipient.display_name))
+            # comment chosen resume
+            return render(request, 'comment_resume.html', user_dictionary)
 
-        # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
-        if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
-            break
 
-    return mrc_resumes_list
+    # get method
+    else:
+        NUM_RESUMES_TO_RETURN = 5
+        
+        # get all comments
+        comments = Comment.objects.order_by('timestamp')
+
+        mrc_resumes_list = []
+
+        # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
+        for c in comments:
+
+            # the owner of the resume item this comment is on (aka recipient of comment)
+            recipient = c.get_header_level_parent().owner
+
+
+            # append (user id, user's display name) to list of results
+            if (recipient.id != request.user.user_info.id) and (recipient.id, recipient.display_name) not in mrc_resumes_list:
+                mrc_resumes_list.append((recipient.id, recipient.display_name))
+
+            # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
+            if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
+                break
+
+        # create and populate form with choices of mrc resumes
+        form = MostRecentlyCommentedResumesForm()
+        form.set_mrc_resumes(mrc_resumes_list)
+
+        return render(request, 'mrc_resumes.html', {'form': form})
 
 
 def most_popular_resumes(request):
-    
-    # list of most popular resumes
-    mp_resumes_list = []
 
-    # list of all users
-    all_userinfos = UserInfo.objects.all()
+    if request.method == 'POST':
 
-    # initialize count of comments for each resume to 0
-    comment_count_per_ui = {}
-    for ui in all_userinfos:
-        comment_count_per_ui[ui.id] = 0
+        form = MostRecentlyCommentedResumesForm(request.POST)
 
-    # count the number of comments per resume/user
-    comments = Comment.objects.all()
-    for c in comments:
+        # check whether it's valid:
+        if form.is_valid():
 
-        # id of the owner of the resume item this comment is on (aka id of comment's recipient)
-        recipient_id = c.get_header_level_parent().owner.id
+            # get selected resume/user
+            userinfo_id = request.POST.get("Resumes")
+            user_info = UserInfo.objects.get(id=userinfo_id)
+            user_dictionary = user_profile_dict(user_info.user, True)
+            user_dictionary.update({'header_user': request.user})
+
+            # comment chosen resume
+            return render(request, 'comment_resume.html', user_dictionary)
+
+    # get request
+    else:
+        NUM_RESUMES_TO_RETURN = 5
+
+
+        # list of all users
+        all_userinfos = UserInfo.objects.exclude(id = request.user.user_info.id)
+
+        # initialize count of comments for each resume to 0
+        comment_count_per_ui = {}
+        for ui in all_userinfos:
+            comment_count_per_ui[ui.id] = 0
+
+        # count the number of comments per resume/user
+        comments = Comment.objects.all()
+        for c in comments:
+
+            # id of the owner of the resume item this comment is on (aka id of comment's recipient)
+            recipient_id = c.get_header_level_parent().owner.id
+            
+            # increment number of comments attributed to that resume
+            if recipient_id != request.user.user_info.id:
+                comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+
+        # return the NUM_RESUMES_TO_RETURN most commented resumes
+        sorted_top_resumes = sorted(comment_count_per_ui, key=comment_count_per_ui.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
         
-        # increment number of comments attributed to that resume
-        comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+        mp_resumes_list = []
+        for x in sorted_top_resumes:
+            mp_resumes_list.append((x, UserInfo.objects.get(id=x).display_name))
 
-    return mp_resumes_list
+
+        # create and populate form with choices of mrc resumes
+        form = MostPopularResume()
+        form.set_mp_resumes(mp_resumes_list)
+
+        return render(request, 'most_popular_resumes.html', {'form': form})
+
+
+# Randomly choose a user/resume to view, giving priority to users with more rep points
+# Priority depends on rep points compared to other users, not absolute rep points
+# The general idea is that higher ranked users will be more likely to remain
+# in the pool of resumes to be randomly chosen from@login_required
+def random_resume(request):
+
+    # size of table
+    num_users = UserInfo.objects.count()
+
+    if num_users < 6:
+        upper_limit = num_users-1
+    else:
+        # randomly determine how many users to exclude
+        # the top priority_users percent of users, or the top 5 users, 
+        # whichever is greater, will never be excluded
+        safe_users = .05
+        s = num_users*safe_users
+        print s
+        s = (6 if (s>6) else s)
+        print s
+        print num_users-1
+        upper_limit = random.randint(int(s), num_users-1)
+
+    # from remaining users, randomly choose a resume
+    # resumes are ordered from highest points [0] to lowest points [upper_limit]
+    # subtract 1 from upper limit because we exclude our own resume from the search
+    user_index = random.randint(0,upper_limit-1)
+    user_info = UserInfo.objects.order_by('-points').exclude(id=request.user.user_info.id)[user_index]
+
+    user_dictionary = user_profile_dict(user_info.user, True)
+    user_dictionary.update({'header_user': request.user})
+
+    # comment randomly chosen resume
+    return render(request, 'comment_resume.html', user_dictionary)
 
 
 @login_required
@@ -1756,6 +1815,7 @@ def create_award(request):
 
     return render(request, 'add_award.html', {'form': form})
 
+
 # Add a skill category
 # (User should list individual skills as bullet points under a category)
 @login_required
@@ -1794,41 +1854,70 @@ def create_skill_category(request):
     return render(request, 'add-skill-category.html', {'form': form})
 
 
-
+@login_required
 def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
 
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = AwardForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
+    # create the resumePDF
+    pdf = ResumePDF()
 
-            # process the data in form.cleaned_data as required
-            # get user
-            user_info = request.user.user_info
-            
-            # create experience
-            award = Award(**form.cleaned_data)
-            award.owner = user_info
-            
-            # set order to last item
-            order_max = Award.objects.filter(owner=user_info).aggregate(Max('order')).get('order__max')
-            if order_max is not None:
-                award.order = order_max + 1
-            else:
-                award.order = 1
+    # get user id
+    user_id = str(request.user.pk)
+    pdf.user = request.user.user_info
 
-            award.save()
+    # generate file id
+    random_int = str(random.randint(00000001, 99999999))
+    pdf.path = random_int
 
-            return redirect('/profile/')
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
-
-    # if a GET (or any other method) we'll create a blank form
+    # get last version number
+    last_max = ResumePDF.objects.filter(user=request.user.user_info).aggregate(Max('version_number')).get('version_number__max')
+    if last_max is not None:
+        pdf.version_number = last_max + 1
     else:
-        form = AwardForm()
+        pdf.version_number = 1
 
-    return render(request, 'add_award.html', {'form': form})
+    pdf.save()
+
+    os.system(command)
+    return redirect('/profile/')
+
+
+@login_required
+def coverflow(request):
+
+    return render(request, 'coverflow.html', {})
+
+
+@login_required
+def embed_pdf(request):
+
+    pdfs = ResumePDF.objects.filter(user=request.user.user_info)
+
+    if len(pdfs) == 0:
+        first_path = ""
+
+    else:
+        first_path = pdfs[0].path
+
+    return render(request, 'embed_pdf.html', {'first_path': first_path, 'url_list': pdfs})
+
+
+@login_required
+def view_pdf(request):
+
+    # get user id
+    user_id = str(request.user.pk)
+
+    # generate file id
+    random_int = str(random.randint(00000001, 99999999))
+
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+
+    os.system(command)
+
+    return redirect('/static/cvhub_app/'+str(random_int)+'.pdf')
+
 
 # Add a skill category
 # (User should list individual skills as bullet points under a category)
@@ -1921,14 +2010,64 @@ def user_profile_dict(user, only_enabled=False):
     return dictionary
 
 
+@login_required
+def add_bp_comment(request, bp_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+
+        # get bp parent
+        bp = BulletPoint.objects.get(id=bp_id)
+        parent = bp.get_parent()
+
+        # increment pending
+        bp.num_pending_comments += 1
+        bp.save()
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
+        new_comment.object_id = bp_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
 
 @login_required
-def generate_pdf(request):
-    return render(request, 'resume-pdf.html', user_profile_dict(request.user, True))
-
-
-# TODO rep points
-def add_bp_comment(request, bp_id=None):
+def add_education_comment(request, education_id=None):
 
     if request.method == 'POST':
 
@@ -1966,13 +2105,14 @@ def add_bp_comment(request, bp_id=None):
 
         print new_comment.is_suggestion
 
-        # get bp parent
-        bp = BulletPoint.objects.get(id=bp_id)
-        parent = bp.get_parent()
+        # increment pending
+        edu = Education.objects.get(id=education_id)
+        edu.num_pending_comments += 1
+        edu.save()
 
         # get content type
-        new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
-        new_comment.object_id = bp_id
+        new_comment.content_type = ContentType.objects.get_for_model(Education)
+        new_comment.object_id = education_id
         new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
         new_comment.save()
 
@@ -1981,6 +2121,175 @@ def add_bp_comment(request, bp_id=None):
         return redirect('/view-my-resume/')
 
 
+@login_required
+def add_skill_comment(request, skill_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # increment pending
+        edu = Skill.objects.get(id=skill_id)
+        edu.num_pending_comments += 1
+        edu.save()
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Skill)
+        new_comment.object_id = skill_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
+def add_experience_comment(request, experience_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # increment pending
+        edu = Experience.objects.get(id=experience_id)
+        edu.num_pending_comments += 1
+        edu.save()
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Experience)
+        new_comment.object_id = experience_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
+def add_award_comment(request, award_id=None):
+
+    print "THE"
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # increment pending
+        edu = Award.objects.get(id=award_id)
+        edu.num_pending_comments += 1
+        edu.save()
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Award)
+        new_comment.object_id = award_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
 def get_comments_for_bp(request, bp_id):
 
     # get all the comments
@@ -2013,6 +2322,139 @@ def get_comments_for_bp(request, bp_id):
     return HttpResponse(output, content_type='application/json')
 
 
+@login_required
+def get_comments_for_education(request, education_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Education), object_id=education_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['education_info'] = Education.objects.get(id=education_id).school + ", " + Education.objects.get(id=education_id).location
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_skill(request, skill_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Skill), object_id=skill_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['skill_info'] = Skill.objects.get(id=skill_id).category
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_experience(request, experience_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Experience), object_id=experience_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['experience_info'] = Experience.objects.get(id=experience_id).title + " at " + Experience.objects.get(id=experience_id).employer
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_award(request, award_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Award), object_id=award_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['award_info'] = Award.objects.get(id=award_id).name + " from " + Award.objects.get(id=award_id).issuer
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
 def upvote_comment(request, comment_id):
 
     # assuming they haven't voted before
@@ -2038,6 +2480,7 @@ def upvote_comment(request, comment_id):
     return redirect('/view-my-resume/')
 
 
+@login_required
 def downvote_comment(request, comment_id):
 
     # assuming they haven't voted before
@@ -2062,12 +2505,14 @@ def downvote_comment(request, comment_id):
 
     return redirect('/view-my-resume/')
 
+
 # Resume owner reviews comments on their resume
+@login_required
 def review_comments(request):
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
-
+@login_required
 def accept_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
@@ -2075,6 +2520,12 @@ def accept_comment(request, comment_id):
     ACCEPTED_COMMENT_RP = 20
     ACCEPTED_SUGGESTION_RP = 30
     rp = ACCEPTED_COMMENT_RP
+
+    # decrement pending
+    # need to decrement pending
+    obj = comment.get_parent()
+    obj.num_pending_comments -= 1
+    obj.save()
 
     # if accepted suggestion, need to replace bp text
     # suggestions can only be made to bullet points
@@ -2093,10 +2544,13 @@ def accept_comment(request, comment_id):
             is_suggestion=True, status=CommentStatus.PENDING).exclude(id=comment_id).values('id'))
         for rs_id in reject_suggestions:
             rs = Comment.objects.get(id=rs_id)
+            obj = rs.get_parent()
+            obj.num_pending_comments -= 1
+            obj.save()
             rs.status = CommentStatus.DECLINE
             rs.save()
             print "successfully rejected", rs.text
-    
+
     # award rp to commenter
     commenter = UserInfo.objects.get(id=comment.author.id)
     commenter.points = commenter.points + rp
@@ -2109,11 +2563,17 @@ def accept_comment(request, comment_id):
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 # note there is no rp penalty for rejected comment
+@login_required
 def reject_comment(request, comment_id):
     # retrieve the relevant comment
     comment = Comment.objects.get(id=comment_id)
     comment.status = CommentStatus.DECLINE
     comment.save()
+
+    # decrement pending
+    obj = comment.get_parent()
+    obj.num_pending_comments -= 1
+    obj.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
@@ -2129,6 +2589,7 @@ def queryset_to_valueslist(key, query_set):
 
     return id_results
 
+@login_required
 def edit_information(request):
 
    # if this is a POST request we need to process the form data
@@ -2144,7 +2605,19 @@ def edit_information(request):
             user_info.display_name = form.cleaned_data.get('display_name')
             user_info.phone_number = form.cleaned_data.get('phone_number')
             user_info.website = form.cleaned_data.get('website')
-            user_info.save()
+
+            # set a unique public resume url
+            proposed_resume_url = form.cleaned_data.get('resume_url')
+            
+            # if the url is already taken, ask the user for a new url
+            name_taken = UserInfo.objects.exclude(id=request.user.user_info.id).filter(resume_url=proposed_resume_url).count()
+            if name_taken > 0 or (proposed_resume_url == "None"):
+                return render(request, 'edit_information.html', {'form': form, 'name_taken': True, 'url_is_none': False})
+            
+            # unique url requested, so finish updating information
+            else:
+                user_info.resume_url = proposed_resume_url
+                user_info.save()
 
         return redirect('/profile/')
 
@@ -2154,5 +2627,110 @@ def edit_information(request):
         # return form to edit information
         form = EditInformationForm(instance=request.user.user_info)
 
-        return render(request, 'edit_information.html', {'form': form})
+        return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': False})
 
+
+# When editing resume, enable all items of either Education, Skill,
+# Experience, or Award
+# However, we don't disable the associated bullet points, because if the header
+# level education is disabled, the bp's won't show anyway. And it's possible the
+# user wants to remember which bp's are enabled/disabled.
+@login_required
+def disable_section(request, section_name):
+
+    # disable all header-level education items
+    if section_name == "education":
+        items = Education.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+    # disable all header-level skill categories
+    elif section_name == "skill":
+        items = Skill.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+
+    # disable all header-level experience items
+    elif section_name == "experience":
+        items = Experience.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+    # disable all header-level award items
+    elif section_name == "award":        
+        items = Award.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+    return redirect('/profile/')
+
+
+# When editing resume, enable all items of either Education, Skill,
+# Experience, or Award
+# However, we don't disable the associated bullet points, because if the header
+# level education is disabled, the bp's won't show anyway. And it's possible the
+# user wants to remember which bp's are enabled/disabled.
+@login_required
+def enable_section(request, section_name):
+
+    # disable all header-level education items
+    if section_name == "education":
+        items = Education.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+    # disable all header-level skill categories
+    elif section_name == "skill":
+        items = Skill.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+
+    # disable all header-level experience items
+    elif section_name == "experience":
+        items = Experience.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+    # disable all header-level award items
+    elif section_name == "award":        
+        items = Award.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+    return redirect('/profile/')
+
+
+def public_resume_pdf(request, custom_string):
+
+    print "custom string is", custom_string
+
+    # this user hasn't set their custom public url yet, ask them to
+    if custom_string == "None":
+        form = EditInformationForm(instance=request.user.user_info)
+        return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': True})
+    else:
+
+        # find associated user
+        user = UserInfo.objects.get(resume_url=str(custom_string))
+
+        # get their resume pdf
+        user_id = str(user.user.pk)
+
+        # generate file id
+        random_int = str(random.randint(00000001, 99999999))
+
+        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+
+        os.system(command)
+
+        return redirect('/static/cvhub_app/'+str(random_int)+'.pdf')

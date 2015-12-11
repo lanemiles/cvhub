@@ -62,6 +62,9 @@ class BulletPoint(CommentableResumeItem):
     object_id = models.PositiveIntegerField(null=True)
     parent_item = GenericForeignKey('content_type', 'object_id')
 
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
+
     # return the parent object of the bullet point
     def get_parent(self):
 
@@ -87,6 +90,9 @@ class Education(ResumeItem):
     in_progress = models.BooleanField()
     location = models.CharField(max_length=128)
 
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
+
     def save(self, *args, **kwargs):
 
         # check if in progress
@@ -102,6 +108,9 @@ class Skill(ResumeItem):
 
     category = models.CharField(max_length=128)
 
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
+
 
 class Experience(ResumeItem):
 
@@ -110,6 +119,9 @@ class Experience(ResumeItem):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     current = models.BooleanField()
+
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-end_date']
@@ -122,6 +134,9 @@ class Award(ResumeItem):
     name = models.CharField(max_length=128)
     issuer = models.CharField(max_length=128)
     date_awarded = models.DateField()
+
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
 
 
 class CommentStatus(enum.Enum):
@@ -185,6 +200,23 @@ class Comment(models.Model):
             return BulletPoint.objects.get(id=self.object_id).get_parent()
 
 
+class Section(enum.Enum):
+    EDUCATION = 0
+    SKILLS = 1
+    AWARDS = 2
+    EXPERIENCE = 3
+
+
+class SectionComment(models.Model):
+
+    author = models.ForeignKey(UserInfo, related_name='commenter')
+    section_owner = models.ForeignKey(UserInfo, related_name='section_owner')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.CharField(max_length=1024)
+    status = enum.EnumField(CommentStatus, default=CommentStatus.PENDING)
+    vote_total = models.IntegerField(default=0)
+
+
 class VoteType(enum.Enum):
     UP = 0
     DOWN = 1
@@ -205,6 +237,7 @@ class ResumePDF(models.Model):
     path = models.CharField(max_length=512)
     user = models.ForeignKey(UserInfo)
     version_number = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         unique_together = ("user", "version_number")

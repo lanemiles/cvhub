@@ -8,9 +8,7 @@
 <link rel='stylesheet' href='{% static "cvhub_app/review_comments_css.css" %}' />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.js"></script>
 
-<style type='text/css'>
-
-		
+		<style type='text/css'>
 		#ex1 {
 			font-family: "Garamond";
 		}
@@ -20,9 +18,9 @@
 			margin-bottom: 10px;
 		}
 
-		.column-left{ float: left; width: 200px; }
+		.column-left{ float: left; width: 180px; }
 .column-right{ float: right; width: 0%; }
-.column-center{ display: inline-block;  padding-left: 20px; border-left: 1px solid black;}
+.column-center{ display: inline-block; width: 70%; padding-left: 20px; border-left: 1px solid black;}
 
 		.blocker {
   position: fixed;
@@ -47,7 +45,7 @@
   display: inline-block;
   vertical-align: middle;
   position: relative;
-  z-index: 20000;
+  z-index: 2000;
   width: 700px;
   background: #fff;
   padding: 15px 30px;
@@ -110,6 +108,8 @@ blockquote p {
   -ms-border-radius: 8px;
   border-radius: 8px;
 }</style>
+		
+
 {% endblock %}
 
 
@@ -125,7 +125,7 @@ blockquote p {
 				<span class='divider_pipe'> | </span>
 				<span class='phone'>{{user_info.phone_number|slice:":3"}}-{{user_info.phone_number|slice:"3:6"}}-{{user_info.phone_number|slice:"6:"}}</span>
 				<span class='divider_pipe'> | </span>
-				<span class='url'>{{user_info.website}}</span>
+				<span class='user_url'>{{user_info.website}}</span>
 			</div>
 
 			<!-- <div class='summary'>
@@ -135,7 +135,7 @@ blockquote p {
 			</div> -->
 
 			{% if education_list %}
-			<div class='section' id={{user_info.education_order}}>
+			<div class='section' id={{user_info.education_order}} name='education'>
 
 				<span class='section_name small_caps bold'>EDUCATION:</span>
 
@@ -144,24 +144,50 @@ blockquote p {
 				{% for info in education_list %}
 				{% if info.enabled == True %}
 
-				<div class='item'>
+				<div class='item' id='{{info.pk}}'>
 
 					<div class='main_row'>
 
 						<span class='row_left'>
 
-						<span class='item_title bold'>{{info.school}}</span>, <span class='item_sub_title'>{{info.location}}</span>
+						{% if info.num_pending_comments > 0 %}
+
+						<span style='color: red;' class='item_title bold' id='{{info.pk}}'>{{info.school}}</span>, <span style='color: red;' class='item_sub_title' id='{{info.pk}}'>{{info.location}}</span>
+
+
+						{% else %}
+
+						<span class='item_title bold' id='{{info.pk}}'>{{info.school}}</span>, <span class='item_sub_title' id='{{info.pk}}'>{{info.location}}</span>
+
+						{% endif %}
+
+						
 
 						</span>
 
 						<span class='row_right'>
 
+						{% if info.num_pending_comments > 0 %}
+
 						{% if info.in_progress %}
-						<span class='item_date italics'>Expected Graduation: {{info.end_date}}</span>
+						<span style='color: red;' class='item_date italics' id='{{info.pk}}'>Expected Graduation: {{info.end_date}}</span>
 						{% else %}
-						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
+						<span style='color: red;' class='item_date italics' id='{{info.pk}}'>{{info.start_date}} - {{info.end_date}}</span>
 						{% endif %}
 						</span>
+
+						{% else %}
+
+						{% if info.in_progress %}
+						<span class='item_date italics' id='{{info.pk}}'>Expected Graduation: {{info.end_date}}</span>
+						{% else %}
+						<span class='item_date italics' id='{{info.pk}}'>{{info.start_date}} - {{info.end_date}}</span>
+						{% endif %}
+						</span>
+
+						{% endif %}
+
+						
 
 					</div>
 
@@ -208,7 +234,7 @@ blockquote p {
 			{% endif %}
 
 			{% if skill_category_list %}
-			<div class='section' id={{user_info.skill_order}}>
+			<div class='section' id={{user_info.skill_order}} name='skills'>
 
 				<span class='section_name small_caps bold'>SKILLS:</span>
 
@@ -217,17 +243,25 @@ blockquote p {
 				{% for info in skill_category_list %}
 				{% if info.enabled == True %}
 
-				<div class='item'>
+				<div class='item' id='{{info.pk}}'>
 
 					<div class='main_row'>
 
 						<span class='row_left'>
 
-						<span class='item_title bold'>{{info.category}}</span>
+						{% if info.num_pending_comments > 0 %}
+
+						<span style='color: red;' class='item_title bold' id='{{info.pk}}'>{{info.category}}</span>
+
+						{% else %}
+
+						<span class='item_title bold' id='{{info.pk}}'>{{info.category}}</span>
+
+						{% endif %}
 
 						</span>
 
-						<span class='row_right'>
+						<span class='row_right' id='{{info.pk}}'>
 
 						
 						</span>
@@ -243,6 +277,7 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+
 							{% if text.num_pending_comments > 0 %}
 
 							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
@@ -276,7 +311,7 @@ blockquote p {
 			{% endif %}
 
 			{% if experience_list %}
-			<div class='section' id={{user_info.experience_order}}>
+			<div class='section' id={{user_info.experience_order}} name='experience'>
 
 				<span class='section_name small_caps bold'>EXPERIENCE:</span>
 
@@ -285,24 +320,47 @@ blockquote p {
 				{% for info in experience_list %}
 				{% if info.enabled == True %}
 
-				<div class='item'>
+				<div class='item' id='{{info.pk}}'>
 
 					<div class='main_row'>
 
 						<span class='row_left'>
 
-						<span class='item_title bold'>{{info.employer}}</span>, <span class='item_sub_title'>{{info.title}}</span>
+						{% if info.num_pending_comments > 0 %}
+
+						<span style='color: red;' class='item_title bold' id='{{info.pk}}'>{{info.employer}}</span>, <span style='color: red;' class='item_sub_title' id='{{info.pk}}'>{{info.title}}</span>
+
+						{% else %}
+
+						<span class='item_title bold' id='{{info.pk}}'>{{info.employer}}</span>, <span class='item_sub_title' id='{{info.pk}}'>{{info.title}}</span>
+
+						{% endif %}
+
+						
 
 						</span>
 
 						<span class='row_right'>
 
+						{% if info.num_pending_comments > 0 %}
+
 						{% if info.current %}
-						<span class='item_date italics'>{{info.start_date}} - Present</span>
+						<span style='color: red;' class='item_date italics' id='{{info.pk}}'>{{info.start_date}} - Present</span>
 						{% else %}
-						<span class='item_date italics'>{{info.start_date}} - {{info.end_date}}</span>
+						<span style='color: red;' class='item_date italics' id='{{info.pk}}'>{{info.start_date}} - {{info.end_date}}</span>
 						{% endif %}
 						</span>
+
+						{% else %}
+
+						{% if info.current %}
+						<span class='item_date italics' id='{{info.pk}}'>{{info.start_date}} - Present</span>
+						{% else %}
+						<span class='item_date italics' id='{{info.pk}}'>{{info.start_date}} - {{info.end_date}}</span>
+						{% endif %}
+						</span>
+
+						{% endif %}
 
 					</div>
 
@@ -315,6 +373,7 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+
 							{% if text.num_pending_comments > 0 %}
 
 							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
@@ -348,7 +407,7 @@ blockquote p {
 			{% endif %}
 
 			{% if award_list %}
-			<div class='section' id={{user_info.award_order}}>
+			<div class='section' id={{user_info.award_order}} name='awards'>
 
 				<span class='section_name small_caps bold'>AWARDS:</span>
 
@@ -363,15 +422,33 @@ blockquote p {
 
 						<span class='row_left'>
 
-						<span class='item_title bold'>{{info.name}}</span>, <span class='item_sub_title'>{{info.issuer}}</span>
+						{% if info.num_pending_comments > 0 %}
+
+						<span style='color: red;' class='item_title bold' id='{{info.pk}}'>{{info.name}}</span>, <span style='color: red;' class='item_sub_title' id='{{info.pk}}'>{{info.issuer}}</span>
 
 						</span>
 
 						<span class='row_right'>
 
 						
-						<span class='item_date italics'>{{info.date_awarded}}</span>
+						<span style='color: red;' class='item_date italics' id='{{info.pk}}'>{{info.date_awarded}}</span>
 						</span>
+
+						{% else %}
+
+						<span class='item_title bold' id='{{info.pk}}'>{{info.name}}</span>, <span class='item_sub_title' id='{{info.pk}}'>{{info.issuer}}</span>
+
+						</span>
+
+						<span class='row_right'>
+
+						
+						<span class='item_date italics' id='{{info.pk}}'>{{info.date_awarded}}</span>
+						</span>
+
+						{% endif %}
+
+						
 
 					</div>
 
@@ -384,6 +461,7 @@ blockquote p {
 							{% for key, value in bps.items %}
 							{% if key == info %}
 							{% for text in value %}
+
 							{% if text.num_pending_comments > 0 %}
 
 							<li class='bullet_point_li'  style='color: red;' id={{text.pk}}><span class='bullet_point_item' database_id={{text.pk}}>
@@ -444,47 +522,104 @@ blockquote p {
 
 	<script type="text/javascript">
 
+	$(document).ready(function() {
 
-function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
+		var bp_id = getUrlParameter('bullet_id');
+		var skill_id = getUrlParameter('skill_id');
+		var experience_id = getUrlParameter('experience_id');
+		var award_id = getUrlParameter('award_id');
+		var education_id = getUrlParameter('education_id');
+		
+		if (bp_id) {
+			var li = $('#'+bp_id)
+			var span = li.children()[0]
+			span.click()
+		}
 
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
+		if (education_id) {
+			var li = $('#'+education_id)
+			var span = li
+			span.click()
+		}
 
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
-};
+		if (skill_id) {
+			var li = $('#'+skill_id)
+			var span = li
+			span.click()
+		}
 
-	$( "#submit_button" ).click(function( e ) {
+		if (experience_id) {
+			var li = $('#'+experience_id)
+			var span = li
+			span.click()
+		}
+
+		if (award_id) {
+			var li = $('#'+award_id)
+			var span = li
+			span.click()
+		}
+		
+});
+
+
+
+	$('#results').click(function (e){
 
 			
 			e.preventDefault()
-			var url = $("#add_comment").attr('action');
+			     e.stopImmediatePropagation()
+			      var url = $(e.target).attr('href');
 
 
-			var comment_text = $("#comment_text").val()
-			var suggestion_text = $("#suggestion_text").val()
+			  $.get(url, function(data) {
 
+				   	if (window.last == 'bullet') {
+				   		
+				   			var bp_id = window.bullet_id
+				   	
+				   	window.location.replace("/review-comments/?bullet_id="+bp_id);
 
-		    var csrftoken = getCookie('csrftoken');
+				   	} 
 
+				   	else if (window.last == 'education') {
+				   		
+				   			var bp_id = window.education_id
+				   	
+				   	window.location.replace("/review-comments/?education_id="+bp_id);
+					
 
-			$.post(url, {comment_text: comment_text, suggestion_text: suggestion_text, csrfmiddlewaretoken: csrftoken}, function() {
+				   	}
 
-			var comment_text = $("#comment_text").val('')
-			var suggestion_text = $("#suggestion_text").val('')
+				   	else if (window.last == 'skill') {
+				   		
+				   			var bp_id = window.skill_id
+				   	
+				   	window.location.replace("/review-comments/?skill_id="+bp_id);
+					
 
+				
+				   	}
 
+				   	else if (window.last == 'award') {
+				   		
+				   			var bp_id = window.award_id
+				   	
+				   	window.location.replace("/review-comments/?award_id="+bp_id);
+					
 
+				    
+				   	}
 
-			update_modal()
+				   	else if (window.last == 'experience') {
+				   		
+				   			var bp_id = window.experience_id
+				   	
+				   	window.location.replace("/review-comments/?experience_id="+bp_id);
+					
 
-			});
+			
+				   	}
 
 
 
@@ -493,6 +628,8 @@ function getUrlParameter(sParam) {
 			
 
 				    });
+
+			});
 
 
 			function getCookie(name) {
@@ -512,28 +649,25 @@ function getUrlParameter(sParam) {
 			}
 
 
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
 
-	$('#results').click(function (e){
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
 
-			console.log("A CLICK")
-			console.log(e) 
-
-				e.preventDefault()
-			     e.stopImmediatePropagation()
-			      var url = $(e.target).attr('href');
-			      var bp_id = window.bullet_id
-				   $.get(url, function(data) {
-				   	
-				   	window.location.replace("/review-comments/?bullet_id="+bp_id);
-					
-
-				    });
-
-		 });
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 
 	function update_modal() {
 		$("#results").html('')
+		$("#bp_text").html('')
 		    the_id = window.bullet_id
 		    url = "/get-comments-for-bp/".concat(the_id)
 		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
@@ -551,7 +685,7 @@ function getUrlParameter(sParam) {
 
 			 		if (value[0][5] == 1) {
 
-			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Accepted</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
 
 			 		}
 
@@ -580,18 +714,334 @@ function getUrlParameter(sParam) {
 
 			 		if (value[0][5] == 1) {
 
-			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Agreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 
 			 		}
 
 			 		else if (value[0][5] == 2) {
 
-			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Rejected</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Disagreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 			 		}
 
 			 		else {
 
-			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Agree</a> | <a href='/reject-comment/" + value[0][0] + "'>Disagree</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_education() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.education_id
+		    url = "/get-comments-for-education/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-education-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['education_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Accepted</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Agreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Disagreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Agree</a> | <a href='/reject-comment/" + value[0][0] + "'>Disagree</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_skills() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.skills_id
+		    url = "/get-comments-for-skill/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-skill-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['skill_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Accepted</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Agreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Disagreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Agree</a> | <a href='/reject-comment/" + value[0][0] + "'>Disagree</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_experience() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.experience_id
+		    url = "/get-comments-for-experience/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-experience-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['experience_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Accepted</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Agreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Disagreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Agree</a> | <a href='/reject-comment/" + value[0][0] + "'>Disagree</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_award() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.award_id
+		    url = "/get-comments-for-award/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-award-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['award_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Accepted</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Agreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Disagreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Agree</a> | <a href='/reject-comment/" + value[0][0] + "'>Disagree</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
 
 
 			 }
@@ -615,25 +1065,163 @@ function getUrlParameter(sParam) {
 
 
 		$("#container li").click(function (e) {
-			console.log(e.target)
+			e.stopPropagation();
 			window.bullet_id = $(e.target).attr("database_id");
+			window.last = 'bullet'
+			$("#suggestion_text").show()
+			$("#suggestion_text_label").show()
+			console.log("SHOWING")
 			update_modal()
 		});
 
 
-	$(document).ready(function() {
+		$('div[name="education"] .item').click(function (e){
+			e.stopPropagation()
+			window.education_id = $(e.target).attr("id");
+			window.last = 'education'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
 
-		var tech = getUrlParameter('bullet_id');
-		var li = $('#'+tech)
-		var span = li.children()[0]
-		span.click()
-		console.log()
-   
-});
+			update_modal_education()
+		});
+
+		$('div[name="education"] .item_sub_title').click(function (e){
+			e.stopPropagation()
+			window.education_id = $(e.target).attr("id");
+			window.last = 'education'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_education()
+		});
+
+		$('div[name="education"] .item_date').click(function (e){
+			e.stopPropagation()
+			window.education_id = $(e.target).attr("id");
+			window.last = 'education'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_education()
+		});
 
 
-		
+
+
+
+
+		$('div[name="skills"] .item').click(function (e){
+			e.stopPropagation()
+			window.skills_id = $(e.target).attr("id");
+			window.last = 'skill'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_skills()
+		});
+
+		$('div[name="skills"] .item_sub_title').click(function (e){
+			e.stopPropagation()
+			window.skills_id = $(e.target).attr("id");
+			window.last = 'skill'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_skills()
+		});
+
+		$('div[name="skills"] .item_date').click(function (e){
+			e.stopPropagation()
+			window.skills_id = $(e.target).attr("id");
+			window.last = 'skill'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_skills()
+		});
+
+
+
+
+
+
+		$('div[name="experience"] .item').click(function (e){
+			e.stopPropagation()
+			window.experience_id = $(e.target).attr("id");
+			window.last = 'experience'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_experience()
+		});
+
+		$('div[name="experience"] .item_sub_title').click(function (e){
+			e.stopPropagation()
+			window.experience_id = $(e.target).attr("id");
+			window.last = 'experience'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_experience()
+		});
+
+		$('div[name="experience"] .item_date').click(function (e){
+			e.stopPropagation()
+			window.experience_id = $(e.target).attr("id");
+			window.last = 'experience'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_experience()
+		});
+
+
+
+
+
+		$('div[name="awards"] .item').click(function (e){
+			e.stopPropagation()
+			window.award_id = $(e.target).attr("id");
+			window.last = 'award'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_award()
+		});
+
+		$('div[name="awards"] .item_sub_title').click(function (e){
+			e.stopPropagation()
+			window.award_id = $(e.target).attr("id");
+			window.last = 'award'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_award()
+		});
+
+		$('div[name="awards"] .item_date').click(function (e){
+			e.stopPropagation()
+			window.award_id = $(e.target).attr("id");
+			window.last = 'award'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			console.log("HIDING")
+
+			update_modal_award()
+		});
 
 
 	</script>	
+
 {% endblock %}

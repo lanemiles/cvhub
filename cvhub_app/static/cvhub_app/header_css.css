@@ -7,9 +7,6 @@ body {
 	height: 100%;
 }
 
-a:link { color: #0000EE; text-decoration: none; }
-a:link:hover { color: #0000EE; text-decoration: underline; }
-a:visited { color: #0000EE; }
 
 .slideout-menu {
   position: fixed;
@@ -17,12 +14,12 @@ a:visited { color: #0000EE; }
   top: 0;
   bottom: 0;
   right: 0;
-
+  z-index: 0;
   width: 256px;
   overflow-y: auto;
   display: none;
   background-color: #4096EE;
-  padding-top: 75px;
+  padding-top: 45px;
   box-shadow: 1px 1px 1px #888888;
 }
 
@@ -51,6 +48,7 @@ a:visited { color: #0000EE; }
 	color: white;
 	cursor: pointer;
 }
+
 
 .page_title {
 	text-align: center;
@@ -161,14 +159,34 @@ ul.menu1 li {
     	padding-bottom: 5px;
 }
 
-.url {
+.resume_url {
+width: 160px;
+	word-wrap: break-word;
 	display: block;
 	text-align: center;
 	font-family: Avenir;
+	margin: 0 auto;
 	color: white;
 	font-size: 16px;
 	text-decoration: none;
 	margin-top: 10px;
+}
+
+.url a{
+	width: 160px;
+	word-wrap: break-word;
+	display: block;
+	text-align: center;
+	font-family: Avenir;
+	margin: 0 auto;
+	color: white;
+	font-size: 16px;
+	text-decoration: none;
+	margin-top: 10px;
+}
+
+.url a:hover{
+	text-decoration: underline;
 }
 
 a.menu_link{
@@ -181,49 +199,18 @@ a.menu_link{
 	margin-top: 10px;
 }
 
+/*a.menu_link:visited{
+	display: block;
+	text-align: center;
+	font-family: Avenir;
+	color: white;
+	font-size: 16px;
+	text-decoration: none;
+	margin-top: 10px;
+}*/
+
 a.menu_link:hover {
 	text-decoration: underline;
-}
-
-.slideout-menu {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-
-  width: 256px;
-  overflow-y: auto;
-  display: none;
-  background-color: #4096EE;
-  padding-top: 75px;
-  box-shadow: 1px 1px 1px #888888;
-}
-
-.slideout-panel {
-  position:relative;
-  z-index: 5;
-}
-
-.slideout-open,
-.slideout-open body,
-.slideout-open .slideout-panel {
-  overflow: hidden;
-}
-
-.slideout-open .slideout-menu {
-  display: block;
-}
-
-
-.toggle-button {
-	font-size: 40px;
-	display: inline;
-	margin-left: 17px;
-	position: fixed;
-	margin-top: 7px;
-	color: white;
-	cursor: pointer;
 }
 
 

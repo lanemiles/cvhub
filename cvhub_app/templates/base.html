@@ -1,9 +1,11 @@
-{% load staticfiles %}
+={% load staticfiles %}
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel='stylesheet' href='{% static "cvhub_app/header_css.css" %}' />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/0.1.11/slideout.min.js"></script>
 
+<script src="{% static "cvhub_app/dist/sweetalert.min.js" %}"></script> 
+<link rel="stylesheet" type="text/css" href="{% static "cvhub_app/dist/sweetalert.css" %}">
 <title>{% block title %}{% endblock %}</title>
         {% block extra_head %}{% endblock %}
 
@@ -20,23 +22,26 @@
   	<hr class='menu_hr'>
 <a href="/profile/" class='menu_link'>Edit Content</a>
 <a href="/view-my-resume/" class='menu_link'>View Resume</a>
+<a href="/view-pdf/" class='menu_link' target="_blank">View as PDF</a>
 <a href="/review-comments/" class='menu_link'>Review Comments</a>
-<a href="/generate-pdf/" class='menu_link'>PDF</a>
+<a href="/generate-pdf/" class='menu_link' id='save_version'>Save Current Version</a>
+<a href="/embed-pdf/" class='menu_link'>View Past Versions</a>
+
   
 
 
 
 <h3 class='link_header'>Explore</h3>
 <hr class='menu_hr'>
-<a href="/choose-resume-to-edit/" class='menu_link'>Top</a>
-<a href="/choose-resume-to-edit/" class='menu_link'>Recent</a>
+<a href="/mp-resumes/" class='menu_link'>Top</a>
+<a href="/mrc-resumes/" class='menu_link'>Recent</a>
 <a href="/choose-resume-to-edit/" class='menu_link'>Search</a>
-<a href="/choose-resume-to-edit/" class='menu_link'>Random</a>
+<a href="/random-resume/" class='menu_link'>Random</a>
 
 
 <h3 class='link_header'>Your URL</h3>
 <hr class='menu_hr'>
-<span class='url'>www.laneresume.com</span>
+<span class='url'><div id='resume_url'>{{request.user.user_info.resume_url}}</div></span>
 
 </nav>
 
@@ -53,7 +58,7 @@
 
 
 	<div class='login'>
-	 <p align=right>{{user.user_info.display_name}} | <a href='/logout/'>Logout</a> </p>
+	 <p align=right>{{request.user.user_info.display_name}} | <a href='/logout/'>Logout</a> </p>
 	</div>
 </div>
 
@@ -66,6 +71,30 @@
 </div>
 </div>
 <script>
+
+$(document).ready( function() {
+
+  var old =  $("#resume_url").html()
+  $("#resume_url").html("<a target='_blank' href='/resume/" + old+"'>"+document.domain + '/resume/' + old+"</a>")
+
+});
+
+
+
+$('#save_version').click(function (e){
+
+        e.preventDefault()
+           e.stopImmediatePropagation()
+            var url = $(e.target).attr('href');
+            console.log(url)
+           $.get(url, function(data) {
+            swal({   title: "Saved!",   text: "Resume version has been saved!",   type: "success"});
+           });
+
+         });
+
+
+
   var slideout = new Slideout({
     'panel': document.getElementById('panel'),
     'menu': document.getElementById('menu'),
