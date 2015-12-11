@@ -12,6 +12,9 @@
 <div id='form'>
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
+    {% if no_results %}
+    Your search returned no results.
+    {% endif %}
     <br> <br>
   	<label for='keywords'>Keywords:</label> <input type="text" name="keywords"> <br>
     <label for='num_resumes_to_return'>Number of results:</label> <input type="number" name="num_resumes_to_return" value="5" min = 1> 
