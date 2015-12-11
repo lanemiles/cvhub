@@ -159,8 +159,25 @@ ul.menu1 li {
     	padding-bottom: 5px;
 }
 
+<<<<<<< HEAD
 
 .resume_url {
+=======
+.resume_url {
+width: 160px;
+	word-wrap: break-word;
+	display: block;
+	text-align: center;
+	font-family: Avenir;
+	margin: 0 auto;
+	color: white;
+	font-size: 16px;
+	text-decoration: none;
+	margin-top: 10px;
+}
+
+.url a{
+>>>>>>> origin/lane-branch
 	width: 160px;
 	word-wrap: break-word;
 	display: block;
@@ -205,6 +222,7 @@ a.menu_link:hover {
 	text-decoration: underline;
 }
 
+<<<<<<< HEAD
 a.menu_link{
 	display: block;
 	text-align: center;
@@ -229,6 +247,8 @@ a.menu_link:hover {
 	text-decoration: underline;
 }
 
+=======
+>>>>>>> origin/lane-branch
 
 
 
