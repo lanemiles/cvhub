@@ -2601,8 +2601,19 @@ def edit_information(request):
             user_info.display_name = form.cleaned_data.get('display_name')
             user_info.phone_number = form.cleaned_data.get('phone_number')
             user_info.website = form.cleaned_data.get('website')
-            user_info.resume_url = form.cleaned_data.get('resume_url')
-            user_info.save()
+
+            # set a unique public resume url
+            proposed_resume_url = form.cleaned_data.get('resume_url')
+            
+            # if the url is already taken, ask the user for a new url
+            name_taken = UserInfo.objects.exclude(id=request.user.user_info.id).filter(resume_url=proposed_resume_url).count()
+            if name_taken > 0:
+                return render(request, 'edit_information.html', {'form': form, 'name_taken': True})
+            
+            # unique url requested, so finish updating information
+            else:
+                user_info.resume_url = proposed_resume_url
+                user_info.save()
 
         return redirect('/profile/')
 
@@ -2612,7 +2623,7 @@ def edit_information(request):
         # return form to edit information
         form = EditInformationForm(instance=request.user.user_info)
 
-        return render(request, 'edit_information.html', {'form': form})
+        return render(request, 'edit_information.html', {'form': form, 'name_taken': False})
 
 
 # When editing resume, enable all items of either Education, Skill,
