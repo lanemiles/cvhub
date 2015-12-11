@@ -90,6 +90,9 @@ class Education(ResumeItem):
     in_progress = models.BooleanField()
     location = models.CharField(max_length=128)
 
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
+
     def save(self, *args, **kwargs):
 
         # check if in progress
@@ -105,6 +108,9 @@ class Skill(ResumeItem):
 
     category = models.CharField(max_length=128)
 
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
+
 
 class Experience(ResumeItem):
 
@@ -113,6 +119,9 @@ class Experience(ResumeItem):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     current = models.BooleanField()
+
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-end_date']
@@ -125,6 +134,9 @@ class Award(ResumeItem):
     name = models.CharField(max_length=128)
     issuer = models.CharField(max_length=128)
     date_awarded = models.DateField()
+
+    # num pending
+    num_pending_comments = models.IntegerField(default=0)
 
 
 class CommentStatus(enum.Enum):
