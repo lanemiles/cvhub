@@ -24,7 +24,7 @@
 <a href="/view-my-resume/" class='menu_link'>View Resume</a>
 <a href="/view-pdf/" class='menu_link' target="_blank">View as PDF</a>
 <a href="/review-comments/" class='menu_link'>Review Comments</a>
-<a href="/generate-pdf/" class='menu_link'>Save Current Version</a>
+<a href="/generate-pdf/" class='menu_link' id='save_version'>Save Current Version</a>
 <a href="/embed-pdf/" class='menu_link'>View Past Versions</a>
 
   
@@ -71,6 +71,21 @@
 </div>
 </div>
 <script>
+
+$('#save_version').click(function (e){
+
+        e.preventDefault()
+           e.stopImmediatePropagation()
+            var url = $(e.target).attr('href');
+            console.log(url)
+           $.get(url, function(data) {
+            swal({   title: "Saved!",   text: "Resume version has been saved!",   type: "success"});
+           });
+
+         });
+
+
+
   var slideout = new Slideout({
     'panel': document.getElementById('panel'),
     'menu': document.getElementById('menu'),
