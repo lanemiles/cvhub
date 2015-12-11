@@ -261,4 +261,4 @@ class EditInformationForm(forms.ModelForm):
 
     class Meta:
         model = UserInfo
-        fields = ['dob', 'display_name', 'phone_number', 'website']
+        fields = ['dob', 'display_name', 'phone_number', 'website', 'resume_url']
