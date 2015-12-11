@@ -1892,20 +1892,30 @@ def embed_pdf(request):
 
     pdfs = ResumePDF.objects.filter(user=request.user.user_info)
 
-    return render(request, 'embed_pdf.html', {'first_path': pdfs[0].path, 'url_list': pdfs})
+    if len(pdfs) == 0:
+        first_path = ""
 
+    else:
+        first_path = pdfs[0].path
+
+    return render(request, 'embed_pdf.html', {'first_path': first_path, 'url_list': pdfs})
 
 
 @login_required
 def view_pdf(request):
 
-    # get user
-    user = request.user.user_info
+    # get user id
+    user_id = str(request.user.pk)
 
-    # get last resumePDF
-    last_pdf = ResumePDF.objects.filter(user=user).order_by('-created_at')[0]
+    # generate file id
+    random_int = str(random.randint(00000001, 99999999))
 
-    return redirect('/static/cvhub_app/'+str(last_pdf.path)+'.pdf')
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+
+    os.system(command)
+
+    return redirect('/static/cvhub_app/'+str(random_int)+'.pdf')
+
 
 # Add a skill category
 # (User should list individual skills as bullet points under a category)
