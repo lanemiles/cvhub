@@ -1882,6 +1882,15 @@ def coverflow(request):
 
 
 @login_required
+def embed_pdf(request):
+
+    pdfs = ResumePDF.objects.filter(user=request.user.user_info)
+
+    return render(request, 'embed_pdf.html', {'first_path': pdfs[0].path, 'url_list': pdfs})
+
+
+
+@login_required
 def view_pdf(request):
 
     # get user
@@ -2038,6 +2047,209 @@ def add_bp_comment(request, bp_id=None):
 
 
 @login_required
+def add_education_comment(request, education_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Education)
+        new_comment.object_id = education_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
+def add_skill_comment(request, skill_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Skill)
+        new_comment.object_id = skill_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
+def add_experience_comment(request, experience_id=None):
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Experience)
+        new_comment.object_id = experience_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
+def add_award_comment(request, award_id=None):
+
+    print "THE"
+
+    if request.method == 'POST':
+
+        print request.POST
+
+        new_comment = Comment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # is there a suggestion
+        new_comment.suggestion = request.POST.get('suggestion_text')
+
+        if request.POST.get('suggestion_text') != "":
+
+            new_comment.is_suggestion = True
+
+            # add rep points for a suggestion to the author
+            MADE_SUGGESTION_RP = 15
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_SUGGESTION_RP
+            print "test"
+
+        else:
+
+            new_comment.is_suggestion = False
+
+            # add rep points to the commenter
+            MADE_COMMENT_RP = 10
+            author = UserInfo.objects.get(id=new_comment.author.id)
+            author.points = author.points + MADE_COMMENT_RP
+
+        print new_comment.is_suggestion
+
+        # get content type
+        new_comment.content_type = ContentType.objects.get_for_model(Award)
+        new_comment.object_id = award_id
+        new_comment.parent_item = GenericForeignKey('content_type', 'object_id')
+
+        new_comment.save()
+
+        author.save()
+
+        return redirect('/view-my-resume/')
+
+
+@login_required
 def get_comments_for_bp(request, bp_id):
 
     # get all the comments
@@ -2062,6 +2274,138 @@ def get_comments_for_bp(request, bp_id):
 
     # get bp info
     output['bp_info'] = BulletPoint.objects.get(id=bp_id).text
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_education(request, education_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Education), object_id=education_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['education_info'] = Education.objects.get(id=education_id).school + ", " + Education.objects.get(id=education_id).location
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_skill(request, skill_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Skill), object_id=skill_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['skill_info'] = Skill.objects.get(id=skill_id).category
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_experience(request, experience_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Experience), object_id=experience_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['experience_info'] = Experience.objects.get(id=experience_id).title + " at " + Experience.objects.get(id=experience_id).employer
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+@login_required
+def get_comments_for_award(request, award_id):
+
+    # get all the comments
+    comments = Comment.objects.filter(content_type=ContentType.objects.get_for_model(Award), object_id=award_id).order_by('-vote_total')
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.is_suggestion, comment.suggestion, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = Vote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['award_info'] = Award.objects.get(id=award_id).name + " from " + Award.objects.get(id=award_id).issuer
 
     # get comment info
     output['comments'] = zip(comment_list, votes)
