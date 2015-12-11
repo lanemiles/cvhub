@@ -23,8 +23,6 @@ from django.core import serializers
 import json
 
 
-
-
 def index(request):
     return render(request, 'current_time.html', {'question': 'his'})
 
@@ -2603,6 +2601,7 @@ def edit_information(request):
             user_info.display_name = form.cleaned_data.get('display_name')
             user_info.phone_number = form.cleaned_data.get('phone_number')
             user_info.website = form.cleaned_data.get('website')
+            user_info.resume_url = form.cleaned_data.get('resume_url')
             user_info.save()
 
         return redirect('/profile/')
