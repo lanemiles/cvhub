@@ -86,4 +86,5 @@ urlpatterns = [
     url(r'^get-comments-for-award/(?P<award_id>[0-9]+)', views.get_comments_for_award, name='get_comments_for_award'),
     url(r'^upvote-comment/(?P<comment_id>[0-9]+)', views.upvote_comment, name='upvote_comment'),
     url(r'^downvote-comment/(?P<comment_id>[0-9]+)', views.downvote_comment, name='downvote_comment'),
+    url(r'^resume/(?P<custom_string>\w+)/', views.public_resume_pdf, name='public_resume_pdf'),
 ]

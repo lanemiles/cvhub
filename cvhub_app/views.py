@@ -2677,7 +2677,6 @@ def enable_section(request, section_name):
             i.enabled = True
             i.save()
 
-
     # disable all header-level experience items
     elif section_name == "experience":
         items = Experience.objects.filter(owner_id=request.user.user_info.id, enabled=False)
@@ -2686,10 +2685,39 @@ def enable_section(request, section_name):
             i.save()
 
     # disable all header-level award items
-    elif section_name == "award":        
+    elif section_name == "award":   
         items = Award.objects.filter(owner_id=request.user.user_info.id, enabled=False)
         for i in items:
             i.enabled = True
             i.save()
 
     return redirect('/profile/')
+
+
+def public_resume_pdf(request, custom_string):
+
+    print custom_string
+
+    # find associated user
+    user = UserInfo.objects.get(resume_url=str(custom_string))
+
+    # get their resume pdf
+    user_id = str(user.user.pk)
+
+    # generate file id
+    random_int = str(random.randint(00000001, 99999999))
+
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+
+    os.system(command)
+
+    return redirect('/static/cvhub_app/'+str(random_int)+'.pdf')
+
+
+
+
+
+
+
+
+
