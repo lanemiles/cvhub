@@ -101,7 +101,7 @@
 </div>
 
 <div id={{user_info.skill_order}}>
-<h2>Your Skills</h2><div class='section_edit'><a href='/move-up-section/skill/'>Move Up</a> | <a href='/move-down-section/skill/'>Move Down</a></div><hr>
+<h2>Your Skills</h2><div class='section_edit'><a href='/move-up-section/skill/'>Move Up</a> | <a href='/move-down-section/skill/'>Move Down</a> | <a href='/enable-section/skill/'>Enable All</a> | <a href='/disable-section/skill/'>Disable All</a></div><hr>
 <ul>
 {% for info in skill_category_list %}
 <li>
@@ -154,7 +154,7 @@
 <div id={{user_info.experience_order}}>
 <h2>Your Experience</h2>
 <div class='section_edit'>
-<a href='/move-up-section/experience/'>Move Up</a> | <a href='/move-down-section/experience/'>Move Down</a>
+<a href='/move-up-section/experience/'>Move Up</a> | <a href='/move-down-section/experience/'>Move Down</a> | <a href='/enable-section/experience/'>Enable All</a> | <a href='/disable-section/experience/'>Disable All</a>
 </div><hr>
 <ul>
 {% for info in experience_list %}
@@ -203,7 +203,7 @@
 			{% endfor %}
 			{% endif %}
 			{% endfor %}
-			<li><a href='/add-experience-bp/{info.{id}}'>Add Detail Bullet Point</a></li>
+			<li><a href='/add-experience-bp/{{info.id}}'>Add Detail Bullet Point</a></li>
 			<br>
 		</ul>
 </li>
@@ -217,7 +217,7 @@
 <div id={{user_info.award_order}}>
 <h2>Your Awards</h2>
 <div class='section_edit'>
-<a href='/move-up-section/award/'>Move Up</a> | <a href='/move-down-section/award/'>Move Down</a>
+<a href='/move-up-section/award/'>Move Up</a> | <a href='/move-down-section/award/'>Move Down</a> |  <a href='/enable-section/award/'>Enable All</a> | <a href='/disable-section/award/'>Disable All</a>
 </div>
 <hr>
 <ul>

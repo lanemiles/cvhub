@@ -2643,7 +2643,7 @@ def disable_section(request, section_name):
             i.enabled = False
             i.save()
 
-    return render(request, 'profile.html', user_profile_dict(request.user))
+    return redirect('/profile/')
 
 
 # When editing resume, enable all items of either Education, Skill,
@@ -2683,5 +2683,4 @@ def enable_section(request, section_name):
             i.enabled = True
             i.save()
 
-    return render(request, 'profile.html', user_profile_dict(request.user))
-
+    return redirect('/profile/')
