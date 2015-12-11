@@ -1057,7 +1057,6 @@ def most_recently_commented_resumes(request):
 
         # check whether it's valid:
         if form.is_valid():
-
             # get selected resume/user
             userinfo_id = request.POST.get("Resumes")
             user_info = UserInfo.objects.get(id=userinfo_id)
@@ -2035,6 +2034,10 @@ def add_bp_comment(request, bp_id=None):
         bp = BulletPoint.objects.get(id=bp_id)
         parent = bp.get_parent()
 
+        # increment pending
+        bp.num_pending_comments += 1
+        bp.save()
+
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(BulletPoint)
         new_comment.object_id = bp_id
@@ -2084,6 +2087,11 @@ def add_education_comment(request, education_id=None):
             author.points = author.points + MADE_COMMENT_RP
 
         print new_comment.is_suggestion
+
+        # increment pending
+        edu = Education.objects.get(id=education_id)
+        edu.num_pending_comments += 1
+        edu.save()
 
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(Education)
@@ -2135,6 +2143,11 @@ def add_skill_comment(request, skill_id=None):
 
         print new_comment.is_suggestion
 
+        # increment pending
+        edu = Skill.objects.get(id=skill_id)
+        edu.num_pending_comments += 1
+        edu.save()
+
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(Skill)
         new_comment.object_id = skill_id
@@ -2184,6 +2197,11 @@ def add_experience_comment(request, experience_id=None):
             author.points = author.points + MADE_COMMENT_RP
 
         print new_comment.is_suggestion
+
+        # increment pending
+        edu = Experience.objects.get(id=experience_id)
+        edu.num_pending_comments += 1
+        edu.save()
 
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(Experience)
@@ -2236,6 +2254,11 @@ def add_award_comment(request, award_id=None):
             author.points = author.points + MADE_COMMENT_RP
 
         print new_comment.is_suggestion
+
+        # increment pending
+        edu = Award.objects.get(id=award_id)
+        edu.num_pending_comments += 1
+        edu.save()
 
         # get content type
         new_comment.content_type = ContentType.objects.get_for_model(Award)
@@ -2481,6 +2504,12 @@ def accept_comment(request, comment_id):
     ACCEPTED_SUGGESTION_RP = 30
     rp = ACCEPTED_COMMENT_RP
 
+    # decrement pending
+    # need to decrement pending
+    obj = comment.get_parent()
+    obj.num_pending_comments -= 1
+    obj.save()
+
     # if accepted suggestion, need to replace bp text
     # suggestions can only be made to bullet points
     if comment.is_suggestion:
@@ -2498,10 +2527,13 @@ def accept_comment(request, comment_id):
             is_suggestion=True, status=CommentStatus.PENDING).exclude(id=comment_id).values('id'))
         for rs_id in reject_suggestions:
             rs = Comment.objects.get(id=rs_id)
+            obj = rs.get_parent()
+            obj.num_pending_comments -= 1
+            obj.save()
             rs.status = CommentStatus.DECLINE
             rs.save()
             print "successfully rejected", rs.text
-    
+
     # award rp to commenter
     commenter = UserInfo.objects.get(id=comment.author.id)
     commenter.points = commenter.points + rp
@@ -2520,6 +2552,11 @@ def reject_comment(request, comment_id):
     comment = Comment.objects.get(id=comment_id)
     comment.status = CommentStatus.DECLINE
     comment.save()
+
+    # decrement pending
+    obj = comment.get_parent()
+    obj.num_pending_comments -= 1
+    obj.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
