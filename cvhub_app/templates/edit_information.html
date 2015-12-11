@@ -11,6 +11,9 @@
 {% if name_taken %}
 Sorry, that resume URL is already taken.
 {% endif %}
+{% if url_is_none %}
+Please choose a resume URL.
+{% endif %}
 <br> <br>
 <form action="/edit-information/" method="post">
     {% csrf_token %}

@@ -2607,8 +2607,8 @@ def edit_information(request):
             
             # if the url is already taken, ask the user for a new url
             name_taken = UserInfo.objects.exclude(id=request.user.user_info.id).filter(resume_url=proposed_resume_url).count()
-            if name_taken > 0:
-                return render(request, 'edit_information.html', {'form': form, 'name_taken': True})
+            if name_taken > 0 or (proposed_resume_url == "None"):
+                return render(request, 'edit_information.html', {'form': form, 'name_taken': True, 'url_is_none': False})
             
             # unique url requested, so finish updating information
             else:
@@ -2623,7 +2623,7 @@ def edit_information(request):
         # return form to edit information
         form = EditInformationForm(instance=request.user.user_info)
 
-        return render(request, 'edit_information.html', {'form': form, 'name_taken': False})
+        return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': False})
 
 
 # When editing resume, enable all items of either Education, Skill,
@@ -2688,6 +2688,7 @@ def enable_section(request, section_name):
             i.enabled = True
             i.save()
 
+
     # disable all header-level experience items
     elif section_name == "experience":
         items = Experience.objects.filter(owner_id=request.user.user_info.id, enabled=False)
@@ -2696,7 +2697,7 @@ def enable_section(request, section_name):
             i.save()
 
     # disable all header-level award items
-    elif section_name == "award":   
+    elif section_name == "award":        
         items = Award.objects.filter(owner_id=request.user.user_info.id, enabled=False)
         for i in items:
             i.enabled = True
@@ -2707,28 +2708,25 @@ def enable_section(request, section_name):
 
 def public_resume_pdf(request, custom_string):
 
-    print custom_string
+    print "custom string is", custom_string
 
-    # find associated user
-    user = UserInfo.objects.get(resume_url=str(custom_string))
+    # this user hasn't set their custom public url yet, ask them to
+    if custom_string == "None":
+        form = EditInformationForm(instance=request.user.user_info)
+        return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': True})
+    else:
 
-    # get their resume pdf
-    user_id = str(user.user.pk)
+        # find associated user
+        user = UserInfo.objects.get(resume_url=str(custom_string))
 
-    # generate file id
-    random_int = str(random.randint(00000001, 99999999))
+        # get their resume pdf
+        user_id = str(user.user.pk)
 
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+        # generate file id
+        random_int = str(random.randint(00000001, 99999999))
 
-    os.system(command)
+        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
-    return redirect('/static/cvhub_app/'+str(random_int)+'.pdf')
+        os.system(command)
 
-
-
-
-
-
-
-
-
+        return redirect('/static/cvhub_app/'+str(random_int)+'.pdf')
