@@ -18,6 +18,7 @@
 {% block content %}
 <center>
 <br><br>
+{% if url_list %}
 <div id='url_list' style='width: 700px; overflow-x: scroll; display: inline-block;
 white-space: nowrap; height: 50px;'>
 <-- Older | 
@@ -45,6 +46,13 @@ white-space: nowrap; height: 50px;'>
 | Newer -->
 </div>
 <br><br>
+
+
+
 <iframe id='frame' src="http://40.83.184.46:8002/static/cvhub_app/{{first_path}}.pdf" style="width:800px; height:100%;" frameborder="0"></iframe>
+
+{% else %}
+<h3>You have no saved versions!</h3>
+{% endif %}
 </center>
 {% endblock %}
