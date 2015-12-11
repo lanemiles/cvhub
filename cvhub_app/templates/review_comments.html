@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block title %}Comment on a Resume{% endblock %}
-{% block page_title %}Comment on a Resume{% endblock %}
+{% block title %}Review Comments{% endblock %}
+{% block page_title %}Review Comments{% endblock %}
 {% block extra_head %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel='stylesheet' href='{% static "cvhub_app/review_comments_css.css" %}' />
@@ -633,7 +633,6 @@ function getUrlParameter(sParam) {
 		var span = li.children()[0]
 		span.click()
 		console.log()
-   
 });
 
 

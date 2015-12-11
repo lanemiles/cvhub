@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block page_title %}Your Resume History{% endblock %}
+<style>
+#container {
+	position: relative;
+	top: 35px;
+	font-family: Garamond;
+	width: 800px;
+	margin: 0 auto;
+	border: 1px solid black;
+
+}
+</style>
+{% block extra_head %}
+{% endblock %}
+
+{% block content %}
+<center>
+<br><br>
+<div id='url_list' style='width: 700px; overflow-x: scroll; display: inline-block;
+white-space: nowrap; height: 50px;'>
+<-- Older | 
+{% for url in url_list %}
+
+{% if url == url_list.0 %}
+
+<a style='font-size: 18px; font-family: "Garamond";color: black; text-decoration: none; cursor: pointer;' onclick='document.getElementById("frame").src="http://40.83.184.46:8002/static/cvhub_app/{{url.path}}.pdf"; $(".resume_link").css("color", "blue").css("text-decoration", "underline"); this.style.color="black"; this.style.textDecoration="none";'  class='resume_link'>{{url.created_at|date:'m/d/Y'}}</a> |
+
+{% else %}
+
+{% if url == url_list.last %}
+
+<a style='font-size: 18px; font-family: "Garamond";color: blue; text-decoration: underline; cursor: pointer;' onclick='document.getElementById("frame").src="http://40.83.184.46:8002/static/cvhub_app/{{url.path}}.pdf"; $(".resume_link").css("color", "blue").css("text-decoration", "underline"); this.style.color="black"; this.style.textDecoration="none";'  class='resume_link'>{{url.created_at|date:'m/d/Y'}}</a>
+
+{% else %}
+
+<a style='font-size: 18px; font-family: "Garamond";color: blue; text-decoration: underline; cursor: pointer;' onclick='document.getElementById("frame").src="http://40.83.184.46:8002/static/cvhub_app/{{url.path}}.pdf"; $(".resume_link").css("color", "blue").css("text-decoration", "underline"); this.style.color="black"; this.style.textDecoration="none";'  class='resume_link'>{{url.created_at|date:'m/d/Y'}}</a> |
+
+{% endif %}
+
+{% endif %}
+
+{% endfor %}
+| Newer -->
+</div>
+<br><br>
+<iframe id='frame' src="http://40.83.184.46:8002/static/cvhub_app/{{first_path}}.pdf" style="width:800px; height:100%;" frameborder="0"></iframe>
+</center>
+{% endblock %}
