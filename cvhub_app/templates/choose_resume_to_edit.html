@@ -3,24 +3,27 @@
 {% block title %}Search Resumes{% endblock %}
 {% block page_title %}Search Resumes {% endblock %}
 {% block extra_head %}
-<link rel='stylesheet' href='{% static "cvhub_app/profile_css.css" %}' />
 <link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
-{% endblock %}
 
+{% endblock %}
 
 {% block content %}
 <div id='form'>
+<table>
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
     {% if no_results %}
     Your search returned no results.
     {% endif %}
     <br> <br>
-  	<label for='keywords'>Keywords:</label> <input type="text" name="keywords"> <br>
-    <label for='num_resumes_to_return'>Number of results:</label> <input type="number" name="num_resumes_to_return" value="5" min = 1> 
-    <br>
-  	<input type="submit" name="search_resumes" value="Search">
-
+  	<tr><th><label for='keywords'>Keywords:</label></th><td> <input type="text" name="keywords"></td></tr>
+    <tr><th><label for='num_resumes_to_return'>Number of results:</label></th><td> <input type="number" name="num_resumes_to_return" value="5" min = 1> </td></tr>
+    <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
+
+</table>
+
 </div>
+
 {% endblock %}
+
