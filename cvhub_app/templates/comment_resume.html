@@ -407,7 +407,7 @@ blockquote p {
   <div id='new_comment'>
   <form id='add_comment' method='POST'>
   <label id='comment_text_label'>Comment: </label><input style='width: 300px;' id='comment_text' type='text' name='comment_text' placeholder='Your thoughts...'><br>
-  <label id='suggestion_text_label'>Suggestion: </label><input style='width: 300px;' id='suggestion_text' type='text' name='suggestion_text' placeholder='(Optional) What would you replace it with?'><br>
+  <label id='suggestion_text_label'>Suggestion: </label><input style='width: 300px;' id='suggestion_text' type='text' name='suggestion_text' placeholder='(Optional) What would you replace it with?'><span id='fill'> | <a style='color: blue; text-decoration: underline; cursor: pointer;' onclick='$("#suggestion_text").val(window.thing_value)'>Fill</a></span><br>
   {% csrf_token %}
   <input type='button' id='submit_button' value='Submit'>
   </form>
@@ -539,13 +539,14 @@ blockquote p {
 	function update_modal() {
 		$("#results").html('')
 		$("#bp_text").html('')
+		$("#suggestion_text").val('')
 		    the_id = window.bullet_id
 		    url = "/get-comments-for-bp/".concat(the_id)
 		    $("#add_comment").attr("action", "/add-bp-comment/".concat(the_id))
 		    $.get(url, function( data ) {
 
 		    	$("#bp_text").html(data['bp_info'])
-
+		    	window.thing_value = data['bp_info']
 
 			 $.each(data['comments'], function(index, value) {
 
@@ -1002,6 +1003,7 @@ blockquote p {
 			window.last = 'bullet'
 			$("#suggestion_text").show()
 			$("#suggestion_text_label").show()
+			$("#fill").show()
 			console.log("SHOWING")
 			update_modal()
 		});
@@ -1013,6 +1015,7 @@ blockquote p {
 			window.last = 'education'
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
+			$("#fill").hide()
 			console.log("HIDING")
 
 			update_modal_education()
@@ -1024,6 +1027,7 @@ blockquote p {
 			window.last = 'education'
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
+			$("#fill").hide()
 			console.log("HIDING")
 
 			update_modal_education()
@@ -1036,6 +1040,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_education()
 		});
@@ -1051,6 +1056,7 @@ blockquote p {
 			window.last = 'skill'
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
+			$("#fill").hide()
 			console.log("HIDING")
 
 			update_modal_skills()
@@ -1063,6 +1069,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_skills()
 		});
@@ -1074,6 +1081,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_skills()
 		});
@@ -1090,6 +1098,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_experience()
 		});
@@ -1101,6 +1110,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_experience()
 		});
@@ -1112,6 +1122,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_experience()
 		});
@@ -1127,6 +1138,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_award()
 		});
@@ -1138,6 +1150,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_award()
 		});
@@ -1149,6 +1162,7 @@ blockquote p {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+			$("#fill").hide()
 
 			update_modal_award()
 		});
