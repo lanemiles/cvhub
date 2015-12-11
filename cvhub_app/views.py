@@ -72,7 +72,7 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-   
+
     return render(request, 'profile.html', user_profile_dict(request.user))
 
 
@@ -166,7 +166,7 @@ def edit_education(request, education_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all()
+        bps = BulletPoint.objects.all().order_by('order')
         education_bps = []
         for bp in bps:
             if bp.get_parent() == Education.objects.get(id=education_id):
@@ -579,6 +579,7 @@ def add_award_bp(request, item_id=None):
 def remove_bp(request, bp_id):
 
     BulletPoint.objects.get(id=bp_id).delete()
+
     return redirect('/profile/')
 
 
@@ -1175,8 +1176,11 @@ def random_resume(request):
         # whichever is greater, will never be excluded
         safe_users = .05
         s = num_users*safe_users
-        s = (6 if (s<6) else s)
-        upper_limit = random.randint(s,num_users-1)
+        print s
+        s = (6 if (s>6) else s)
+        print s
+        print num_users-1
+        upper_limit = random.randint(int(s), num_users-1)
 
     # from remaining users, randomly choose a resume
     # resumes are ordered from highest points [0] to lowest points [upper_limit]

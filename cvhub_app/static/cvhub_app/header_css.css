@@ -7,18 +7,19 @@ body {
 	height: 100%;
 }
 
+
 .slideout-menu {
   position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
   right: 0;
-
+  z-index: 0;
   width: 256px;
   overflow-y: auto;
   display: none;
   background-color: #4096EE;
-  padding-top: 75px;
+  padding-top: 45px;
   box-shadow: 1px 1px 1px #888888;
 }
 
@@ -47,6 +48,7 @@ body {
 	color: white;
 	cursor: pointer;
 }
+
 
 .page_title {
 	text-align: center;
@@ -196,47 +198,6 @@ a.menu_link{
 
 a.menu_link:hover {
 	text-decoration: underline;
-}
-
-.slideout-menu {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-
-  width: 256px;
-  overflow-y: auto;
-  display: none;
-  background-color: #4096EE;
-  padding-top: 75px;
-  box-shadow: 1px 1px 1px #888888;
-}
-
-.slideout-panel {
-  position:relative;
-  z-index: 5;
-}
-
-.slideout-open,
-.slideout-open body,
-.slideout-open .slideout-panel {
-  overflow: hidden;
-}
-
-.slideout-open .slideout-menu {
-  display: block;
-}
-
-
-.toggle-button {
-	font-size: 40px;
-	display: inline;
-	margin-left: 17px;
-	position: fixed;
-	margin-top: 7px;
-	color: white;
-	cursor: pointer;
 }
 
 

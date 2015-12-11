@@ -4,18 +4,21 @@
 {% block page_title %}Add Detail{% endblock %}
 {% block extra_head %}
 <link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+
 {% endblock %}
 
 {% block content %}
 <div id='form'>
-
+<table>
 <form action="/add-education-bp/" method="post">
     {% csrf_token %}
     {{ form }}
     <input name='edu_id' type='hidden' value={{edu_id}}></input>
-    <input type="submit" value="Submit" />
+    <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
+
+</table>
+
 </div>
+
 {% endblock %}
-
-

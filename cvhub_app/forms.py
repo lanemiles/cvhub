@@ -47,8 +47,10 @@ class EducationBulletPointForm(EducationForm):
 
     def add_bp_fields(self, bps):
         print bps
+        order = 1
         for bp in bps:
-            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+            self.fields["BP"+str(bp.pk)] = forms.CharField(widget=forms.Textarea, label=("Bullet Point: (#" + str(order)) + ")", initial=bp.text)
+            order += 1
 
 
 # Form to add bullet points to education
@@ -225,8 +227,10 @@ class SkillBulletPointForm(SkillCategoryForm):
 
     def add_bp_fields(self, bps):
         print bps
+        order = 1
         for bp in bps:
-            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+            self.fields["BP"+str(bp.pk)] = forms.CharField(widget=forms.Textarea, label=("Bullet Point: (#" + str(order)) + ")", initial=bp.text)
+            order += 1
 
 
 class ExperienceBulletPointForm(ExperienceForm):
@@ -239,8 +243,10 @@ class ExperienceBulletPointForm(ExperienceForm):
 
     def add_bp_fields(self, bps):
         print bps
+        order = 1
         for bp in bps:
-            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+            self.fields["BP"+str(bp.pk)] = forms.CharField(widget=forms.Textarea, label=("Bullet Point: (#" + str(order)) + ")", initial=bp.text)
+            order += 1
 
 
 class AwardBulletPointForm(AwardForm):
@@ -253,8 +259,10 @@ class AwardBulletPointForm(AwardForm):
 
     def add_bp_fields(self, bps):
         print bps
+        order = 1
         for bp in bps:
-            self.fields["BP"+str(bp.pk)] = forms.CharField(label=("Bullet Point" + str(bp.order)), initial=bp.text)
+            self.fields["BP"+str(bp.pk)] = forms.CharField(widget=forms.Textarea, label=("Bullet Point: (#" + str(order)) + ")", initial=bp.text)
+            order += 1
 
 
 class EditInformationForm(forms.ModelForm):
