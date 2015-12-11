@@ -37,3 +37,7 @@ ul ul li {
 	margin-top: 5px;
 	font-weight: normal;
 }
+
+#container a:link { color: #0000EE; text-decoration: none; }
+#container a:link:hover { color: #0000EE; text-decoration: underline; }
+#container a:visited { color: #0000EE; }
