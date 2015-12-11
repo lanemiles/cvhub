@@ -1034,18 +1034,23 @@ def choose_resume_to_edit(request):
                     top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
                     results_list.append((x, top_hit_user))
 
-                # redirect to results page, with search results
-                form = SearchResumeResultsForm()
-                form.set_resumes_to_display(results_list)
-                return render(request, 'search_resume_results.html', {'form':form})
+                # if we have search results, redirect to results page
+                if len(results_list) > 0:
+                    form = SearchResumeResultsForm()
+                    form.set_resumes_to_display(results_list)
+                    return render(request, 'search_resume_results.html', {'form':form})
 
+                # if no search results returned, redirect to search page
+                else:
+                    form = ChooseResumeToEditForm()
+                    return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
 
     # if a GET (or any other method) we'll create a blank form
     else:
 
         form = ChooseResumeToEditForm()
 
-    return render(request, 'choose_resume_to_edit.html', {'form': form})
+    return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': False})
 
 # Get most recently commented resumes
 @login_required
@@ -1072,7 +1077,7 @@ def most_recently_commented_resumes(request):
         NUM_RESUMES_TO_RETURN = 5
         
         # get all comments
-        comments = Comment.objects.order_by('timestamp').exclude(id=request.user.user_info.id)
+        comments = Comment.objects.order_by('timestamp')
 
         mrc_resumes_list = []
 
@@ -1082,8 +1087,9 @@ def most_recently_commented_resumes(request):
             # the owner of the resume item this comment is on (aka recipient of comment)
             recipient = c.get_header_level_parent().owner
 
+
             # append (user id, user's display name) to list of results
-            if (recipient.id, recipient.display_name) not in mrc_resumes_list:
+            if (recipient.id != request.user.user_info.id) and (recipient.id, recipient.display_name) not in mrc_resumes_list:
                 mrc_resumes_list.append((recipient.id, recipient.display_name))
 
             # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
@@ -1121,7 +1127,7 @@ def most_popular_resumes(request):
 
 
         # list of all users
-        all_userinfos = UserInfo.objects.all()
+        all_userinfos = UserInfo.objects.exclude(id = request.user.user_info.id)
 
         # initialize count of comments for each resume to 0
         comment_count_per_ui = {}
@@ -1136,7 +1142,8 @@ def most_popular_resumes(request):
             recipient_id = c.get_header_level_parent().owner.id
             
             # increment number of comments attributed to that resume
-            comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+            if recipient_id != request.user.user_info.id:
+                comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
         sorted_top_resumes = sorted(comment_count_per_ui, key=comment_count_per_ui.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
@@ -2017,7 +2024,6 @@ def add_bp_comment(request, bp_id=None):
             MADE_SUGGESTION_RP = 15
             author = UserInfo.objects.get(id=new_comment.author.id)
             author.points = author.points + MADE_SUGGESTION_RP
-            print "test"
 
         else:
 
@@ -2028,7 +2034,6 @@ def add_bp_comment(request, bp_id=None):
             author = UserInfo.objects.get(id=new_comment.author.id)
             author.points = author.points + MADE_COMMENT_RP
 
-        print new_comment.is_suggestion
 
         # get bp parent
         bp = BulletPoint.objects.get(id=bp_id)
@@ -2599,4 +2604,84 @@ def edit_information(request):
         form = EditInformationForm(instance=request.user.user_info)
 
         return render(request, 'edit_information.html', {'form': form})
+
+
+# When editing resume, enable all items of either Education, Skill,
+# Experience, or Award
+# However, we don't disable the associated bullet points, because if the header
+# level education is disabled, the bp's won't show anyway. And it's possible the
+# user wants to remember which bp's are enabled/disabled.
+@login_required
+def disable_section(request, section_name):
+
+    # disable all header-level education items
+    if section_name == "education":
+        items = Education.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+    # disable all header-level skill categories
+    elif section_name == "skill":
+        items = Skill.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+
+    # disable all header-level experience items
+    elif section_name == "experience":
+        items = Experience.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+    # disable all header-level award items
+    elif section_name == "award":        
+        items = Award.objects.filter(owner_id=request.user.user_info.id, enabled=True)
+        for i in items:
+            i.enabled = False
+            i.save()
+
+    return render(request, 'profile.html', user_profile_dict(request.user))
+
+
+# When editing resume, enable all items of either Education, Skill,
+# Experience, or Award
+# However, we don't disable the associated bullet points, because if the header
+# level education is disabled, the bp's won't show anyway. And it's possible the
+# user wants to remember which bp's are enabled/disabled.
+@login_required
+def enable_section(request, section_name):
+
+    # disable all header-level education items
+    if section_name == "education":
+        items = Education.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+    # disable all header-level skill categories
+    elif section_name == "skill":
+        items = Skill.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+
+    # disable all header-level experience items
+    elif section_name == "experience":
+        items = Experience.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+    # disable all header-level award items
+    elif section_name == "award":        
+        items = Award.objects.filter(owner_id=request.user.user_info.id, enabled=False)
+        for i in items:
+            i.enabled = True
+            i.save()
+
+    return render(request, 'profile.html', user_profile_dict(request.user))
 
