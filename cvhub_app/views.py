@@ -1177,19 +1177,13 @@ def random_resume(request):
         # whichever is greater, will never be excluded
         safe_users = .05
         s = num_users*safe_users
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/lane-branch
         print s
         s = (6 if (s>6) else s)
         print s
         print num_users-1
         upper_limit = random.randint(int(s), num_users-1)
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/lane-branch
 
     # from remaining users, randomly choose a resume
     # resumes are ordered from highest points [0] to lowest points [upper_limit]

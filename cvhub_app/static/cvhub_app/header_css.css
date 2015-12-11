@@ -159,10 +159,7 @@ ul.menu1 li {
     	padding-bottom: 5px;
 }
 
-<<<<<<< HEAD
 
-.resume_url {
-=======
 .resume_url {
 width: 160px;
 	word-wrap: break-word;
@@ -177,7 +174,6 @@ width: 160px;
 }
 
 .url a{
->>>>>>> origin/lane-branch
 	width: 160px;
 	word-wrap: break-word;
 	display: block;
@@ -204,34 +200,6 @@ width: 160px;
 	margin-top: 10px;
 }
 
-<<<<<<< HEAD
-.url a:hover{
-=======
-/*a.menu_link:visited{
-	display: block;
-	text-align: center;
-	font-family: Avenir;
-	color: white;
-	font-size: 16px;
-	text-decoration: none;
-	margin-top: 10px;
-}*/
-
-a.menu_link:hover {
->>>>>>> ad02d74ccbe290ad99c491fca1b3907b52a5686b
-	text-decoration: underline;
-}
-
-<<<<<<< HEAD
-a.menu_link{
-	display: block;
-	text-align: center;
-	font-family: Avenir;
-	color: white;
-	font-size: 16px;
-	text-decoration: none;
-	margin-top: 10px;
-}
 
 /*a.menu_link:visited{
 	display: block;
@@ -246,9 +214,6 @@ a.menu_link{
 a.menu_link:hover {
 	text-decoration: underline;
 }
-
-=======
->>>>>>> origin/lane-branch
 
 
 
