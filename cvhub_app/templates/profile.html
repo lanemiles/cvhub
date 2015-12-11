@@ -33,16 +33,18 @@
 	</li>
 	<li> Website: {{user.user_info.website}}
 	</li>
-	<li> DOB: {{user.user_info.dob}}
+	<li> Born on: {{user.user_info.dob}}
 	</li>
-	<li> Resume URL: {{user.user_info.resume_url}}
+	<li> My Public Resume URL Ending: {{user.user_info.resume_url}}
 	</li>
 </ul>
 </div>
 
 
 <div id={{user_info.education_order}}>
-<h2>Your Education</h2><div class='section_edit'><a href='/move-up-section/education/'>Move Up</a> | <a href='/move-down-section/education/'>Move Down</a></div>
+<h2>Your Education</h2><div class='section_edit'>
+<a href='/move-up-section/education/'>Move Up</a> | <a href='/move-down-section/education/'>Move Down</a> | <a href='/enable-section/education/'>Enable All</a> | <a href='/disable-section/education/'>Disable All</a>
+</div>
 <hr>
 
 <ul>
@@ -75,7 +77,7 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li id={{text.id}}>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
 			{{text.text}}
 			{% else %}
@@ -99,7 +101,7 @@
 </div>
 
 <div id={{user_info.skill_order}}>
-<h2>Your Skills</h2><div class='section_edit'><a href='/move-up-section/skill/'>Move Up</a> | <a href='/move-down-section/skill/'>Move Down</a></div><hr>
+<h2>Your Skills</h2><div class='section_edit'><a href='/move-up-section/skill/'>Move Up</a> | <a href='/move-down-section/skill/'>Move Down</a> | <a href='/enable-section/skill/'>Enable All</a> | <a href='/disable-section/skill/'>Disable All</a></div><hr>
 <ul>
 {% for info in skill_category_list %}
 <li>
@@ -125,7 +127,7 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li id={{text.id}}>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
 			{{text.text}}
 			{% else %}
@@ -152,7 +154,7 @@
 <div id={{user_info.experience_order}}>
 <h2>Your Experience</h2>
 <div class='section_edit'>
-<a href='/move-up-section/experience/'>Move Up</a> | <a href='/move-down-section/experience/'>Move Down</a>
+<a href='/move-up-section/experience/'>Move Up</a> | <a href='/move-down-section/experience/'>Move Down</a> | <a href='/enable-section/experience/'>Enable All</a> | <a href='/disable-section/experience/'>Disable All</a>
 </div><hr>
 <ul>
 {% for info in experience_list %}
@@ -190,7 +192,7 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li id={{text.id}}>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
 			{{text.text}}
 			{% else %}
@@ -201,7 +203,7 @@
 			{% endfor %}
 			{% endif %}
 			{% endfor %}
-			<li><a href='/add-experience-bp/{info.{id}}'>Add Detail Bullet Point</a></li>
+			<li><a href='/add-experience-bp/{{info.id}}'>Add Detail Bullet Point</a></li>
 			<br>
 		</ul>
 </li>
@@ -215,7 +217,7 @@
 <div id={{user_info.award_order}}>
 <h2>Your Awards</h2>
 <div class='section_edit'>
-<a href='/move-up-section/award/'>Move Up</a> | <a href='/move-down-section/award/'>Move Down</a>
+<a href='/move-up-section/award/'>Move Up</a> | <a href='/move-down-section/award/'>Move Down</a> |  <a href='/enable-section/award/'>Enable All</a> | <a href='/disable-section/award/'>Disable All</a>
 </div>
 <hr>
 <ul>
@@ -247,7 +249,7 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li id={{text.id}}>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
 			{{text.text}}
 			{% else %}
@@ -279,7 +281,13 @@ $( "#container li li" )
 
   	else {
   		var bp_id = $(e.target).attr('id')
-  		if (bp_id) {
+  		var enabled = $(e.target).attr('enabled')
+
+  		if (bp_id && enabled =="True") {
+  			$(e.target).append("<ul class='bullet_edit'><li><div><a href='/move-up-bp/"+bp_id+"'>Move Up</a> | <a href='/move-down-bp/"+bp_id+"'>Move Down</a> | <a href='/disable-bp/"+bp_id+"'>Disable</a> | <a href='/remove-bp/"+bp_id+"'>Remove</a></div></li></ul>")
+  		} 
+
+  		else if (bp_id && enabled =="False") {
   			$(e.target).append("<ul class='bullet_edit'><li><div><a href='/move-up-bp/"+bp_id+"'>Move Up</a> | <a href='/move-down-bp/"+bp_id+"'>Move Down</a> | <a href='/enable-bp/"+bp_id+"'>Enable</a> | <a href='/remove-bp/"+bp_id+"'>Remove</a></div></li></ul>")
   		}
   		

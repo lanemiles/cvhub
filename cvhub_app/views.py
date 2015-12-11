@@ -1159,6 +1159,7 @@ def most_popular_resumes(request):
         return render(request, 'most_popular_resumes.html', {'form': form})
 
 
+
 # Randomly choose a user/resume to view, giving priority to users with more rep points
 # Priority depends on rep points compared to other users, not absolute rep points
 # The general idea is that higher ranked users will be more likely to remain
@@ -1176,11 +1177,13 @@ def random_resume(request):
         # whichever is greater, will never be excluded
         safe_users = .05
         s = num_users*safe_users
+
         print s
         s = (6 if (s>6) else s)
         print s
         print num_users-1
         upper_limit = random.randint(int(s), num_users-1)
+
 
     # from remaining users, randomly choose a resume
     # resumes are ordered from highest points [0] to lowest points [upper_limit]

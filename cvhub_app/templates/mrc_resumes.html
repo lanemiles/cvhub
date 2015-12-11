@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+
 {% block title %}Recently Edited Resumes{% endblock %}
 {% block page_title %}Recently Edited Resumes {% endblock %}
 {% block extra_head %}
@@ -9,6 +10,7 @@
 
 {% block content %}
 <div id='form'>
+
 <table>
 <form action="/mrc-resumes/" method="post">
     {% csrf_token %}

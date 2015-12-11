@@ -159,8 +159,9 @@ ul.menu1 li {
     	padding-bottom: 5px;
 }
 
+
 .resume_url {
-width: 160px;
+	width: 160px;
 	word-wrap: break-word;
 	display: block;
 	text-align: center;
@@ -171,6 +172,7 @@ width: 160px;
 	text-decoration: none;
 	margin-top: 10px;
 }
+
 
 .url a{
 	width: 160px;
@@ -185,7 +187,21 @@ width: 160px;
 	margin-top: 10px;
 }
 
+<<<<<<< HEAD
 .url a:hover{
+=======
+/*a.menu_link:visited{
+	display: block;
+	text-align: center;
+	font-family: Avenir;
+	color: white;
+	font-size: 16px;
+	text-decoration: none;
+	margin-top: 10px;
+}*/
+
+a.menu_link:hover {
+>>>>>>> ad02d74ccbe290ad99c491fca1b3907b52a5686b
 	text-decoration: underline;
 }
 

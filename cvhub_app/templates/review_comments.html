@@ -19,6 +19,7 @@
 		}
 
 		.column-left{ float: left; width: 180px; }
+
 .column-right{ float: right; width: 0%; }
 .column-center{ display: inline-block; width: 70%; padding-left: 20px; border-left: 1px solid black;}
 
@@ -542,6 +543,7 @@ blockquote p {
 			span.click()
 		}
 
+
 		if (skill_id) {
 			var li = $('#'+skill_id)
 			var span = li
@@ -561,7 +563,6 @@ blockquote p {
 		}
 		
 });
-
 
 
 	$('#results').click(function (e){
@@ -589,10 +590,12 @@ blockquote p {
 				   	window.location.replace("/review-comments/?education_id="+bp_id);
 					
 
+
 				   	}
 
 				   	else if (window.last == 'skill') {
 				   		
+
 				   			var bp_id = window.skill_id
 				   	
 				   	window.location.replace("/review-comments/?skill_id="+bp_id);
@@ -603,22 +606,22 @@ blockquote p {
 
 				   	else if (window.last == 'award') {
 				   		
+
 				   			var bp_id = window.award_id
 				   	
 				   	window.location.replace("/review-comments/?award_id="+bp_id);
 					
-
 				    
 				   	}
 
 				   	else if (window.last == 'experience') {
 				   		
+
 				   			var bp_id = window.experience_id
 				   	
 				   	window.location.replace("/review-comments/?experience_id="+bp_id);
 					
 
-			
 				   	}
 
 
@@ -1060,6 +1063,323 @@ function getUrlParameter(sParam) {
 			$("#key").click()
 	}
 
+	function update_modal_education() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.education_id
+		    url = "/get-comments-for-education/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-education-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['education_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Rejected</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_skills() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.skills_id
+		    url = "/get-comments-for-skill/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-skill-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['skill_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Rejected</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_experience() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.experience_id
+		    url = "/get-comments-for-experience/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-experience-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['experience_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Rejected</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+	function update_modal_award() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    the_id = window.award_id
+		    url = "/get-comments-for-award/".concat(the_id)
+		    $("#add_comment").attr("action", "/add-award-comment/".concat(the_id))
+		    $.get(url, function( data ) {
+
+		    	$("#bp_text").html(data['award_info'])
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 	if (value[0][3] == true) {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>Rejected</span></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 			
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'><b>Suggestion: </b><br>" + (value[0][4]) + "<br><br><b>Comment: </b><br>" + (value[0][1]) + "</div></div><hr>")
+				 	
+
+			 		}
+
+			 		
+			 	}
+
+
+			 	
+
+
+			 	else {
+
+			 		if (value[0][5] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Approved</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][5] == 2) {
+
+			 			$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Rejected</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Accept</a> | <a href='/reject-comment/" + value[0][0] + "'>Reject</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+
+			 }
+			}
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
+
 			
 
 
@@ -1093,6 +1413,7 @@ function getUrlParameter(sParam) {
 			$("#suggestion_text").hide()
 			$("#suggestion_text_label").hide()
 			console.log("HIDING")
+
 
 			update_modal_education()
 		});

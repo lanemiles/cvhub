@@ -1,4 +1,4 @@
-={% load staticfiles %}
+{% load staticfiles %}
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <link rel='stylesheet' href='{% static "cvhub_app/header_css.css" %}' />
@@ -41,7 +41,9 @@
 
 <h3 class='link_header'>Your URL</h3>
 <hr class='menu_hr'>
+
 <span class='url'><div id='resume_url'>{{request.user.user_info.resume_url}}</div></span>
+
 
 </nav>
 
@@ -78,8 +80,6 @@ $(document).ready( function() {
   $("#resume_url").html("<a target='_blank' href='/resume/" + old+"'>"+document.domain + '/resume/' + old+"</a>")
 
 });
-
-
 
 $('#save_version').click(function (e){
 

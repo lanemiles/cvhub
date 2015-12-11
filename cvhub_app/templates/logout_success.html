@@ -1,4 +1,17 @@
-Successful logout!
-<br>
+{% extends 'login_base.html' %}
+{% load staticfiles %}
+{% block title %}Logout{% endblock %}
+{% block page_title %}Logout{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
+You have successfully logged out.
+<br> <br>
 
 <a href='/login/'>Back to Login</a>
+</div>
+{% endblock %}

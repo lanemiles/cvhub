@@ -1,8 +1,11 @@
 #container {
+	position: relative;
+	top: 35px;
 	font-family: Garamond;
 	width: 800px;
 	margin: 0 auto;
 	border: 1px solid black;
+
 }
 
 #container_pdf {
@@ -81,6 +84,10 @@
 	cursor: pointer;
 }
 
+.main_row:hover {
+	color: blue;
+	cursor: pointer;
+}
 
 .small_caps {
 	font-variant: small-caps;
