@@ -41,7 +41,7 @@
 
 <h3 class='link_header'>Your URL</h3>
 <hr class='menu_hr'>
-<span class='url'>{{request.user.user_info.resume_url}}</span>
+<span class='url' id='resume_url'>{{request.user.user_info.resume_url}}</span>
 
 </nav>
 
@@ -71,6 +71,13 @@
 </div>
 </div>
 <script>
+
+$(document).ready( function() {
+
+  var old =  $("#resume_url").html()
+  $("#resume_url").html("<a target='_blank' class='menu_link' href='/resume/" + old+"'>"+document.domain + '/resume/' + old+"</a>")
+
+});
 
 $('#save_version').click(function (e){
 
