@@ -7,10 +7,6 @@ body {
 	height: 100%;
 }
 
-a:link { color: #0000EE; text-decoration: none; }
-a:link:hover { color: #0000EE; text-decoration: underline; }
-a:visited { color: #0000EE; }
-
 .slideout-menu {
   position: fixed;
   left: 0;
