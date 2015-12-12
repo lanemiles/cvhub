@@ -12,7 +12,24 @@
 
 {% block content %}
 <div id='form'>
+
+
+<center>
+
+{% if name_taken %}
+Sorry, that resume URL is already taken.
+{% endif %}
+{% if url_is_none %}
+Please choose a resume URL.
+{% endif %}
+
+</center>
+<br> <br>
+
 <table>
+
+
+
 <form action="/edit-information/" method="post">
     {% csrf_token %}
     {{ form }}
