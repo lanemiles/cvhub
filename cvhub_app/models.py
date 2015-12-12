@@ -24,6 +24,11 @@ class UserInfo(models.Model):
     experience_order = models.IntegerField(default=3)
     award_order = models.IntegerField(default=4)
 
+    education_section_pending = models.IntegerField(default=0)
+    awards_section_pending = models.IntegerField(default=0)
+    skills_section_pending = models.IntegerField(default=0)
+    experience_section_pending = models.IntegerField(default=0)
+
     def __unicode__(self):
         return '{} - {}'.format(self.user.username, self.dob)
 
@@ -200,6 +205,24 @@ class Comment(models.Model):
             return BulletPoint.objects.get(id=self.object_id).get_parent()
 
 
+class SectionType(enum.Enum):
+    EDUCATION = 0
+    SKILLS = 1
+    AWARDS = 2
+    EXPERIENCE = 3
+
+
+class SectionComment(models.Model):
+
+    author = models.ForeignKey(UserInfo, related_name='commenter')
+    section_owner = models.ForeignKey(UserInfo, related_name='section_owner')
+    section_type = enum.EnumField(SectionType)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.CharField(max_length=1024)
+    status = enum.EnumField(CommentStatus, default=CommentStatus.PENDING)
+    vote_total = models.IntegerField(default=0)
+
+
 class VoteType(enum.Enum):
     UP = 0
     DOWN = 1
@@ -209,6 +232,16 @@ class Vote(models.Model):
 
     user = models.ForeignKey(UserInfo)
     comment = models.ForeignKey(Comment)
+    vote_type = enum.EnumField(VoteType)
+
+    class Meta:
+        unique_together = ("user", "comment")
+
+
+class SectionVote(models.Model):
+
+    user = models.ForeignKey(UserInfo)
+    comment = models.ForeignKey(SectionComment)
     vote_type = enum.EnumField(VoteType)
 
     class Meta:

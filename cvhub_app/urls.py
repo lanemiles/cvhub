@@ -30,6 +30,8 @@ urlpatterns = [
     url(r'^review-comments', views.review_comments, name='review_comments'),
     url(r'^accept-comment/(?P<comment_id>[0-9]+)', views.accept_comment, name='accept_comment'),
     url(r'^reject-comment/(?P<comment_id>[0-9]+)', views.reject_comment, name='reject_comment'),
+    url(r'^accept-section-comment/(?P<section_comment_id>[0-9]+)', views.accept_section_comment, name='accept_section_comment'),
+    url(r'^reject-section-comment/(?P<section_comment_id>[0-9]+)', views.reject_section_comment, name='reject_section_comment'),
     url(r'^view-my-resume', views.view_my_resume, name='view_my_resume'),
     url(r'^edit-information/', views.edit_information, name='edit_information'),
     url(r'^view-user-resume/(?P<user_id>[0-9]+)', views.view_user_resume, name='view_user_resume'),
@@ -87,4 +89,9 @@ urlpatterns = [
     url(r'^upvote-comment/(?P<comment_id>[0-9]+)', views.upvote_comment, name='upvote_comment'),
     url(r'^downvote-comment/(?P<comment_id>[0-9]+)', views.downvote_comment, name='downvote_comment'),
     url(r'^resume/(?P<custom_string>\w+)/', views.public_resume_pdf, name='public_resume_pdf'),
+    url(r'^get-comments-for-section/(?P<section_name>\w+)/(?P<user_info_id>[0-9]+)', views.get_comments_for_section, name='get_comments_for_section'),
+    url(r'^add-section-comment/(?P<section_name>\w+)/(?P<user_info_id>[0-9]+)', views.add_section_comment, name='add_section_comment'),
+    url(r'^upvote-section-comment/(?P<section_comment_id>[0-9]+)', views.upvote_section_comment, name='upvote_section_comment'),
+    url(r'^downvote-section-comment/(?P<section_comment_id>[0-9]+)', views.downvote_section_comment, name='downvote_section_comment'),
+
 ]
