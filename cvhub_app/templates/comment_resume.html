@@ -137,7 +137,7 @@ blockquote p {
 			{% if education_list %}
 			<div class='section' id={{user_info.education_order}} name='education'>
 
-				<span class='section_name small_caps bold'>EDUCATION:</span>
+				<span class='section_name small_caps bold' id='EDUCATION' name='EDUCATION' user_info={{user_info.pk}}>EDUCATION:</span>
 
 				<hr class='section_hr'>
 
@@ -201,7 +201,7 @@ blockquote p {
 			{% if skill_category_list %}
 			<div class='section' id={{user_info.skill_order}} name='skills'>
 
-				<span class='section_name small_caps bold'>SKILLS:</span>
+				<span class='section_name small_caps bold' id='SKILLS' name='SKILLS' user_info={{user_info.pk}}>SKILLS:</span>
 
 				<hr class='section_hr'>
 
@@ -261,7 +261,7 @@ blockquote p {
 			{% if experience_list %}
 			<div class='section' id={{user_info.experience_order}} name='experience'>
 
-				<span class='section_name small_caps bold'>EXPERIENCE:</span>
+				<span class='section_name small_caps bold' id='EXPERIENCE' name='EXPERIENCE' user_info={{user_info.pk}}>EXPERIENCE:</span>
 
 				<hr class='section_hr'>
 
@@ -325,7 +325,7 @@ blockquote p {
 			{% if award_list %}
 			<div class='section' id={{user_info.award_order}} name='awards'>
 
-				<span class='section_name small_caps bold'>AWARDS:</span>
+				<span class='section_name small_caps bold' id='AWARDS' name='AWARDS' user_info={{user_info.pk}}>AWARDS:</span>
 
 				<hr class='section_hr'>
 
@@ -427,20 +427,18 @@ blockquote p {
 			var url = $("#add_comment").attr('action');
 
 
-			var comment_text = $("#comment_text").val()
-			var suggestion_text = $("#suggestion_text").val()
+
+			if (window.last == 'section') {
+
+				var comment_text = $("#comment_text").val()
 
 
 		    var csrftoken = getCookie('csrftoken');
 
 
-			$.post(url, {comment_text: comment_text, suggestion_text: suggestion_text, csrfmiddlewaretoken: csrftoken}, function() {
+			$.post(url, {comment_text: comment_text, csrfmiddlewaretoken: csrftoken}, function() {
 
 			var comment_text = $("#comment_text").val('')
-			var suggestion_text = $("#suggestion_text").val('')
-
-
-
 
 			if (window.last == 'bullet') {
 				   		update_modal()
@@ -462,7 +460,67 @@ blockquote p {
 				   		update_modal_experience()
 				   	}
 
+				   	else if (window.last == 'section') {
+				   		update_modal_section()
+				   	}
+
 			});
+
+		}
+
+
+
+
+
+			else {
+
+				var comment_text = $("#comment_text").val()
+			var suggestion_text = $("#suggestion_text").val()
+
+
+		    var csrftoken = getCookie('csrftoken');
+
+
+			$.post(url, {comment_text: comment_text, suggestion_text: suggestion_text, csrfmiddlewaretoken: csrftoken}, function() {
+
+			var comment_text = $("#comment_text").val('')
+			var suggestion_text = $("#suggestion_text").val('')
+
+			if (window.last == 'bullet') {
+				   		update_modal()
+				   	} 
+
+				   	else if (window.last == 'education') {
+				   		update_modal_education()
+				   	}
+
+				   	else if (window.last == 'skill') {
+				   		update_modal_skills()
+				   	}
+
+				   	else if (window.last == 'award') {
+				   		update_modal_award()
+				   	}
+
+				   	else if (window.last == 'experience') {
+				   		update_modal_experience()
+				   	}
+
+				   	else if (window.last == 'section') {
+				   		update_modal_section()
+				   	}
+
+			});
+
+			}
+
+
+			
+
+
+
+
+			
 
 
 
@@ -520,6 +578,10 @@ blockquote p {
 
 				   	else if (window.last == 'experience') {
 				   		update_modal_experience()
+				   	}
+
+				   	else if (window.last == 'section') {
+				   		update_modal_section()
 				   	}
 
 
@@ -628,7 +690,8 @@ blockquote p {
 			$("#key").click()
 	}
 
-	function update_modal_education() {
+	function update_modal_education(e) {
+		parent = $(e.target).parents()[2].cloneNode(true)
 		$("#results").html('')
 		$("#bp_text").html('')
 		    the_id = window.education_id
@@ -636,7 +699,7 @@ blockquote p {
 		    $("#add_comment").attr("action", "/add-education-comment/".concat(the_id))
 		    $.get(url, function( data ) {
 
-		    	$("#bp_text").html(data['education_info'])
+		    	$("#bp_text").html(parent)
 
 
 			 $.each(data['comments'], function(index, value) {
@@ -719,7 +782,8 @@ blockquote p {
 			$("#key").click()
 	}
 
-	function update_modal_skills() {
+	function update_modal_skills(e) {
+		parent = $(e.target).parents()[2].cloneNode(true)
 		$("#results").html('')
 		$("#bp_text").html('')
 		    the_id = window.skills_id
@@ -727,7 +791,7 @@ blockquote p {
 		    $("#add_comment").attr("action", "/add-skill-comment/".concat(the_id))
 		    $.get(url, function( data ) {
 
-		    	$("#bp_text").html(data['skill_info'])
+		    	$("#bp_text").html(parent)
 
 
 			 $.each(data['comments'], function(index, value) {
@@ -810,7 +874,8 @@ blockquote p {
 			$("#key").click()
 	}
 
-	function update_modal_experience() {
+	function update_modal_experience(e) {
+		parent = $(e.target).parents()[2].cloneNode(true)
 		$("#results").html('')
 		$("#bp_text").html('')
 		    the_id = window.experience_id
@@ -818,7 +883,7 @@ blockquote p {
 		    $("#add_comment").attr("action", "/add-experience-comment/".concat(the_id))
 		    $.get(url, function( data ) {
 
-		    	$("#bp_text").html(data['experience_info'])
+		    	$("#bp_text").html(parent)
 
 
 			 $.each(data['comments'], function(index, value) {
@@ -901,7 +966,8 @@ blockquote p {
 			$("#key").click()
 	}
 
-	function update_modal_award() {
+	function update_modal_award(e) {
+		parent = $(e.target).parents()[2].cloneNode(true)
 		$("#results").html('')
 		$("#bp_text").html('')
 		    the_id = window.award_id
@@ -909,7 +975,7 @@ blockquote p {
 		    $("#add_comment").attr("action", "/add-award-comment/".concat(the_id))
 		    $.get(url, function( data ) {
 
-		    	$("#bp_text").html(data['award_info'])
+		    	$("#bp_text").html(parent)
 
 
 			 $.each(data['comments'], function(index, value) {
@@ -992,8 +1058,116 @@ blockquote p {
 			$("#key").click()
 	}
 
+	function update_modal_section() {
+		$("#results").html('')
+		$("#bp_text").html('')
+		    section_name = window.section_string
+		    user_resume = window.user_info_id
+		    url = "/get-comments-for-section/".concat(section_name) + "/" + user_resume
+		    $("#add_comment").attr("action", "/add-section-comment/".concat(section_name) + "/" + user_resume)
+		    console.log(url)
+		    $.get(url, function( data ) {
+
+		    	var section_id = $("#"+section_name).closest("div").attr("id")
+		    	// console.log(search_string)
+		    	$("#bp_text").html($("#"+section_id).html())
+
+
+			 $.each(data['comments'], function(index, value) {
+
+			 	console.log(value)
+
+
+			 		if (value[0][3] == 1) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray'><div class='column-left'>Score: " + value[0][2] + " | <span>Agreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
+			 		}
+
+			 		else if (value[0][3] == 2) {
+
+			 			$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span style='color: gray;'>Disagreed</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 		}
+
+			 		else {
+
+
+			 		
+			 		if (value[1] == 2) {
+			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/upvote-section-comment/" + value[0][0] + "'>+1</a> | <a href='/downvote-section-comment/" + value[0][0] + "'>-1</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	} else if(value[1] == 0) {
+			 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You +1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	} else if(value[1] == 1){
+			 		$("#results").append("<div class='result_block' style='color: gray;'><div class='column-left'>Score: " + value[0][2] + " | <span>You -1'd</span></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+			 	}
+
+			 	}
+
+			 
+
+			 	
+
+			 	
+
+
+
+			 });
+			
+
+			});
+			$("#key").click()
+	}
+
 
 			
+	$('span[name="EDUCATION"]').click(function (e){
+			e.stopPropagation()
+			window.section_string = $(e.target).attr("name");
+			window.user_info_id = $(e.target).attr("user_info");
+			window.last = 'section'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			$("#fill").hide()
+
+			update_modal_section()
+		});
+
+	$('span[name="AWARDS"]').click(function (e){
+			e.stopPropagation()
+			window.section_string = $(e.target).attr("name");
+			window.user_info_id = $(e.target).attr("user_info");
+			window.last = 'section'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			$("#fill").hide()
+
+			update_modal_section()
+		});
+
+	$('span[name="SKILLS"]').click(function (e){
+			e.stopPropagation()
+			window.section_string = $(e.target).attr("name");
+			window.user_info_id = $(e.target).attr("user_info");
+			window.last = 'section'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			$("#fill").hide()
+
+			update_modal_section()
+		});
+
+	$('span[name="EXPERIENCE"]').click(function (e){
+			e.stopPropagation()
+			window.section_string = $(e.target).attr("name");
+			window.user_info_id = $(e.target).attr("user_info");
+			window.last = 'section'
+			$("#suggestion_text").hide()
+			$("#suggestion_text_label").hide()
+			$("#fill").hide()
+
+			update_modal_section()
+		});
+
 
 
 
@@ -1018,7 +1192,7 @@ blockquote p {
 			$("#fill").hide()
 			console.log("HIDING")
 
-			update_modal_education()
+			update_modal_education(e)
 		});
 
 		$('div[name="education"] .item_sub_title').click(function (e){
@@ -1030,7 +1204,7 @@ blockquote p {
 			$("#fill").hide()
 			console.log("HIDING")
 
-			update_modal_education()
+			update_modal_education(e)
 		});
 
 		$('div[name="education"] .item_date').click(function (e){
@@ -1042,7 +1216,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_education()
+			update_modal_education(e)
 		});
 
 
@@ -1059,7 +1233,7 @@ blockquote p {
 			$("#fill").hide()
 			console.log("HIDING")
 
-			update_modal_skills()
+			update_modal_skills(e)
 		});
 
 		$('div[name="skills"] .item_sub_title').click(function (e){
@@ -1071,7 +1245,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_skills()
+			update_modal_skills(e)
 		});
 
 		$('div[name="skills"] .item_date').click(function (e){
@@ -1083,7 +1257,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_skills()
+			update_modal_skills(e)
 		});
 
 
@@ -1100,7 +1274,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_experience()
+			update_modal_experience(e)
 		});
 
 		$('div[name="experience"] .item_sub_title').click(function (e){
@@ -1112,7 +1286,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_experience()
+			update_modal_experience(e)
 		});
 
 		$('div[name="experience"] .item_date').click(function (e){
@@ -1124,7 +1298,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_experience()
+			update_modal_experience(e)
 		});
 
 
@@ -1140,7 +1314,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_award()
+			update_modal_award(e)
 		});
 
 		$('div[name="awards"] .item_sub_title').click(function (e){
@@ -1152,7 +1326,7 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_award()
+			update_modal_award(e)
 		});
 
 		$('div[name="awards"] .item_date').click(function (e){
@@ -1164,8 +1338,10 @@ blockquote p {
 			console.log("HIDING")
 			$("#fill").hide()
 
-			update_modal_award()
+			update_modal_award(e)
 		});
+
+
 
 
 
