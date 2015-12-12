@@ -19,6 +19,7 @@
 		}
 
 		.column-left{ float: left; width: 180px; }
+
 .column-right{ float: right; width: 0%; }
 .column-center{ display: inline-block; width: 70%; padding-left: 20px; border-left: 1px solid black;}
 
@@ -577,6 +578,7 @@ blockquote p {
 			span.click()
 		}
 
+
 		if (skill_id) {
 			var li = $('#'+skill_id)
 			var span = li
@@ -601,7 +603,6 @@ blockquote p {
 		}
 		
 });
-
 
 
 	$('#results').click(function (e){
@@ -629,10 +630,11 @@ blockquote p {
 				   	window.location.replace("/review-comments/?education_id="+bp_id);
 					
 
+
 				   	}
 
 				   	else if (window.last == 'skill') {
-				   		
+
 				   			var bp_id = window.skill_id
 				   	
 				   	window.location.replace("/review-comments/?skill_id="+bp_id);
@@ -643,6 +645,7 @@ blockquote p {
 
 				   	else if (window.last == 'award') {
 				   		
+
 				   			var bp_id = window.award_id
 				   	
 				   	window.location.replace("/review-comments/?award_id="+bp_id);
@@ -653,12 +656,13 @@ blockquote p {
 
 				   	else if (window.last == 'experience') {
 				   		
+
 				   			var bp_id = window.experience_id
 				   	
 				   	window.location.replace("/review-comments/?experience_id="+bp_id);
 					
 
-			
+
 				   	}
 
 				   	else if (window.last == 'section') {
@@ -771,6 +775,7 @@ function getUrlParameter(sParam) {
 			 		else {
 
 			 		$("#results").append("<div class='result_block'><div class='column-left'>Score: " + value[0][2] + " | <a href='/accept-comment/" + value[0][0] + "'>Agree</a> | <a href='/reject-comment/" + value[0][0] + "'>Disagree</a></div><div class='column-right'></div><div class='column-center'>" + (value[0][1]) + "</div></div><hr>")
+
 
 
 			 }
