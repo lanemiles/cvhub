@@ -14,10 +14,12 @@
 
 <form action="/choose-resume-to-edit/" method="post">
     {% csrf_token %}
+    <center>
     {% if no_results %}
     Your search returned no results.
     {% endif %}
-    <br> <br>
+    </center>
+    <br>
 
   	<tr><th><label for='keywords'>Keywords:</label></th><td> <input type="text" name="keywords"></td></tr>
     <tr><th><label for='num_resumes_to_return'>Number of results:</label></th><td> <input type="number" name="num_resumes_to_return" value="5" min = 1> </td></tr>
