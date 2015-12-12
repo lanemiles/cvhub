@@ -72,7 +72,7 @@ def thanks(request):
 
 @login_required
 def user_profile(request):
-   
+
     return render(request, 'profile.html', user_profile_dict(request.user))
 
 
@@ -166,7 +166,7 @@ def edit_education(request, education_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all()
+        bps = BulletPoint.objects.all().order_by('order')
         education_bps = []
         for bp in bps:
             if bp.get_parent() == Education.objects.get(id=education_id):
@@ -579,6 +579,7 @@ def add_award_bp(request, item_id=None):
 def remove_bp(request, bp_id):
 
     BulletPoint.objects.get(id=bp_id).delete()
+
     return redirect('/profile/')
 
 
@@ -951,97 +952,98 @@ def choose_resume_to_edit(request):
         if form.is_valid():
 
             # Find the num_resumes_to_return resumes most relevant to keywords
-            if request.POST.get("search_resumes"):
+            #if request.POST.get("search_resumes"):
+            print "in search"
 
-                # Search terms; default is empty string
-                keywords = request.POST.get('keywords')
-                keywords = ("" if None else keywords)
+            # Search terms; default is empty string
+            keywords = request.POST.get('keywords')
+            keywords = ("" if None else keywords)
 
-                # Search terms; default is 5
-                num_resumes_to_return = request.POST.get('num_resumes_to_return')
-                num_resumes_to_return = (5 if None else num_resumes_to_return)
+            # Search terms; default is 5
+            num_resumes_to_return = request.POST.get('num_resumes_to_return')
+            num_resumes_to_return = (5 if None else num_resumes_to_return)
 
-                # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search 
-                id_results = []
+            # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search 
+            id_results = []
 
-                # See if user's contact information or name matches
-                id_results += queryset_to_valueslist("id", UserInfo.objects.filter( \
-                    Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
-                    Q(website__icontains=keywords)).values('id'))
+            # See if user's contact information or name matches
+            id_results += queryset_to_valueslist("id", UserInfo.objects.filter( \
+                Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
+                Q(website__icontains=keywords)).values('id'))
 
-                # Attempts to search in email commented out here.
-                # UserInfo and User id's are not the same. We are using the UserInfo id's,
-                # so if a User matches, we have to fetch the UserInfo id
-                # matching_users = User.objects.filter(email__icontains=keywords)
-                # for x in matching_users:
-                #     print x
-                #     id_results.append(x.user_info.id)
+            # Attempts to search in email commented out here.
+            # UserInfo and User id's are not the same. We are using the UserInfo id's,
+            # so if a User matches, we have to fetch the UserInfo id
+            # matching_users = User.objects.filter(email__icontains=keywords)
+            # for x in matching_users:
+            #     print x
+            #     id_results.append(x.user_info.id)
 
-                # Search in Education, Skill categories, Experience, and Awards
-                id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
-                    Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
-                id_results += queryset_to_valueslist("owner", Skill.objects.filter(Q(enabled=True), \
-                    Q(category__icontains=keywords)).values('owner'))
-                id_results += queryset_to_valueslist("owner", Experience.objects.filter(Q(enabled=True), \
-                    Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
-                id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
-                    Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
+            # Search in Education, Skill categories, Experience, and Awards
+            id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
+                Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
+            id_results += queryset_to_valueslist("owner", Skill.objects.filter(Q(enabled=True), \
+                Q(category__icontains=keywords)).values('owner'))
+            id_results += queryset_to_valueslist("owner", Experience.objects.filter(Q(enabled=True), \
+                Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+            id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
+                Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
 
-                # Search in Bullet Points. BP's only know about their parent objects,
-                # so we get the bp's parent's owner's id
-                bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
-                bp_owner_ids = []
-                for bp in bp_results:
-                    bp_owner_ids.append(bp.get_parent().owner.pk)
-                id_results += bp_owner_ids
+            # Search in Bullet Points. BP's only know about their parent objects,
+            # so we get the bp's parent's owner's id
+            bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
+            bp_owner_ids = []
+            for bp in bp_results:
+                bp_owner_ids.append(bp.get_parent().owner.pk)
+            id_results += bp_owner_ids
 
-                # Count and order by how many times the keyword appeared per user, 
-                c = collections.Counter(id_results).most_common()
-                
-                # turn list of tuples (immutable) --> list of lists
-                c_1 = map(list, c)
+            # Count and order by how many times the keyword appeared per user, 
+            c = collections.Counter(id_results).most_common()
+            
+            # turn list of tuples (immutable) --> list of lists
+            c_1 = map(list, c)
 
-                own_resume = None
+            own_resume = None
 
-                # for every user
-                for x in c_1:
+            # for every user
+            for x in c_1:
 
-                    # if the user's own resume showed up in the search,
-                    # remember it so we can remove it from the results
-                    if x[0] == request.user.user_info.id:
-                        own_resume = x
+                # if the user's own resume showed up in the search,
+                # remember it so we can remove it from the results
+                if x[0] == request.user.user_info.id:
+                    own_resume = x
 
-                    # normal behavior: adjust each user's ranking based on rep score
-                    else:
-                        points = UserInfo.objects.get(id=x[0]).points
-                        # no one ever loses points for low rep score
-                        points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
-                        x[1] += points_bonus
-
-                # if user's own resume showed up in search
-                if own_resume is not None:
-                    c_1.remove(own_resume)
-
-                # return a flat list of num_resumes_to_return users in new ranking order
-                sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
-                top_hits = [item[0] for item in sorted_c]
-
-                # make the choice list of tuples (user id, user's display name)
-                results_list = []
-                for x in top_hits:
-                    top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
-                    results_list.append((x, top_hit_user))
-
-                # if we have search results, redirect to results page
-                if len(results_list) > 0:
-                    form = SearchResumeResultsForm()
-                    form.set_resumes_to_display(results_list)
-                    return render(request, 'search_resume_results.html', {'form':form})
-
-                # if no search results returned, redirect to search page
+                # normal behavior: adjust each user's ranking based on rep score
                 else:
-                    form = ChooseResumeToEditForm()
-                    return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
+                    points = UserInfo.objects.get(id=x[0]).points
+                    # no one ever loses points for low rep score
+                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                    x[1] += points_bonus
+
+            # if user's own resume showed up in search
+            if own_resume is not None:
+                c_1.remove(own_resume)
+
+            # return a flat list of num_resumes_to_return users in new ranking order
+            sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
+            top_hits = [item[0] for item in sorted_c]
+
+            # make the choice list of tuples (user id, user's display name)
+            results_list = []
+            for x in top_hits:
+                top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
+                results_list.append((x, top_hit_user))
+
+            # if we have search results, redirect to results page
+            if len(results_list) > 0:
+                form = SearchResumeResultsForm()
+                form.set_resumes_to_display(results_list)
+                return render(request, 'search_resume_results.html', {'form':form})
+
+            # if no search results returned, redirect to search page
+            else:
+                form = ChooseResumeToEditForm()
+                return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1075,7 +1077,7 @@ def most_recently_commented_resumes(request):
         NUM_RESUMES_TO_RETURN = 5
         
         # get all comments
-        comments = Comment.objects.order_by('timestamp')
+        comments = Comment.objects.order_by('-timestamp')
 
         mrc_resumes_list = []
 
@@ -1158,6 +1160,7 @@ def most_popular_resumes(request):
         return render(request, 'most_popular_resumes.html', {'form': form})
 
 
+
 # Randomly choose a user/resume to view, giving priority to users with more rep points
 # Priority depends on rep points compared to other users, not absolute rep points
 # The general idea is that higher ranked users will be more likely to remain
@@ -1171,12 +1174,22 @@ def random_resume(request):
         upper_limit = num_users-1
     else:
         # randomly determine how many users to exclude
-        # the top priority_users percent of users, or the top 5 users, 
+        # the top safe_users_percent % of users, or the top 5 users, 
         # whichever is greater, will never be excluded
-        safe_users = .05
-        s = num_users*safe_users
-        s = (6 if (s<6) else s)
-        upper_limit = random.randint(s,num_users-1)
+        safe_users_percent = .05
+        s = num_users*safe_users_percent
+
+        # if the number of users in the top safe_users_percent is less than 5,
+        # set the top 5 users to be safe 
+        if s < 5:
+            s = 5
+
+        # can't choose 0 as the upper limit, or the second call to random will fail
+        if s < 1:
+            s = 1
+
+        upper_limit = random.randint(int(s), num_users-1)
+
 
     # from remaining users, randomly choose a resume
     # resumes are ordered from highest points [0] to lowest points [upper_limit]

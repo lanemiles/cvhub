@@ -200,6 +200,23 @@ class Comment(models.Model):
             return BulletPoint.objects.get(id=self.object_id).get_parent()
 
 
+class Section(enum.Enum):
+    EDUCATION = 0
+    SKILLS = 1
+    AWARDS = 2
+    EXPERIENCE = 3
+
+
+class SectionComment(models.Model):
+
+    author = models.ForeignKey(UserInfo, related_name='commenter')
+    section_owner = models.ForeignKey(UserInfo, related_name='section_owner')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.CharField(max_length=1024)
+    status = enum.EnumField(CommentStatus, default=CommentStatus.PENDING)
+    vote_total = models.IntegerField(default=0)
+
+
 class VoteType(enum.Enum):
     UP = 0
     DOWN = 1
