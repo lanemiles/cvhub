@@ -15,6 +15,7 @@
 
 #container table {
     margin: 0 auto;
+
 }
 
 #container tr {
@@ -34,6 +35,8 @@
     font-family: Garamond;
     width: 100px;
     margin-left: 180px;
+    margin-top: 10px;
+
 }
 
 
