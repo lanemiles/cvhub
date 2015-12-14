@@ -205,6 +205,7 @@ class Comment(models.Model):
             return BulletPoint.objects.get(id=self.object_id).get_parent()
 
 
+
 class SectionType(enum.Enum):
     EDUCATION = 0
     SKILLS = 1
