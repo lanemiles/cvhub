@@ -38,7 +38,7 @@ def create_user(request):
 
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'), \
-                form.cleaned_data.get('email'), form.cleaned_data.get('password'))
+            form.cleaned_data.get('email'), form.cleaned_data.get('password'))
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
@@ -2464,6 +2464,118 @@ def get_comments_for_award(request, award_id):
 
 
 @login_required
+def get_comments_for_section(request, section_name, user_info_id):
+
+    # if education
+    if section_name == 'EDUCATION':
+        comments = SectionComment.objects.filter(section_type=SectionType.EDUCATION, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
+
+    # get all the comments
+    elif section_name == 'SKILLS':
+        comments = SectionComment.objects.filter(section_type=SectionType.SKILLS, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
+
+    elif section_name == 'AWARDS':
+        comments = SectionComment.objects.filter(section_type=SectionType.AWARDS, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
+
+    elif section_name == 'EXPERIENCE':
+        comments = SectionComment.objects.filter(section_type=SectionType.EXPERIENCE, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
+
+    elif section_name == 'CONTACT':
+        comments = SectionComment.objects.filter(section_type=SectionType.CONTACT, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
+
+
+    # make into a list of lists
+    comment_list = [[comment.pk, comment.text, comment.vote_total, comment.status] for comment in comments]
+
+    votes = []
+    for comment in comments:
+        # check if user has voted
+        has_voted = SectionVote.objects.filter(user=request.user.user_info, comment=comment)
+        if has_voted and has_voted[0].vote_type == VoteType.UP:
+            votes.append(0)
+        elif has_voted and has_voted[0].vote_type == VoteType.DOWN:
+            votes.append(1)
+        else:
+            votes.append(2)
+    # now, thats a list of comments
+    # let's make it a list of dictionaries
+    output = {}
+
+    # get bp info
+    output['bp_info'] = None
+
+    # get comment info
+    output['comments'] = zip(comment_list, votes)
+
+    output = json.dumps(output)
+    return HttpResponse(output, content_type='application/json')
+
+
+
+@login_required
+def add_section_comment(request, section_name, user_info_id):
+
+    if request.method == 'POST':
+
+        new_comment = SectionComment()
+
+        # author of comment is poster
+        new_comment.author = request.user.user_info
+
+        # get the comment text
+        new_comment.text = request.POST.get('comment_text')
+
+        # add rep points to the commenter
+        MADE_COMMENT_RP = 10
+        author = UserInfo.objects.get(id=new_comment.author.id)
+        author.points = author.points + MADE_COMMENT_RP
+
+        # get the type
+        if section_name == 'EDUCATION':
+            section_type = SectionType.EDUCATION
+        elif section_name == 'SKILLS':
+            section_type = SectionType.SKILLS
+        elif section_name == 'AWARDS':
+            section_type = SectionType.AWARDS
+        elif section_name == 'EXPERIENCE':
+            section_type = SectionType.EXPERIENCE
+        elif section_name == 'CONTACT':
+            section_type = SectionType.CONTACT
+
+        # set the type
+        new_comment.section_type = section_type
+
+        # set the owner
+        new_comment.section_owner = UserInfo.objects.get(id=user_info_id)
+
+        # increment pending
+        if section_name == 'EDUCATION':
+            owner = UserInfo.objects.get(id=user_info_id)
+            owner.education_section_pending += 1
+            owner.save()
+        elif section_name == 'SKILLS':
+            owner = UserInfo.objects.get(id=user_info_id)
+            owner.skills_section_pending += 1
+            owner.save()
+        elif section_name == 'AWARDS':
+            owner = UserInfo.objects.get(id=user_info_id)
+            owner.awards_section_pending += 1
+            owner.save()
+        elif section_name == 'EXPERIENCE':
+            owner = UserInfo.objects.get(id=user_info_id)
+            owner.experience_section_pending += 1
+            owner.save()
+        elif section_name == 'CONTACT':
+            owner = UserInfo.objects.get(id=user_info_id)
+            owner.contact_info_pending += 1
+            owner.save()
+
+        author.save()
+        new_comment.save()
+
+        return redirect('/view-my-resume/')
+
+@login_required
 def upvote_comment(request, comment_id):
 
     # assuming they haven't voted before
@@ -2509,6 +2621,58 @@ def downvote_comment(request, comment_id):
     # negative rep points for comment author
     DOWNVOTED_COMMENT_RP = -1
     comment_author = UserInfo.objects.get(id = comment.author.id)
+    comment_author.points = comment_author.points + DOWNVOTED_COMMENT_RP
+    comment_author.save()
+
+    return redirect('/view-my-resume/')
+
+
+@login_required
+def upvote_section_comment(request, section_comment_id):
+
+    # assuming they haven't voted before
+    vote = SectionVote()
+    vote.user = request.user.user_info
+    vote.comment = SectionComment.objects.get(id=section_comment_id)
+    vote.vote_type = VoteType.UP
+    vote.save()
+    print vote
+
+    # update total on comment
+    comment = SectionComment.objects.get(id=section_comment_id)
+    comment.vote_total = comment.vote_total + 1
+    comment.save()
+    print comment
+
+    # rep points for comment author
+    UPVOTED_COMMENT_RP = 3
+    comment_author = UserInfo.objects.get(id=comment.author.id)
+    comment_author.points = comment_author.points + UPVOTED_COMMENT_RP
+    comment_author.save()
+
+    return redirect('/view-my-resume/')
+
+
+@login_required
+def downvote_section_comment(request, section_comment_id):
+
+    # assuming they haven't voted before
+    vote = SectionVote()
+    vote.user = request.user.user_info
+    vote.comment = SectionComment.objects.get(id=section_comment_id)
+    vote.vote_type = VoteType.DOWN
+    vote.save()
+    print vote
+
+    # update total on comment
+    comment = SectionComment.objects.get(id=section_comment_id)
+    comment.vote_total = comment.vote_total - 1
+    comment.save()
+    print comment
+
+    # negative rep points for comment author
+    DOWNVOTED_COMMENT_RP = -1
+    comment_author = UserInfo.objects.get(id=comment.author.id)
     comment_author.points = comment_author.points + DOWNVOTED_COMMENT_RP
     comment_author.save()
 
@@ -2583,6 +2747,82 @@ def reject_comment(request, comment_id):
     obj = comment.get_parent()
     obj.num_pending_comments -= 1
     obj.save()
+
+    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
+
+
+@login_required
+def accept_section_comment(request, section_comment_id):
+
+    # retrieve the relevant comment
+    comment = SectionComment.objects.get(id=section_comment_id)
+
+    # rep points for commenter
+    ACCEPTED_COMMENT_RP = 20
+    rp = ACCEPTED_COMMENT_RP
+
+    if comment.section_type == SectionType.EDUCATION:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.education_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.SKILLS:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.skills_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.AWARDS:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.awards_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.EXPERIENCE:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.experience_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.CONTACT:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.contact_info_pending -= 1
+        owner.save()
+
+    # award rp to commenter
+    commenter = UserInfo.objects.get(id=comment.author.id)
+    commenter.points = commenter.points + rp
+    commenter.save()
+
+    # update comment's status
+    comment.status = CommentStatus.ACCEPTED
+    comment.save()
+
+    return render(request, 'review_comments.html', user_profile_dict(request.user, True))
+
+
+# note there is no rp penalty for rejected comment
+@login_required
+def reject_section_comment(request, section_comment_id):
+    # retrieve the relevant comment
+    comment = SectionComment.objects.get(id=section_comment_id)
+    comment.status = CommentStatus.DECLINE
+    comment.save()
+
+    # decrement pending
+    if comment.section_type == SectionType.EDUCATION:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.education_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.SKILLS:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.skills_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.AWARDS:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.awards_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.EXPERIENCE:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.experience_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.CONTACT:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.contact_info_pending -= 1
+        owner.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 

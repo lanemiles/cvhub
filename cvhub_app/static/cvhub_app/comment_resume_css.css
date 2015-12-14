@@ -84,7 +84,17 @@
 	cursor: pointer;
 }
 
+.contact:hover {
+	color: blue;
+	cursor: pointer;
+}
+
 .main_row:hover {
+	color: blue;
+	cursor: pointer;
+}
+
+span.section_name:hover {
 	color: blue;
 	cursor: pointer;
 }
@@ -92,7 +102,6 @@
 .small_caps {
 	font-variant: small-caps;
 }
-
 
 .bold {
 	font-weight: bold;
