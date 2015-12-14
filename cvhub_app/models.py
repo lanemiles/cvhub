@@ -28,6 +28,7 @@ class UserInfo(models.Model):
     awards_section_pending = models.IntegerField(default=0)
     skills_section_pending = models.IntegerField(default=0)
     experience_section_pending = models.IntegerField(default=0)
+    contact_info_pending = models.IntegerField(default=0)
 
     def __unicode__(self):
         return '{} - {}'.format(self.user.username, self.dob)
@@ -210,6 +211,7 @@ class SectionType(enum.Enum):
     SKILLS = 1
     AWARDS = 2
     EXPERIENCE = 3
+    CONTACT = 4
 
 
 class SectionComment(models.Model):

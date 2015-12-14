@@ -38,7 +38,7 @@ def create_user(request):
 
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'), \
-                form.cleaned_data.get('email'), form.cleaned_data.get('password'))
+            form.cleaned_data.get('email'), form.cleaned_data.get('password'))
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
@@ -2480,6 +2480,10 @@ def get_comments_for_section(request, section_name, user_info_id):
     elif section_name == 'EXPERIENCE':
         comments = SectionComment.objects.filter(section_type=SectionType.EXPERIENCE, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
 
+    elif section_name == 'CONTACT':
+        comments = SectionComment.objects.filter(section_type=SectionType.CONTACT, section_owner=UserInfo.objects.get(id=user_info_id)).order_by('-vote_total')
+
+
     # make into a list of lists
     comment_list = [[comment.pk, comment.text, comment.vote_total, comment.status] for comment in comments]
 
@@ -2535,6 +2539,8 @@ def add_section_comment(request, section_name, user_info_id):
             section_type = SectionType.AWARDS
         elif section_name == 'EXPERIENCE':
             section_type = SectionType.EXPERIENCE
+        elif section_name == 'CONTACT':
+            section_type = SectionType.CONTACT
 
         # set the type
         new_comment.section_type = section_type
@@ -2558,6 +2564,10 @@ def add_section_comment(request, section_name, user_info_id):
         elif section_name == 'EXPERIENCE':
             owner = UserInfo.objects.get(id=user_info_id)
             owner.experience_section_pending += 1
+            owner.save()
+        elif section_name == 'CONTACT':
+            owner = UserInfo.objects.get(id=user_info_id)
+            owner.contact_info_pending += 1
             owner.save()
 
         author.save()
@@ -2767,6 +2777,10 @@ def accept_section_comment(request, section_comment_id):
         owner = UserInfo.objects.get(id=request.user.user_info.pk)
         owner.experience_section_pending -= 1
         owner.save()
+    elif comment.section_type == SectionType.CONTACT:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.contact_info_pending -= 1
+        owner.save()
 
     # award rp to commenter
     commenter = UserInfo.objects.get(id=comment.author.id)
@@ -2804,6 +2818,10 @@ def reject_section_comment(request, section_comment_id):
     elif comment.section_type == SectionType.EXPERIENCE:
         owner = UserInfo.objects.get(id=request.user.user_info.pk)
         owner.experience_section_pending -= 1
+        owner.save()
+    elif comment.section_type == SectionType.CONTACT:
+        owner = UserInfo.objects.get(id=request.user.user_info.pk)
+        owner.contact_info_pending -= 1
         owner.save()
 
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
