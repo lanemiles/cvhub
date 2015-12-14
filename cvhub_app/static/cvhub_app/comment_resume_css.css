@@ -84,6 +84,11 @@
 	cursor: pointer;
 }
 
+.contact:hover {
+	color: blue;
+	cursor: pointer;
+}
+
 .main_row:hover {
 	color: blue;
 	cursor: pointer;
