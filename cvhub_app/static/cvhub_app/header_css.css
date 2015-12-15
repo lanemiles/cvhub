@@ -63,6 +63,7 @@ body {
 	width: 100%;
 	z-index: 3;
 	background-color: 	#F8F8F8;
+	min-height: 1000px;
 }
 
 #header {
