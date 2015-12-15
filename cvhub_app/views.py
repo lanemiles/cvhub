@@ -559,6 +559,7 @@ def edit_experience(request, experience_id=None):
                 if bp.get_parent() == Experience.objects.get(id=request.POST.get('experience_id')):
                     experience_bps.append(bp)
 
+            form = ExperienceBulletPointForm(experience_bps, instance=Experience.objects.get(id=request.POST.get('experience_id')))
             form.add_bp_fields(experience_bps)
             return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
@@ -804,6 +805,7 @@ def edit_skill(request, skill_id=None):
                 if bp.get_parent() == Skill.objects.get(id=request.POST.get('skill_id')):
                     skill_bps.append(bp)
 
+            form = SkillBulletPointForm(skill_bps, instance=Skill.objects.get(id=request.POST.get('skill_id')))
             form.add_bp_fields(skill_bps)
             return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
@@ -1047,6 +1049,7 @@ def edit_award(request, award_id=None):
                 if bp.get_parent() == Award.objects.get(id=request.POST.get('award_id')):
                     award_bps.append(bp)
 
+            form = AwardBulletPointForm(award_bps, instance=Award.objects.get(id=request.POST.get('award_id')))
             form.add_bp_fields(award_bps)
             return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id')})
 

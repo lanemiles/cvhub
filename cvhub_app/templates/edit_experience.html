@@ -14,6 +14,10 @@
 <div id='form'>
 <table>
 <form action="/edit-experience/" method="post">
+{% if errors %}
+<center>{{errors}}</center><br>
+{% else %}
+{% endif %}
     {% csrf_token %}
     {{ form }}
     <input name='experience_id' type='hidden' value={{experience_id}}></input>
