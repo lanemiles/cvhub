@@ -70,7 +70,7 @@ class ExperienceForm(forms.ModelForm):
         end_date = self.cleaned_data.get('end_date')
         print end_date
         print type(end_date)
-        if end_date == "" and current == "":
+        if (end_date is None or end_date == "") and current is None:
             raise ValidationError("You need to specify an end date or select current!")
 
     class Meta:
