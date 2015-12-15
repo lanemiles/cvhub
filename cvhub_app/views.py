@@ -2256,7 +2256,7 @@ def choose_resume_to_edit(request):
 @login_required
 def most_recently_commented_resumes(request):
     """
-    MOST_RECENTLY_COMMENTED_RESUMES: This view returns the 5 most recently commented on resumes
+    MOST_RECENTLY_COMMENTED_RESUMES: This view returns at most 4 of the most recently commented on resumes
     """
 
     if request.method == 'POST':
@@ -2279,42 +2279,61 @@ def most_recently_commented_resumes(request):
     else:
 
         mrc_resumes_list = []
+        my_id = request.user.user_info.id
 
-        # Use a try clause in case there are not 5 uniquely commented resumes
+        # Use a try clause in case there are not 4 uniquely commented resumes
         # In successive queries, we exclude comments on resumes already in our list
         # of most recently commented resumes
+        ui1 = None
+        ui2 = None
+
+        # now look in comments on commentable resume tiems
         try:
             # resume 1 - comment on commentable resume item
-            c = Comment.objects.latest('timestamp')
+            c = Comment.objects.exclude(resume_owner_id=my_id).latest('timestamp')
             ui1 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui1.id, ui1.display_name))
 
-            # resume 2 - section comment
-            c = SectionComment.objects.exclude(section_owner_id=ui1.id).latest('timestamp')
-            ui2 = UserInfo.objects.get(id=c.section_owner_id)
+            # resume 2 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=my_id).exclude(resume_owner_id=ui1.id)\
+                .latest('timestamp')
+            ui2 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui2.id, ui2.display_name))
 
-            # resume 3 - comment on commentable resume item
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id)\
-                .latest('timestamp')
-            ui3 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui3.id, ui3.display_name))
-
-            # resume 4 - comment on commentable resume item
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id)\
-                .exclude(resume_owner_id=ui3.id).latest('timestamp')
-            ui4 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui4.id, ui4.display_name))
-
-            # resume 5 - section comment
-            c = SectionComment.objects.exclude(section_owner_id=ui1.id).exclude(section_owner_id=ui2.id)\
-                .exclude(section_owner_id=ui3.id).exclude(section_owner_id=ui4.id).latest('timestamp')
-            ui5 = UserInfo.objects.get(id=c.section_owner_id)
-            mrc_resumes_list.append((ui5.id, ui5.display_name))
-
-        # if we don't have 5 uniquely commented resumes, just return the ones we do have
         except Comment.DoesNotExist:
             pass
+
+        except NameError:
+            pass
+
+        # now look in section comments
+        try:
+
+            # can't check ID's for "None"
+            if ui1 is None:
+                ui1 = request.user.user_info
+            if ui2 is None:
+                ui2 = request.user.user_info
+
+            # resume 3 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=my_id).exclude(section_owner_id=ui1.id)\
+                .latest('timestamp')
+            ui3 = UserInfo.objects.get(id=c.section_owner_id)
+            mrc_resumes_list.append((ui3.id, ui3.display_name))
+
+            # resume 4 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=my_id).exclude(section_owner_id=ui1.id)\
+                .exclude(section_owner_id=ui2.id).exclude(section_owner_id=ui3.id).latest('timestamp')
+            ui4 = UserInfo.objects.get(id=c.section_owner_id)
+            mrc_resumes_list.append((ui4.id, ui4.display_name))
+
+        except SectionComment.DoesNotExist:
+            pass
+
+        except NameError:
+            pass
+
+        # if we don't have 5 uniquely commented resumes, just return the ones we do have
 
         # create and populate form with choices of mrc resumes
         form = MostRecentlyCommentedResumesForm()
