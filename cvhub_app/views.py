@@ -2197,7 +2197,8 @@ def most_recently_commented_resumes(request):
 @login_required
 def most_popular_resumes(request):
     """
-    MOST_POPULAR_RESUMES: Returns the most commented on resumes
+    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with 
+    the most comment activity in the last N_DAYS days
     """
 
     if request.method == 'POST':
@@ -2216,32 +2217,26 @@ def most_popular_resumes(request):
             # comment chosen resume
             return render(request, 'comment_resume.html', user_dictionary)
 
-    # get request
+    # get most popular resumes
     else:
 
+        N_DAYS = 3
         NUM_RESUMES_TO_RETURN = 5
 
-        # list of all users
-        all_userinfos = UserInfo.objects.exclude(id=request.user.user_info.id)
+        # look at comments on others' resumes in the last 3 days
+        d = datetime.date.today() - datetime.timedelta(days=N_DAYS)
+        comments = Comment.objects.exclude(resume_owner=request.user.user_info.id).filter(timestamp__gt=d)
 
-        # initialize count of comments for each resume to 0
-        comment_count_per_ui = {}
-        for ui in all_userinfos:
-            comment_count_per_ui[ui.id] = 0
-
-        # count the number of comments per resume/user
-        comments = Comment.objects.all()
+        # count comments per resumes using a dict of format {'c.resume_owner': count of comments}
+        comments_per_resume = {}
         for c in comments:
-
-            # id of the owner of the resume item this comment is on (aka id of comment's recipient)
-            recipient_id = c.get_header_level_parent().owner.id
-
-            # increment number of comments attributed to that resume
-            if recipient_id != request.user.user_info.id:
-                comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+            if c.resume_owner not in comments_per_resume:
+                comments_per_resume[c.resume_owner] = 1
+            else:
+                comments_per_resume[c.resume_owner] = comments_per_resume[c.resume_owner] + 1
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
-        sorted_top_resumes = sorted(comment_count_per_ui, key=comment_count_per_ui.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
+        sorted_top_resumes = sorted(comments_per_resume, key=comments_per_resume.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
 
         mp_resumes_list = []
         for x in sorted_top_resumes:
