@@ -2522,7 +2522,7 @@ def embed_pdf(request):
     """
 
     # get past PDFs
-    pdfs = ResumePDF.objects.filter(user=request.user.user_info)
+    pdfs = ResumePDF.objects.filter(user=request.user.user_info).order_by('created_at')
 
     # if no PDFs, don't fail
     if len(pdfs) == 0:
