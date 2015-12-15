@@ -63,7 +63,7 @@ def create_user(request):
             print "SAVE"
 
             # redirect to the profile page:
-            user = authenticate(username=user.email, password=form.cleaned_data.get('password'))
+            user = authenticate(username=request.POST.get('email'), password=request.POST.get('password'))
             if user is not None:
                 print "NOT NONE"
                 if user.is_active:
