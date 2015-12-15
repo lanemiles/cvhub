@@ -71,6 +71,9 @@ class BulletPoint(CommentableResumeItem):
     # num pending
     num_pending_comments = models.IntegerField(default=0)
 
+    # resume owner
+    resume_owner = models.ForeignKey(UserInfo)
+
     # return the parent object of the bullet point
     def get_parent(self):
 
@@ -86,6 +89,19 @@ class BulletPoint(CommentableResumeItem):
     def get_user_info(self):
 
         return self.get_parent().owner
+
+    def save(self, *args, **kwargs):
+
+        if str(self.content_type) == 'education':
+            self.resume_owner = Education.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'skill':
+            self.resume_owner = Skill.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'experience':
+            self.resume_owner = Experience.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'award':
+            self.resume_owner = Award.objects.get(id=self.object_id).owner
+
+        super(BulletPoint, self).save(*args, **kwargs)
 
 
 class Education(ResumeItem):
@@ -153,7 +169,7 @@ class CommentStatus(enum.Enum):
 
 class Comment(models.Model):
 
-    author = models.ForeignKey(UserInfo)
+    author = models.ForeignKey(UserInfo, related_name="author")
 
     # foreign key to CommentableResumeItem
     content_type = models.ForeignKey(ContentType, null=True)
@@ -168,11 +184,24 @@ class Comment(models.Model):
 
     vote_total = models.IntegerField(default=0)
 
+    resume_owner = models.ForeignKey(UserInfo, related_name="resume_owner")
+
     class Meta:
         unique_together = ("author", "content_type", "object_id", "timestamp")
 
     # every time we save a comment, check if we have a suggestion
     def save(self, *args, **kwargs):
+
+        if str(self.content_type) == 'education':
+            self.resume_owner = Education.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'skill':
+            self.resume_owner = Skill.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'experience':
+            self.resume_owner = Experience.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'award':
+            self.resume_owner = Award.objects.get(id=self.object_id).owner
+        elif str(self.content_type) == 'bullet point':
+            self.resume_owner = BulletPoint.objects.get(id=self.object_id).resume_owner
 
         super(Comment, self).save(*args, **kwargs)
 
