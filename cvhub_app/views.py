@@ -1044,13 +1044,9 @@ def choose_resume_to_edit(request):
                 Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
                 Q(website__icontains=keywords)).values('id'))
 
-            # Attempts to search in email commented out here.
-            # UserInfo and User id's are not the same. We are using the UserInfo id's,
-            # so if a User matches, we have to fetch the UserInfo id
-            # matching_users = User.objects.filter(email__icontains=keywords)
-            # for x in matching_users:
-            #     print x
-            #     id_results.append(x.user_info.id)
+            # Search by email, which is contained in User
+            id_results += queryset_to_valueslist("user_info", \
+                User.objects.filter(Q(email__icontains=keywords)).values('user_info'))
 
             # Search in Education, Skill categories, Experience, and Awards
             id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
@@ -1198,7 +1194,6 @@ def most_popular_resumes(request):
     else:
         NUM_RESUMES_TO_RETURN = 5
 
-
         # list of all users
         all_userinfos = UserInfo.objects.exclude(id = request.user.user_info.id)
 
@@ -1208,7 +1203,8 @@ def most_popular_resumes(request):
             comment_count_per_ui[ui.id] = 0
 
         # count the number of comments per resume/user
-        comments = Comment.objects.all()
+        # TODO: use num_pending_comments
+        comments = Comment.objects.all
         for c in comments:
 
             # id of the owner of the resume item this comment is on (aka id of comment's recipient)
