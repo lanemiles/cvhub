@@ -383,6 +383,7 @@ def add_education_bp(request, item_id=None):
 
             # get education from the drop down list in form
             education = request.POST.get('edu_id')
+            print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
             order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
@@ -503,6 +504,7 @@ def edit_experience(request, experience_id=None):
 
                 if 'BP' in thing:
                     bp_dict[thing] = request.POST.get(thing)
+                    print request.POST.get(thing)
 
             # get associated bullet point changes
             for (id_str, text) in bp_dict.items():
@@ -950,6 +952,7 @@ def edit_award(request, award_id=None):
 
                 if 'BP' in thing:
                     bp_dict[thing] = request.POST.get(thing)
+                    print request.POST.get(thing)
 
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
@@ -1795,6 +1798,7 @@ def move_down_resume_item(request, item_type, item_id):
     # get the item we want to move
     if item_type == 'education':
         item_to_move = Education.objects.get(id=item_id)
+        print item_to_move, "s"
     elif item_type == 'skill':
         item_to_move = Skill.objects.get(id=item_id)
     elif item_type == 'award':
@@ -1888,9 +1892,6 @@ def disable_item(request, item_type, item_id):
 
 @login_required
 def add_item_comment(request, item_type, item_id):
-    """
-    ADD_ITEM_COMMENT: Comment on a commentable resume item
-    """
 
     new_comment = Comment()
 
@@ -2023,93 +2024,111 @@ def get_comments_for_item(request, item_type, item_id):
 @login_required
 def choose_resume_to_edit(request):
     """
-    CHOOSE_RESUME_TO_EDIT: Allows the resume reviewer to search all resumes by keyword.
+    CHOOSE_RESUME_TO_EDIT: Controls the logic for search/explore resumes
     """
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = ChooseResumeToEditForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
 
-        # Find the num_resumes_to_return resumes most relevant to keywords
+            # Find the num_resumes_to_return resumes most relevant to keywords
+            # if request.POST.get("search_resumes"):
+            print "in search"
 
-        # Search terms; default is empty string
-        keywords = request.POST.get('keywords')
-        keywords = ("" if None else keywords)
+            # Search terms; default is empty string
+            keywords = request.POST.get('keywords')
+            keywords = ("" if None else keywords)
 
-        # Search terms; default is 5
-        num_resumes_to_return = request.POST.get('num_resumes_to_return')
-        num_resumes_to_return = (5 if None else num_resumes_to_return)
-        my_id = request.user.user_info.id
+            # Search terms; default is 5
+            num_resumes_to_return = request.POST.get('num_resumes_to_return')
+            num_resumes_to_return = (5 if None else num_resumes_to_return)
 
-        # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search
-        id_results = []
+            # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search
+            id_results = []
 
-        # Search in name, phone number, website, and email, excluding my own resume
-        id_results += queryset_to_valueslist("id", UserInfo.objects.exclude(id=my_id).filter( \
-            Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
-            Q(website__icontains=keywords)).values('id'))
-        id_results += queryset_to_valueslist("user_info", User.objects.exclude(id=my_id)\
-            .filter(Q(email__icontains=keywords)).values('user_info'))
+            # See if user's contact information or name matches
+            id_results += queryset_to_valueslist("id", UserInfo.objects.filter( \
+                Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
+                Q(website__icontains=keywords)).values('id'))
 
-        # Search in Education, Skill categories, Experience, and Awards, excluding my own resume
-        id_results += queryset_to_valueslist("owner_id", Education.objects.exclude(owner=my_id).filter(Q(enabled=True), \
-            Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
-        id_results += queryset_to_valueslist("owner", Skill.objects.exclude(owner=my_id).filter(Q(enabled=True), \
-            Q(category__icontains=keywords)).values('owner'))
-        id_results += queryset_to_valueslist("owner", Experience.objects.exclude(owner=my_id).filter(Q(enabled=True), \
-            Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
-        id_results += queryset_to_valueslist("owner", Award.objects.exclude(owner=my_id).filter(Q(enabled=True), \
-            Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
+            # Attempts to search in email commented out here.
+            # UserInfo and User id's are not the same. We are using the UserInfo id's,
+            # so if a User matches, we have to fetch the UserInfo id
+            # matching_users = User.objects.filter(email__icontains=keywords)
+            # for x in matching_users:
+            #     print x
+            #     id_results.append(x.user_info.id)
 
-        # Search in Bullet Points, excluding my own resume
-        id_results += queryset_to_valueslist("resume_owner", BulletPoint.objects.exclude(resume_owner=my_id).filter(enabled=True, \
-            text__icontains=keywords).values('resume_owner'))
+            # Search in Education, Skill categories, Experience, and Awards
+            id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
+                Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
+            id_results += queryset_to_valueslist("owner", Skill.objects.filter(Q(enabled=True), \
+                Q(category__icontains=keywords)).values('owner'))
+            id_results += queryset_to_valueslist("owner", Experience.objects.filter(Q(enabled=True), \
+                Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+            id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
+                Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
 
-        # Count and order by how many times the keyword appeared per user,
-        c = collections.Counter(id_results).most_common()
+            # Search in Bullet Points. BP's only know about their parent objects,
+            # so we get the bp's parent's owner's id
+            bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
+            bp_owner_ids = []
+            for bp in bp_results:
+                bp_owner_ids.append(bp.resume_owner.pk)
+            id_results += bp_owner_ids
 
-        # turn list of tuples (immutable) --> list of lists
-        c_1 = map(list, c)
-        none_item_to_remove = False
+            # Count and order by how many times the keyword appeared per user,
+            c = collections.Counter(id_results).most_common()
 
-        # adjust score for rep points
-        for x in c_1:
+            # turn list of tuples (immutable) --> list of lists
+            c_1 = map(list, c)
 
-            # avoid calling a query on a "None" 
-            if x[0] is None:
-                none_item = x
-                none_item_to_remove = True
+            own_resume = None
+
+            # for every user
+            for x in c_1:
+
+                # if the user's own resume showed up in the search,
+                # remember it so we can remove it from the results
+                if x[0] == request.user.user_info.id:
+                    own_resume = x
+
+                # normal behavior: adjust each user's ranking based on rep score
+                else:
+                    points = UserInfo.objects.get(id=x[0]).points
+                    # no one ever loses points for low rep score
+                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                    x[1] += points_bonus
+
+            # if user's own resume showed up in search
+            if own_resume is not None:
+                c_1.remove(own_resume)
+
+            # return a flat list of num_resumes_to_return users in new ranking order
+            sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
+            top_hits = [item[0] for item in sorted_c]
+
+            # make the choice list of tuples (user id, user's display name)
+            results_list = []
+            for x in top_hits:
+                top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
+                results_list.append((x, top_hit_user))
+
+            # if we have search results, redirect to results page
+            if len(results_list) > 0:
+                form = SearchResumeResultsForm()
+                form.set_resumes_to_display(results_list)
+                return render(request, 'search_resume_results.html', {'form': form})
+
+            # if no search results returned, redirect to search page
             else:
-                points = UserInfo.objects.get(id=x[0]).points
-                # no one ever loses points for low rep score
-                points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
-                x[1] += points_bonus
+                form = ChooseResumeToEditForm()
+                return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
 
-        # remove Nones (resulting from queries with no hits), if there are any
-        if none_item_to_remove:
-            c_1.remove(none_item)
-
-        # return a flat list of num_resumes_to_return users in new ranking order
-        sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
-        top_hits = [item[0] for item in sorted_c]
-
-        # make the choice list of tuples (user id, user's display name)
-        results_list = []
-        for x in top_hits:
-            top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
-            results_list.append((x, top_hit_user))
-
-        # if we have search results, redirect to results page
-        if len(results_list) > 0:
-            form = SearchResumeResultsForm()
-            form.set_resumes_to_display(results_list)
-            return render(request, 'search_resume_results.html', {'form': form})
-
-        # if no search results returned, redirect to search page
-        else:
-            form = ChooseResumeToEditForm()
-            return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
-
-    # if a get request, we'll create a blank form
+    # if a GET (or any other method) we'll create a blank form
     else:
 
         form = ChooseResumeToEditForm()
@@ -2119,7 +2138,7 @@ def choose_resume_to_edit(request):
 @login_required
 def most_recently_commented_resumes(request):
     """
-    MOST_RECENTLY_COMMENTED_RESUMES: This view returns the 5 most recently commented on resumes
+    MOST_RECENTLY_COMMENTED_RESUMES: This view returns the most recently commented on resumes
     """
 
     if request.method == 'POST':
@@ -2141,42 +2160,26 @@ def most_recently_commented_resumes(request):
     # get method
     else:
 
+        NUM_RESUMES_TO_RETURN = 5
+
+        # get all comments
+        comments = Comment.objects.order_by('-timestamp')
+
         mrc_resumes_list = []
 
-        # Use a try clause in case there are not 5 uniquely commented resumes
-        # In successive queries, we exclude comments on resumes already in our list
-        # of most recently commented resumes
-        try:
-            # resume 1
-            c = Comment.objects.latest('timestamp')
-            ui1 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui1.id, ui1.display_name))
+        # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
+        for c in comments:
 
-            # resume 2
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).latest('timestamp')
-            ui2 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui2.id, ui2.display_name))
+            # the owner of the resume item this comment is on (aka recipient of comment)
+            recipient = c.get_header_level_parent().owner
 
-            # resume 3
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id).latest('timestamp')
-            ui3 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui3.id, ui3.display_name))
+            # append (user id, user's display name) to list of results
+            if (recipient.id != request.user.user_info.id) and (recipient.id, recipient.display_name) not in mrc_resumes_list:
+                mrc_resumes_list.append((recipient.id, recipient.display_name))
 
-            # resume 4
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id) \
-                .exclude(resume_owner_id=ui3.id).latest('timestamp')
-            ui4 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui4.id, ui4.display_name))
-
-            # resume 5
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id) \
-                .exclude(resume_owner_id=ui3.id).exclude(resume_owner_id=ui4.id).latest('timestamp')
-            ui5 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui5.id, ui5.display_name))
-       
-        # if we don't have 5 uniquely commented resumes, just return the ones we do have
-        except Comment.DoesNotExist:
-            pass
+            # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
+            if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
+                break
 
         # create and populate form with choices of mrc resumes
         form = MostRecentlyCommentedResumesForm()
@@ -2188,8 +2191,7 @@ def most_recently_commented_resumes(request):
 @login_required
 def most_popular_resumes(request):
     """
-    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with 
-    the most comment activity in the last N_DAYS days
+    MOST_POPULAR_RESUMES: Returns the most commented on resumes
     """
 
     if request.method == 'POST':
@@ -2208,29 +2210,36 @@ def most_popular_resumes(request):
             # comment chosen resume
             return render(request, 'comment_resume.html', user_dictionary)
 
-    # get most popular resumes
+    # get request
     else:
 
-        N_DAYS = 3
         NUM_RESUMES_TO_RETURN = 5
 
-        # look at comments on others' resumes in the last 3 days
-        d = datetime.date.today() - datetime.timedelta(days=N_DAYS)
-        comments = Comment.objects.exclude(resume_owner=request.user.user_info.id).filter(timestamp__gt=d)
+        # list of all users
+        all_userinfos = UserInfo.objects.exclude(id=request.user.user_info.id)
 
-        # count comments per resumes using a dict of format {'c.resume_owner': count of comments}
-        comments_per_resume = {}
+        # initialize count of comments for each resume to 0
+        comment_count_per_ui = {}
+        for ui in all_userinfos:
+            comment_count_per_ui[ui.id] = 0
+
+        # count the number of comments per resume/user
+        comments = Comment.objects.all()
         for c in comments:
-            if c.resume_owner not in comments_per_resume:
-                comments_per_resume[c.resume_owner] = 1
-            else:
-                comments_per_resume[c.resume_owner] = comments_per_resume[c.resume_owner] + 1
+
+            # id of the owner of the resume item this comment is on (aka id of comment's recipient)
+            recipient_id = c.get_header_level_parent().owner.id
+
+            # increment number of comments attributed to that resume
+            if recipient_id != request.user.user_info.id:
+                comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
-        sorted_top_resumes = sorted(comments_per_resume, key=comments_per_resume.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
+        sorted_top_resumes = sorted(comment_count_per_ui, key=comment_count_per_ui.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
+
         mp_resumes_list = []
         for x in sorted_top_resumes:
-            mp_resumes_list.append((x.id, x.display_name))
+            mp_resumes_list.append((x, UserInfo.objects.get(id=x).display_name))
 
         # create and populate form with choices of mrc resumes
         form = MostPopularResume()
@@ -2245,7 +2254,7 @@ def random_resume(request):
     RANDOM_RESUME: Randomly choose a user/resume to view, giving priority
     to users with more rep points. Priority depends on rep points compared to
     other users, not absolute rep points. The general idea is that higher
-    ranked users will be more likely to remain in the pool of resumes to
+    ranked users will be more likely to remain. in the pool of resumes to
     be randomly chosen from.
     """
 
@@ -2574,7 +2583,6 @@ def reject_comment(request, comment_id):
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 
-# HELPER FUNCTIONS
 def queryset_to_valueslist(key, query_set):
     """
     QUERYSET_TO_VALUESLIST: Turns a Query Set into a flat list of values for easier use
@@ -2584,5 +2592,6 @@ def queryset_to_valueslist(key, query_set):
     id_results = []
     for x in query_set:
         id_results.append(x[key])
+        print x
 
     return id_results
