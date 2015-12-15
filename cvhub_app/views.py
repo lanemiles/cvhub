@@ -340,6 +340,14 @@ def edit_education(request, education_id=None):
 
         else:
 
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            education_bps = []
+            for bp in bps:
+                if bp.get_parent() == Education.objects.get(id=request.POST.get('edu_id')):
+                    education_bps.append(bp)
+            form.add_bp_fields(education_bps)
+
             return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
 
     # if a GET (or any other method) we'll create a blank form
@@ -542,6 +550,14 @@ def edit_experience(request, experience_id=None):
 
         else:
 
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            experience_bps = []
+            for bp in bps:
+                if bp.get_parent() == Experience.objects.get(id=request.POST.get('experience_id')):
+                    experience_bps.append(bp)
+
+            form.add_bp_fields(experience_bps)
             return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
     # if a GET (or any other method) we'll create a blank form
@@ -779,6 +795,14 @@ def edit_skill(request, skill_id=None):
 
         else:
 
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            skill_bps = []
+            for bp in bps:
+                if bp.get_parent() == Skill.objects.get(id=request.POST.get('skill_id')):
+                    skill_bps.append(bp)
+
+            form.add_bp_fields(skill_bps)
             return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
     # if a GET (or any other method) we'll create a blank form
@@ -1014,6 +1038,14 @@ def edit_award(request, award_id=None):
 
         else:
 
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            award_bps = []
+            for bp in bps:
+                if bp.get_parent() == Award.objects.get(id=request.POST.get('award_id')):
+                    award_bps.append(bp)
+
+            form.add_bp_fields(award_bps)
             return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id')})
 
     # if a GET (or any other method) we'll create a blank form
