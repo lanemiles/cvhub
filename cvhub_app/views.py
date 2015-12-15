@@ -32,11 +32,15 @@ def create_user(request):
     # if a POST, process the form data
     if request.method == 'POST':
 
+        print "POST"
+
         # create a form instance and populate it with data from the request:
         form = UserInfoForm(request.POST)
 
         # check whether it's valid:
         if form.is_valid():
+
+            print "VALID"
 
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'),
@@ -54,12 +58,16 @@ def create_user(request):
             user_wrapper.user = user
             user_wrapper.save()
 
+            print "SAVE"
+
             # redirect to the profile page:
             user = authenticate(username=user.email, password=form.cleaned_data.get('password'))
             if user is not None:
+                print "NOT NONE"
                 if user.is_active:
+                    print "ACTIVE"
                     login(request, user)
-                return redirect('/profile/')
+                    return redirect('/profile/')
 
     # if a GET, present the sign up form
     else:
