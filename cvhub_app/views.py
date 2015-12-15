@@ -1234,7 +1234,15 @@ def remove_bp(request, bp_id):
     REMOVE_BP: Delete an BP and redirect to profile
     """
 
-    BulletPoint.objects.get(id=bp_id).delete()
+    # get the bullet point and the bp content type
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
+
+    comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    bp.delete()
 
     return redirect('/profile/')
 
@@ -2276,33 +2284,34 @@ def most_recently_commented_resumes(request):
         # In successive queries, we exclude comments on resumes already in our list
         # of most recently commented resumes
         try:
-            # resume 1
+            # resume 1 - comment on commentable resume item
             c = Comment.objects.latest('timestamp')
             ui1 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui1.id, ui1.display_name))
 
-            # resume 2
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).latest('timestamp')
-            ui2 = UserInfo.objects.get(id=c.resume_owner_id)
+            # resume 2 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=ui1.id).latest('timestamp')
+            ui2 = UserInfo.objects.get(id=c.section_owner_id)
             mrc_resumes_list.append((ui2.id, ui2.display_name))
 
-            # resume 3
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id).latest('timestamp')
+            # resume 3 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id)\
+                .latest('timestamp')
             ui3 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui3.id, ui3.display_name))
 
-            # resume 4
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id) \
+            # resume 4 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id)\
                 .exclude(resume_owner_id=ui3.id).latest('timestamp')
             ui4 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui4.id, ui4.display_name))
 
-            # resume 5
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id) \
-                .exclude(resume_owner_id=ui3.id).exclude(resume_owner_id=ui4.id).latest('timestamp')
-            ui5 = UserInfo.objects.get(id=c.resume_owner_id)
+            # resume 5 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=ui1.id).exclude(section_owner_id=ui2.id)\
+                .exclude(section_owner_id=ui3.id).exclude(section_owner_id=ui4.id).latest('timestamp')
+            ui5 = UserInfo.objects.get(id=c.section_owner_id)
             mrc_resumes_list.append((ui5.id, ui5.display_name))
-       
+
         # if we don't have 5 uniquely commented resumes, just return the ones we do have
         except Comment.DoesNotExist:
             pass
@@ -2317,7 +2326,7 @@ def most_recently_commented_resumes(request):
 @login_required
 def most_popular_resumes(request):
     """
-    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with 
+    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with
     the most comment activity in the last N_DAYS days
     """
 
@@ -2343,7 +2352,7 @@ def most_popular_resumes(request):
         N_DAYS = 3
         NUM_RESUMES_TO_RETURN = 5
 
-        # look at comments on others' resumes in the last 3 days
+        # look at comments on commentable resume items from the last 3 days
         d = datetime.date.today() - datetime.timedelta(days=N_DAYS)
         comments = Comment.objects.exclude(resume_owner=request.user.user_info.id).filter(timestamp__gt=d)
 
@@ -2354,6 +2363,14 @@ def most_popular_resumes(request):
                 comments_per_resume[c.resume_owner] = 1
             else:
                 comments_per_resume[c.resume_owner] = comments_per_resume[c.resume_owner] + 1
+
+        # do the same for comments on sections
+        section_comments = SectionComment.objects.exclude(section_owner_id=request.user.user_info.id).filter(timestamp__gt=d)
+        for sc in section_comments:
+            if sc.section_owner not in comments_per_resume:
+                comments_per_resume[sc.section_owner] = 1
+            else:
+                comments_per_resume[sc.section_owner] = comments_per_resume[sc.section_owner] + 1
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
         sorted_top_resumes = sorted(comments_per_resume, key=comments_per_resume.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
