@@ -421,6 +421,7 @@ def add_education_bp(request, item_id=None):
 
         else:
 
+            form.set_education(request.user, request.POST.get('edu_id'))
             return render(request, 'add_education_bp.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
 
     # if a GET (or any other method) we'll create a blank form
