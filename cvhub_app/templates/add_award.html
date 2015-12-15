@@ -13,7 +13,7 @@
 {% block content %}
 <div id='form'>
 <table>
-{% if form.errors %}
+<!-- {% if form.errors %}
     {% for field in form %}
         {% for error in field.errors %}
             <div class="alert alert-error">
@@ -26,7 +26,7 @@
             <strong>{{ error|escape }}</strong>
         </div>
     {% endfor %}
-{% endif %}
+{% endif %} -->
 <form action="/add-award/" method="post">
     {% csrf_token %}
     {{ form }}
