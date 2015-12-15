@@ -647,6 +647,7 @@ def add_experience_bp(request, item_id=None):
 
         else:
 
+            form.set_experience(request.user, request.POST.get('experience_id'))
             return render(request, 'add_experience_bp.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
     # if a GET (or any other method) we'll create a blank form
@@ -883,6 +884,7 @@ def add_skill_bp(request, item_id=None):
 
         else:
 
+            form.set_skills(request.user, request.POST.get('skill_id'))
             return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
     # if a GET (or any other method) we'll create a blank form
@@ -1116,6 +1118,7 @@ def add_award_bp(request, item_id=None):
 
         else:
 
+            form.set_awards(request.user, request.POST.get('award_id'))
             return render(request, 'add_award_bp.html', {'form': form, 'award_id': request.POST.get('award_id')})
 
     # if a GET (or any other method) we'll create a blank form
