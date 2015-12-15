@@ -2062,13 +2062,9 @@ def choose_resume_to_edit(request):
             id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
                 Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
 
-            # Search in Bullet Points. BP's only know about their parent objects,
-            # so we get the bp's parent's owner's id
-            bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
-            bp_owner_ids = []
-            for bp in bp_results:
-                bp_owner_ids.append(bp.resume_owner.pk)
-            id_results += bp_owner_ids
+            # Search in Bullet Points
+            id_results += queryset_to_valueslist("resume_owner", BulletPoint.objects.filter(enabled=True, \
+                text__icontains=keywords).values('resume_owner'))
 
             # Count and order by how many times the keyword appeared per user,
             c = collections.Counter(id_results).most_common()
@@ -2118,7 +2114,7 @@ def choose_resume_to_edit(request):
                 form = ChooseResumeToEditForm()
                 return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
 
-    # if a GET (or any other method) we'll create a blank form
+    # if a get request, we'll create a blank form
     else:
 
         form = ChooseResumeToEditForm()
