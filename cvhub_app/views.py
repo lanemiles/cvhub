@@ -902,7 +902,7 @@ def create_award(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = AwardForm(request.POST)
+        form = AwardForm(**request.POST)
         # check whether it's valid:
         if form.is_valid():
 
@@ -924,6 +924,10 @@ def create_award(request):
             award.save()
 
             return redirect('/profile/')
+
+        else:
+
+            print "HO"
 
     # if a GET (or any other method) we'll create a blank form
     else:

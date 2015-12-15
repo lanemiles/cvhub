@@ -76,10 +76,11 @@ class AwardForm(forms.ModelForm):
     """
 
     def clean_name(self):
+        print "HI"
         name = self.cleaned_data.get('name')
-        if len(password) == 0:
+        if len(name) == 0:
             raise forms.ValidationError('The name of the award cannot be empty.')
-        return password
+        return name
 
     class Meta:
         model = Award
