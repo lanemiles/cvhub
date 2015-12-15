@@ -350,7 +350,7 @@ def edit_education(request, education_id=None):
             form = EducationBulletPointForm(education_bps, instance=Education.objects.get(id=request.POST.get('edu_id')))
             form.add_bp_fields(education_bps)
 
-            return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id'), 'errors': "There was an error in processing your form. Check for an empty field."})
+            return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id'), 'errors': "There was an error in processing your form."})
 
     # if a GET (or any other method) we'll create a blank form
     else:
