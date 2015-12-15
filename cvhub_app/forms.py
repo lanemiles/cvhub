@@ -71,7 +71,7 @@ class ExperienceForm(forms.ModelForm):
         print end_date
         print type(end_date)
         if (end_date is None or end_date == "") and current is None:
-            raise ValidationError("You need to specify an end date or select current!")
+            raise forms.ValidationError("You need to specify an end date or select current!")
 
     class Meta:
         model = Experience
