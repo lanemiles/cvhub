@@ -65,7 +65,11 @@ class ExperienceForm(forms.ModelForm):
 
     def clean_end_date(self):
         current = self.cleaned_data.get('current')
+        print current
+        print type(current)
         end_date = self.cleaned_data.get('end_date')
+        print end_date
+        print type(end_date)
         if end_date == "" and current == "":
             raise ValidationError("You need to specify an end date or select current!")
 
