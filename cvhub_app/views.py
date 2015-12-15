@@ -346,6 +346,8 @@ def edit_education(request, education_id=None):
             for bp in bps:
                 if bp.get_parent() == Education.objects.get(id=request.POST.get('edu_id')):
                     education_bps.append(bp)
+
+            form = EducationBulletPointForm(education_bps, instance=Education.objects.get(id=request.POST.get('edu_id')))
             form.add_bp_fields(education_bps)
 
             return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
