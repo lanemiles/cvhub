@@ -2354,7 +2354,7 @@ def generate_pdf(request):
     pdf.path = random_int
 
     # run the command on command line
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
     # get last version number
     last_max = ResumePDF.objects.filter(user=request.user.user_info).aggregate(Max('version_number')).get('version_number__max')
@@ -2401,7 +2401,7 @@ def view_pdf(request):
     random_int = str(random.randint(00000001, 99999999))
 
     # run the command
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
     os.system(command)
 
@@ -2430,7 +2430,7 @@ def public_resume_pdf(request, custom_string):
         # generate file id
         random_int = str(random.randint(00000001, 99999999))
 
-        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
         os.system(command)
 
