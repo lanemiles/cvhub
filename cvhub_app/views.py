@@ -927,7 +927,7 @@ def create_award(request):
 
         else:
 
-            print "HO"
+            return render_to_response('add_award.html', {'form': form})
 
     # if a GET (or any other method) we'll create a blank form
     else:
