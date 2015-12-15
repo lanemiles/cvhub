@@ -120,17 +120,30 @@ def create_education(request):
 @login_required
 def remove_education(request, education_id=None):
 
-    # delete associated bullet points
-    bps = BulletPoint.objects.all()
-    user_bps = {}
+    # get content types
+    education_type = ContentType.objects.get_for_model(Education)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
+
+    # get associated bullet points
+    bps = BulletPoint.objects.filter(content_type=education_type, object_id=education_id)
+
+    # for every bp under this education
     for bp in bps:
-        if bp.get_parent() == Education.objects.get(id=education_id):
-            bp.delete()
 
-    # delete comments on associated bullet points
-    # delete comments on this education resume item
+        # get and delete its associated comments
+        comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+        for ctd in comments_to_delete:
+            ctd.delete()
 
+        # delete the bp
+        bp.delete()
 
+    # delete comments on this education item
+    comments_to_delete = Comment.objects.filter(content_type=education_type, id=education_id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    # finally, delete the education item itself
     Education.objects.get(id=education_id).delete()
 
     return redirect('/profile/')
@@ -233,12 +246,30 @@ def edit_skill(request, skill_id=None):
 @login_required
 def remove_skill(request, skill_id=None):
 
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent() == Skill.objects.get(id=skill_id):
-            bp.delete()
+    # get content types
+    skill_type = ContentType.objects.get_for_model(Skill)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
 
+    # get associated bullet points
+    bps = BulletPoint.objects.filter(content_type=skill_type, object_id=skill_id)
+
+    # for every bp under this education
+    for bp in bps:
+
+        # get and delete its associated comments
+        comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+        for ctd in comments_to_delete:
+            ctd.delete()
+
+        # delete the bp
+        bp.delete()
+
+    # delete comments on this education item
+    comments_to_delete = Comment.objects.filter(content_type=skill_type, id=skill_id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    # finally, delete the education item itself
     Skill.objects.get(id=skill_id).delete()
 
     return redirect('/profile/')
@@ -297,15 +328,34 @@ def edit_experience(request, experience_id=None):
 @login_required
 def remove_experience(request, experience_id=None):
 
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent() == Experience.objects.get(id=experience_id):
-            bp.delete()
+    # get content types
+    experience_type = ContentType.objects.get_for_model(Experience)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
 
+    # get associated bullet points
+    bps = BulletPoint.objects.filter(content_type=experience_type, object_id=experience_id)
+
+    # for every bp under this education
+    for bp in bps:
+
+        # get and delete its associated comments
+        comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+        for ctd in comments_to_delete:
+            ctd.delete()
+
+        # delete the bp
+        bp.delete()
+
+    # delete comments on this education item
+    comments_to_delete = Comment.objects.filter(content_type=experience_type, id=experience_id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    # finally, delete the education item itself
     Experience.objects.get(id=experience_id).delete()
 
     return redirect('/profile/')
+
 
 @login_required
 def add_education_bp(request, item_id=None):
@@ -411,12 +461,30 @@ def edit_award(request, award_id=None):
 @login_required
 def remove_award(request, award_id=None):
 
-    bps = BulletPoint.objects.all()
-    user_bps = {}
-    for bp in bps:
-        if bp.get_parent() == Award.objects.get(id=award_id):
-            bp.delete()
+        # get content types
+    award_type = ContentType.objects.get_for_model(Award)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
 
+    # get associated bullet points
+    bps = BulletPoint.objects.filter(content_type=award_type, object_id=award_id)
+
+    # for every bp under this education
+    for bp in bps:
+
+        # get and delete its associated comments
+        comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+        for ctd in comments_to_delete:
+            ctd.delete()
+
+        # delete the bp
+        bp.delete()
+
+    # delete comments on this education item
+    comments_to_delete = Comment.objects.filter(content_type=award_type, id=award_id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    # finally, delete the education item itself
     Award.objects.get(id=award_id).delete()
 
     return redirect('/profile/')
