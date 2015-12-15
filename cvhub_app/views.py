@@ -166,7 +166,7 @@ def edit_education(request, education_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all().order_by('order')
+        bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
         education_bps = []
         for bp in bps:
             if bp.get_parent() == Education.objects.get(id=education_id):
@@ -213,7 +213,7 @@ def edit_skill(request, skill_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all()
+        bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
         skill_bps = []
         for bp in bps:
             if bp.get_parent() == Skill.objects.get(id=skill_id):
@@ -277,7 +277,7 @@ def edit_experience(request, experience_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all()
+        bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
         experience_bps = []
         for bp in bps:
             if bp.get_parent() == Experience.objects.get(id=experience_id):
@@ -391,7 +391,7 @@ def edit_award(request, award_id=None):
     else:
 
         # get associated bullet points
-        bps = BulletPoint.objects.all()
+        bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
         award_bps = []
         for bp in bps:
             if bp.get_parent() == Award.objects.get(id=award_id):
@@ -591,7 +591,7 @@ def move_up_bp(request, bp_id):
 
     siblings = []
 
-    for bp in BulletPoint.objects.all().order_by('order'):
+    for bp in BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order'):
 
         if bp.get_parent() == parent and bp != move_bp:
 
@@ -637,7 +637,7 @@ def move_down_bp(request, bp_id):
 
     siblings = []
 
-    for bp in BulletPoint.objects.all().order_by('-order'):
+    for bp in BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('-order'):
 
         if bp.get_parent() == parent and bp != move_bp:
 
@@ -994,7 +994,7 @@ def choose_resume_to_edit(request):
             bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
             bp_owner_ids = []
             for bp in bp_results:
-                bp_owner_ids.append(bp.get_parent().owner.pk)
+                bp_owner_ids.append(bp.resume_owner.pk)
             id_results += bp_owner_ids
 
             # Count and order by how many times the keyword appeared per user, 
@@ -1974,10 +1974,10 @@ def user_profile_dict(user, only_enabled=False):
     # get bullet points for user
     if only_enabled:
 
-        bps = BulletPoint.objects.filter(enabled=True).order_by('order')
+        bps = BulletPoint.objects.filter(enabled=True, resume_owner=user_info).order_by('order')
         user_bps = {}
         for bp in bps:
-            if bp.get_parent().owner == user_info:
+            if bp.resume_owner == user_info:
                 if bp.get_parent() in user_bps:
                     user_bps[bp.get_parent()].append(bp)
                 else:
@@ -1985,10 +1985,10 @@ def user_profile_dict(user, only_enabled=False):
 
     else:
 
-        bps = BulletPoint.objects.all().order_by('order')
+        bps = BulletPoint.objects.filter(resume_owner=user_info).order_by('order')
         user_bps = {}
         for bp in bps:
-            if bp.get_parent().owner == user_info:
+            if bp.resume_owner == user_info:
                 if bp.get_parent() in user_bps:
                     user_bps[bp.get_parent()].append(bp)
                 else:
