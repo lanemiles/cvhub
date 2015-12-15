@@ -419,6 +419,10 @@ def add_education_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add_education_bp.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -533,7 +537,11 @@ def edit_experience(request, experience_id=None):
                 bp.text = text
                 bp.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+
+            return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -635,6 +643,10 @@ def add_experience_bp(request, item_id=None):
             bp.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add_experience_bp.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -761,7 +773,11 @@ def edit_skill(request, skill_id=None):
                 bp.text = text
                 bp.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+
+            return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -863,6 +879,10 @@ def add_skill_bp(request, item_id=None):
             bp.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -987,7 +1007,11 @@ def edit_award(request, award_id=None):
                 bp.text = text
                 bp.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+
+            return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1088,6 +1112,10 @@ def add_award_bp(request, item_id=None):
             bp.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add_award_bp.html', {'form': form, 'award_id': request.POST.get('award_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1494,6 +1522,9 @@ def add_section_comment(request, section_name, user_info_id):
 
         # get the comment text
         new_comment.text = request.POST.get('comment_text')
+
+        if request.POST.get('comment_text') == "":
+            return redirect('/view-my-resume/')
 
         # add rep points to the commenter
         MADE_COMMENT_RP = 10
@@ -1929,6 +1960,9 @@ def add_item_comment(request, item_type, item_id):
 
     # get the comment text
     new_comment.text = request.POST.get('comment_text')
+
+    if request.POST.get('comment_text') == "":
+        return redirect('/view-my-resume/')
 
     # is there a suggestion
     new_comment.suggestion = request.POST.get('suggestion_text')
