@@ -252,6 +252,10 @@ def create_education(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add_education.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -332,7 +336,11 @@ def edit_education(request, education_id=None):
                 bp.text = text
                 bp.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+
+            return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -476,6 +484,10 @@ def create_experience(request):
             exp.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add_experience.html', {'form': form})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -700,6 +712,10 @@ def create_skill_category(request):
             skill_cat.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add-skill-category.html', {'form': form})
 
     # if a GET (or any other method) we'll create a blank form
     else:
