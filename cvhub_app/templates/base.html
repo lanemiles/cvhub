@@ -110,7 +110,7 @@ $('#save_version').click(function (e){
         slideout.toggle();
         if (window.is_set == 1) {
         	$(".slideout-menu").css('z-index', '0')
-          $(".slideout-menu").css('opacity', '0')
+          $("#header").css('box-shadow', '0px')
         	window.is_set = 0
         } else {
         	window.is_set = 1
