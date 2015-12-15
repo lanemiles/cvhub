@@ -108,13 +108,17 @@ $('#save_version').click(function (e){
 
   document.querySelector('.toggle-button').addEventListener('click', function() {
         slideout.toggle();
+        
         if (window.is_set == 1) {
-        	$(".slideout-menu").css('z-index', '0')
-          $("#header").css('box-shadow', '0px 0px 0px #888888')
-          $("#header").css('height', '75px')
         	window.is_set = 0
-          $("#header").css('height', '70px')
+          while (slideout.isOpen()) {
+          $(".slideout-menu").css('z-index', '0')
+          ("#header").css('box-shadow', '0px 0px 0px #888888')
+          $("#header").css('height', '75px')
+        }
+        $("#header").css('height', '70px')
           $("#header").css('box-shadow', '0px 1px 1px #888888')
+
         } else {
         	window.is_set = 1
           $("#header").css('height', '70px')
