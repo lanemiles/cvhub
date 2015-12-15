@@ -333,8 +333,14 @@ def edit_education(request, education_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
+
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
 
             return redirect('/profile/')
 
@@ -545,8 +551,14 @@ def edit_experience(request, experience_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
+
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
 
             return redirect('/profile/')
 
@@ -791,8 +803,14 @@ def edit_skill(request, skill_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
+
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
 
             return redirect('/profile/')
 
@@ -1035,8 +1053,14 @@ def edit_award(request, award_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
+
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
 
             return redirect('/profile/')
 
