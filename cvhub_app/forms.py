@@ -43,8 +43,6 @@ class EducationForm(forms.ModelForm):
     Form to create a new Education Resume Item
     """
 
-    gpa = forms.DecimalField(label='GPA', max_digits=3, max_value=4.00, min_value=0.00)
-
     class Meta:
         model = Education
         fields = ['school', 'start_date', 'end_date', 'location', 'enabled']
