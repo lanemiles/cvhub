@@ -120,11 +120,16 @@ def create_education(request):
 @login_required
 def remove_education(request, education_id=None):
 
+    # delete associated bullet points
     bps = BulletPoint.objects.all()
     user_bps = {}
     for bp in bps:
         if bp.get_parent() == Education.objects.get(id=education_id):
             bp.delete()
+
+    # delete comments on associated bullet points
+    # delete comments on this education resume item
+
 
     Education.objects.get(id=education_id).delete()
 
