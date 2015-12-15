@@ -2028,91 +2028,86 @@ def choose_resume_to_edit(request):
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = ChooseResumeToEditForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
 
-            # Find the num_resumes_to_return resumes most relevant to keywords
+        # Find the num_resumes_to_return resumes most relevant to keywords
 
-            # Search terms; default is empty string
-            keywords = request.POST.get('keywords')
-            keywords = ("" if None else keywords)
+        # Search terms; default is empty string
+        keywords = request.POST.get('keywords')
+        keywords = ("" if None else keywords)
 
-            # Search terms; default is 5
-            num_resumes_to_return = request.POST.get('num_resumes_to_return')
-            num_resumes_to_return = (5 if None else num_resumes_to_return)
+        # Search terms; default is 5
+        num_resumes_to_return = request.POST.get('num_resumes_to_return')
+        num_resumes_to_return = (5 if None else num_resumes_to_return)
+        my_id = request.user.user_info.id
 
-            # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search
-            id_results = []
+        # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search
+        id_results = []
 
-            # Search in name, phone number, website, and email
-            id_results += queryset_to_valueslist("id", UserInfo.objects.filter( \
-                Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
-                Q(website__icontains=keywords)).values('id'))
-            id_results += queryset_to_valueslist("user_info", User.objects.filter(Q(email__icontains=keywords)).values('user_info'))
+        # Search in name, phone number, website, and email, excluding my own resume
+        id_results += queryset_to_valueslist("id", UserInfo.objects.exclude(id=my_id).filter( \
+            Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
+            Q(website__icontains=keywords)).values('id'))
+        id_results += queryset_to_valueslist("user_info", User.objects.exclude(id=my_id)\
+            .filter(Q(email__icontains=keywords)).values('user_info'))
 
-            # Search in Education, Skill categories, Experience, and Awards
-            id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
-                Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
-            id_results += queryset_to_valueslist("owner", Skill.objects.filter(Q(enabled=True), \
-                Q(category__icontains=keywords)).values('owner'))
-            id_results += queryset_to_valueslist("owner", Experience.objects.filter(Q(enabled=True), \
-                Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
-            id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
-                Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
+        # Search in Education, Skill categories, Experience, and Awards, excluding my own resume
+        id_results += queryset_to_valueslist("owner_id", Education.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
+        id_results += queryset_to_valueslist("owner", Skill.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(category__icontains=keywords)).values('owner'))
+        id_results += queryset_to_valueslist("owner", Experience.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+        id_results += queryset_to_valueslist("owner", Award.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
 
-            # Search in Bullet Points
-            id_results += queryset_to_valueslist("resume_owner", BulletPoint.objects.filter(enabled=True, \
-                text__icontains=keywords).values('resume_owner'))
+        # Search in Bullet Points, excluding my own resume
+        id_results += queryset_to_valueslist("resume_owner", BulletPoint.objects.exclude(resume_owner=my_id).filter(enabled=True, \
+            text__icontains=keywords).values('resume_owner'))
 
-            # Count and order by how many times the keyword appeared per user,
-            c = collections.Counter(id_results).most_common()
+        # Count and order by how many times the keyword appeared per user,
+        c = collections.Counter(id_results).most_common()
 
-            # turn list of tuples (immutable) --> list of lists
-            c_1 = map(list, c)
+        # turn list of tuples (immutable) --> list of lists
+        c_1 = map(list, c)
+        none_item_to_remove = False
 
-            own_resume = None
+        # adjust score for rep points
+        for x in c_1:
 
-            # for every user
-            for x in c_1:
-
-                # if the user's own resume showed up in the search,
-                # remember it so we can remove it from the results
-                if x[0] == request.user.user_info.id:
-                    own_resume = x
-
-                # normal behavior: adjust each user's ranking based on rep score
-                else:
-                    points = UserInfo.objects.get(id=x[0]).points
-                    # no one ever loses points for low rep score
-                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
-                    x[1] += points_bonus
-
-            # if user's own resume showed up in search
-            if own_resume is not None:
-                c_1.remove(own_resume)
-
-            # return a flat list of num_resumes_to_return users in new ranking order
-            sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
-            top_hits = [item[0] for item in sorted_c]
-
-            # make the choice list of tuples (user id, user's display name)
-            results_list = []
-            for x in top_hits:
-                top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
-                results_list.append((x, top_hit_user))
-
-            # if we have search results, redirect to results page
-            if len(results_list) > 0:
-                form = SearchResumeResultsForm()
-                form.set_resumes_to_display(results_list)
-                return render(request, 'search_resume_results.html', {'form': form})
-
-            # if no search results returned, redirect to search page
+            # avoid calling a query on a "None" 
+            if x[0] is None:
+                none_item = x
+                none_item_to_remove = True
             else:
-                form = ChooseResumeToEditForm()
-                return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
+                points = UserInfo.objects.get(id=x[0]).points
+                # no one ever loses points for low rep score
+                points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                x[1] += points_bonus
+
+        # remove Nones (resulting from queries with no hits), if there are any
+        if none_item_to_remove:
+            c_1.remove(none_item)
+
+        # return a flat list of num_resumes_to_return users in new ranking order
+        sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
+        top_hits = [item[0] for item in sorted_c]
+
+        # make the choice list of tuples (user id, user's display name)
+        results_list = []
+        for x in top_hits:
+            top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
+            results_list.append((x, top_hit_user))
+
+        # if we have search results, redirect to results page
+        if len(results_list) > 0:
+            form = SearchResumeResultsForm()
+            form.set_resumes_to_display(results_list)
+            return render(request, 'search_resume_results.html', {'form': form})
+
+        # if no search results returned, redirect to search page
+        else:
+            form = ChooseResumeToEditForm()
+            return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
 
     # if a get request, we'll create a blank form
     else:
@@ -2233,10 +2228,9 @@ def most_popular_resumes(request):
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
         sorted_top_resumes = sorted(comments_per_resume, key=comments_per_resume.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
-
         mp_resumes_list = []
         for x in sorted_top_resumes:
-            mp_resumes_list.append((x, UserInfo.objects.get(id=x).display_name))
+            mp_resumes_list.append((x.id, x.display_name))
 
         # create and populate form with choices of mrc resumes
         form = MostPopularResume()
