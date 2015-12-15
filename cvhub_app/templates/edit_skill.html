@@ -1,6 +1,24 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Edit Skill{% endblock %}
+{% block page_title %}Edit Skill{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+<table>
 <form action="/edit-skill/" method="post">
     {% csrf_token %}
     {{ form }}
     <input name='skill_id' type='hidden' value={{skill_id}}></input>
-    <input type="submit" value="Submit" />
+    <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
+
+</table>
+
+</div>
+
+{% endblock %}

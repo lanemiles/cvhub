@@ -1,14 +1,15 @@
+
 #container {
-	font-family: Garamond;
 	width: 800px;
 	margin: 0 auto;
 }
 
 #container_pdf {
-	font-family: Garamond;
 	margin: 0 auto;
 	background: gray;
 }
+
+
 
 #container span:hover {
 	color: blue;

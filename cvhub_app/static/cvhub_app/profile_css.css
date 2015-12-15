@@ -1,0 +1,43 @@
+#container {
+
+	margin: 0 auto;
+	width: 800px;
+}
+
+
+.section_edit {
+	margin-top: -47px;
+	float: right;
+	font-size: 20px;
+
+}
+
+
+.line_edit {
+	float: right;
+}
+
+ul {
+	margin-top: 5px;
+	font-weight: bold;
+	padding-bottom: 20px;
+
+}
+
+.normal {
+	font-weight: normal;
+}
+
+ul ul {
+	padding-bottom: 0px;
+}
+
+
+ul ul li {
+	margin-top: 5px;
+	font-weight: normal;
+}
+
+#container a:link { color: #0000EE; text-decoration: none; }
+#container a:link:hover { color: #0000EE; text-decoration: underline; }
+#container a:visited { color: #0000EE; }

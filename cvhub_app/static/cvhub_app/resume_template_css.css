@@ -1,14 +1,19 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: 	#F8F8F8;
+}
+
+
+
 #container {
+	position: relative;
+	top: 35px;
 	font-family: Garamond;
 	width: 800px;
 	margin: 0 auto;
 	border: 1px solid black;
-}
 
-#container_pdf {
-	font-family: Garamond;
-	margin: 0 auto;
-	background: gray;
 }
 
 .title {
@@ -93,3 +98,6 @@
 #pdf {
 	text-align: center;
 }
+
+
+

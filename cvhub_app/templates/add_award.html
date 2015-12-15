@@ -1,12 +1,50 @@
-    <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
-    <br>
-    <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/review-comments/'>Review Comments</a> |     
-    <a href='/generate-pdf/'>PDF My Resume</a> |
-    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
-<h2> Add an Award</h2>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Add Award{% endblock %}
+{% block page_title %}Add Award{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+<table>
 <form action="/add-award/" method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Submit" />
+    <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
+</table>
+
+</div>
+
+<script type='text/javascript'>
+$(document).ready( function() {
+	$("textarea").attr('cols', 35)
+	$("textarea").attr('rows', 5)
+
+	$("#id_date_awarded" ).datepicker({
+    showButtonPanel: true,
+    changeMonth: true,
+    changeYear: true,
+    showOtherMonths: true,
+    selectOtherMonths: true ,
+    yearRange: "-100:+50"
+});
+	
+	
+	
+
+
+});
+
+$(document).click(function() {
+	$("#ui-datepicker-div").css('z-index', '100000000');
+});
+
+</script>
+{% endblock %}

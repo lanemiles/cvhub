@@ -1,26 +1,20 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}Add Detail{% endblock %}
-{% block page_title %}Add Detail{% endblock %}
+{% block title %}Top Resumes{% endblock %}
+{% block page_title %}Top Resumes{% endblock %}
 {% block extra_head %}
 <link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
-
 {% endblock %}
 
 {% block content %}
 <div id='form'>
 <table>
-<form action="/add-experience-bp/" method="post">
+<form action="/mrc-resumes/" method="post">
     {% csrf_token %}
     {{ form }}
-    <input name='experience_id' type='hidden' value={{experience_id}}></input>
     <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
-
 </table>
 
 </div>
-
 {% endblock %}
-
-

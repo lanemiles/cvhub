@@ -1,5 +1,64 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Edit Your Information{% endblock %}
+{% block page_title %}Edit Your Information{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+{% endblock %}
+
+{% block content %}
+<div id='form'>
+
+
+<center>
+
+{% if name_taken %}
+Sorry, that resume URL is already taken.
+{% endif %}
+{% if url_is_none %}
+Please choose a resume URL.
+{% endif %}
+
+</center>
+<br> <br>
+
+<table>
+
+
+
 <form action="/edit-information/" method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Submit" />
+    <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
+</table>
+
+</div>
+
+<script type='text/javascript'>
+$(document).ready( function() {
+
+	$("#id_dob" ).datepicker({
+    showButtonPanel: true,
+    changeMonth: true,
+    changeYear: true,
+    showOtherMonths: true,
+    selectOtherMonths: true, 
+    yearRange: "-100:+50"
+});
+
+	
+
+
+});
+
+$(document).click(function() {
+	$("#ui-datepicker-div").css('z-index', '100000000');
+});
+
+</script>
+{% endblock %}
