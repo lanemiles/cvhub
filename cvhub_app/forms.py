@@ -75,6 +75,12 @@ class AwardForm(forms.ModelForm):
     Add a header-level Award Resume Item
     """
 
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if len(password) == 0:
+            raise forms.ValidationError('The name of the award cannot be empty.')
+        return password
+
     class Meta:
         model = Award
         fields = ['name', 'issuer', 'date_awarded', 'enabled']
