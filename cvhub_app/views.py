@@ -49,7 +49,7 @@ def create_user(request):
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
 
-            print "MADE USER"
+            # print "MADE USER"
 
             # make the UserInfo object
             user_wrapper = UserInfo()
