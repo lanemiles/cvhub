@@ -69,7 +69,7 @@ def create_user(request):
                 if user.is_active:
                     print "ACTIVE"
                     login(request, user)
-                    return redirect('/profile/')
+            return redirect('/profile/')
 
     # if a GET, present the sign up form
     else:
