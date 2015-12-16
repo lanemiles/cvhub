@@ -1274,6 +1274,9 @@ def move_up_bp(request, bp_id):
 
             siblings.append(bp)
 
+    if len(siblings) == 0:
+        return redirect('/profile/')
+
     # if top
     if move_bp.order < min(siblings, key=lambda x: x.order).order:
         return redirect('/profile/')
@@ -1319,6 +1322,9 @@ def move_down_bp(request, bp_id):
         if bp.get_parent() == parent and bp != move_bp:
 
             siblings.append(bp)
+
+    if len(siblings) == 0:
+        return redirect('/profile/')
 
     # if bottom
     if move_bp.order > max(siblings, key=lambda x: x.order).order:
