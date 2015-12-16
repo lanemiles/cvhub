@@ -179,7 +179,7 @@ def edit_information(request):
     EDIT_INFORMATION: A user can edit certain parts of their information
     """
 
-   # if this is a POST request we need to process the form data
+    # if this is a POST request we need to process the form data
     if request.method == 'POST':
 
         form = EditInformationForm(request.POST)
@@ -206,7 +206,14 @@ def edit_information(request):
                 user_info.resume_url = proposed_resume_url
                 user_info.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+            
+            form = EditInformationForm(instance=request.user.user_info)
+
+            return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': False, 'errors': 'There was an error processing your form!'})
+
 
     # if a GET
     else:

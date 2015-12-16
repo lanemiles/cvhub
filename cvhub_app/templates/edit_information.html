@@ -15,7 +15,9 @@
 
 
 <center>
-
+{% if errors %}
+{{errors}}
+{% endif %}
 {% if name_taken %}
 Sorry, that resume URL is already taken.
 {% endif %}
