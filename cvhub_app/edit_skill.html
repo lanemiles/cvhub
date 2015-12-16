@@ -1,6 +1,0 @@
-<form action="/edit-skill/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input name='skill_id' type='hidden' value={{skill_id}}></input>
-    <input type="submit" value="Submit" />
-</form>

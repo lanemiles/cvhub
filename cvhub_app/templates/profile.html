@@ -1,23 +1,26 @@
-<head>
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Edit Your Resume{% endblock %}
+{% block page_title %}Edit Your Resume{% endblock %}
+{% block extra_head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tinysort/2.2.2/tinysort.js"></script>
-</head>
-<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/0.1.11/slideout.min.js"></script>
+<link rel='stylesheet' href='{% static "cvhub_app/profile_css.css" %}' />
 
-       <p align=right>Logged in as <a href='/profile/'>{{user.user_info.display_name}}</a> ----- <a href='/logout/'>Logout</a> 
-    <br>
-    <a href='/view-my-resume/'>View My Resume</a> | 
-    <a href='/review-comments/'>Review Comments</a> |     
-    <a href='/generate-pdf/'>PDF My Resume</a> |
-    <a href='/choose-resume-to-edit/'>Comment a Resume</a></p>
-<div id='container'>
-<h1> My Profile </h1>
+{% endblock %}
 
+
+{% block content %}
 {% csrf_token %}
 
 
-<div id=0>
-<h2>Your Information -- <a href='/edit-information/'>Edit</a></h2>
-<ul>
+
+<div style='height: 25px'> </div>
+
+<h2>Your Information</h2><div class='section_edit'><a href='/edit-information/'>Edit</a></div>
+<hr>
+<ul class='normal'>
 	<li> Name: {{user.user_info.display_name}}
 	</li>
 	<li> Email: {{user}}
@@ -30,15 +33,19 @@
 	</li>
 	<li> Website: {{user.user_info.website}}
 	</li>
-	<li> DOB: {{user.user_info.dob}}
+	<li> Born on: {{user.user_info.dob}}
 	</li>
-	<li> Resume URL: {{user.user_info.resume_url}}
+	<li> My Public Resume URL Ending: {{user.user_info.resume_url}}
 	</li>
 </ul>
 </div>
 
+
 <div id={{user_info.education_order}}>
-<h2>Your Education -- <a href='/move-up-section/education/'>Move Up</a> | <a href='/move-down-section/education/'>Move Down</a></h2>
+<h2>Your Education</h2><div class='section_edit'>
+<a href='/move-up-section/education/'>Move Up</a> | <a href='/move-down-section/education/'>Move Down</a> | <a href='/enable-section/education/'>Enable All</a> | <a href='/disable-section/education/'>Disable All</a>
+</div>
+<hr>
 
 <ul>
 {% for info in education_list %}
@@ -46,11 +53,19 @@
 
 	{% if info.enabled %}
 
-	{{info.school}} in {{info.location}} ({{info.order}}) -----  {% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a> | <a href='/move-up-education/{{id}}'>Move Up</a> | <a href='/move-down-education/{{id}}'>Move Down</a> | <a href='/disable-education/{{id}}'>Disable</a> | <a href='/remove-education/{{id}}'>Remove</a>{% endwith %}
+	{{info.school}} in {{info.location}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a> | <a href='/move-up-education/{{id}}'>Move Up</a> | <a href='/move-down-education/{{id}}'>Move Down</a> | <a href='/disable-education/{{id}}'>Disable</a> | <a href='/remove-education/{{id}}'>Remove</a>{% endwith %}</div>
+
+	
 	
 	{% else %}
 
-	{{info.school}} in {{info.location}} ({{info.order}}) -----  {% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a> | <a href='/move-up-education/{{id}}'>Move Up</a> | <a href='/move-down-education/{{id}}'>Move Down</a> | <a href='/enable-education/{{id}}'>Enable</a> | <a href='/remove-education/{{id}}'>Remove</a>{% endwith %}
+	{{info.school}} in {{info.location}} 
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-education/{{id}}'>Edit</a> | <a href='/move-up-education/{{id}}'>Move Up</a> | <a href='/move-down-education/{{id}}'>Move Down</a> | <a href='/enable-education/{{id}}'>Enable</a> | <a href='/remove-education/{{id}}'>Remove</a>{% endwith %}</div>
+
+	
 
 	{% endif %}
 
@@ -62,11 +77,11 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/disable-bp/{{id}}'>Disable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% else %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/enable-bp/{{id}}'>Enable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% endif %}
 			</li>
 
@@ -86,18 +101,23 @@
 </div>
 
 <div id={{user_info.skill_order}}>
-<h2>Your Skills -- <a href='/move-up-section/skill/'>Move Up</a> | <a href='/move-down-section/skill/'>Move Down</a></h2>
+<h2>Your Skills</h2><div class='section_edit'><a href='/move-up-section/skill/'>Move Up</a> | <a href='/move-down-section/skill/'>Move Down</a> | <a href='/enable-section/skill/'>Enable All</a> | <a href='/disable-section/skill/'>Disable All</a></div><hr>
 <ul>
 {% for info in skill_category_list %}
 <li>
 
 	{% if info.enabled %}
 
-	{{info.category}} ----- {% with info.id|stringformat:"s" as id %}<a href='/edit-skill/{{id}}'>Edit</a> | <a href='/move-up-skill/{{id}}'>Move Up</a> | <a href='/move-down-skill/{{id}}'>Move Down</a> | <a href='/disable-skill/{{id}}'>Disable</a> | <a href='/remove-skill/{{id}}'>Remove</a>{% endwith %}
+	{{info.category}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-skill/{{id}}'>Edit</a> | <a href='/move-up-skill/{{id}}'>Move Up</a> | <a href='/move-down-skill/{{id}}'>Move Down</a> | <a href='/disable-skill/{{id}}'>Disable</a> | <a href='/remove-skill/{{id}}'>Remove</a>{% endwith %}</div>
+	
 
 	{% else %}
 
-	{{info.category}} ----- {% with info.id|stringformat:"s" as id %}<a href='/edit-skill/{{id}}'>Edit</a> | <a href='/move-up-skill/{{id}}'>Move Up</a> | <a href='/move-down-skill/{{id}}'>Move Down</a> | <a href='/enable-skill/{{id}}'>Enable</a> | <a href='/remove-skill/{{id}}'>Remove</a>{% endwith %}
+	{{info.category}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-skill/{{id}}'>Edit</a> | <a href='/move-up-skill/{{id}}'>Move Up</a> | <a href='/move-down-skill/{{id}}'>Move Down</a> | <a href='/enable-skill/{{id}}'>Enable</a> | <a href='/remove-skill/{{id}}'>Remove</a>{% endwith %}</div>
 
 	{% endif %}
 
@@ -107,11 +127,11 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/disable-bp/{{id}}'>Disable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% else %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/enable-bp/{{id}}'>Enable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% endif %}
 			</li>
 
@@ -132,18 +152,25 @@
 </div>
 
 <div id={{user_info.experience_order}}>
-<h2>Your Experience -- <a href='/move-up-section/experience/'>Move Up</a> | <a href='/move-down-section/experience/'>Move Down</a></h2>
+<h2>Your Experience</h2>
+<div class='section_edit'>
+<a href='/move-up-section/experience/'>Move Up</a> | <a href='/move-down-section/experience/'>Move Down</a> | <a href='/enable-section/experience/'>Enable All</a> | <a href='/disable-section/experience/'>Disable All</a>
+</div><hr>
 <ul>
 {% for info in experience_list %}
 <li>
 
 	{% if info.enabled %}
 
-	{{info.title}} at  {{info.employer}} ----- {% with info.id|stringformat:"s" as id %}<a href='/edit-experience/{{id}}'>Edit</a> | <a href='/move-up-experience/{{id}}'>Move Up</a> | <a href='/move-down-experience/{{id}}'>Move Down</a> | <a href='/disable-experience/{{id}}'>Disable</a> | <a href='/remove-experience/{{id}}'>Remove</a>{% endwith %}
+	{{info.title}} at  {{info.employer}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-experience/{{id}}'>Edit</a> | <a href='/move-up-experience/{{id}}'>Move Up</a> | <a href='/move-down-experience/{{id}}'>Move Down</a> | <a href='/disable-experience/{{id}}'>Disable</a> | <a href='/remove-experience/{{id}}'>Remove</a>{% endwith %}</div>
 
 	{% else %}
 
-	{{info.title}} at  {{info.employer}} ----- {% with info.id|stringformat:"s" as id %}<a href='/edit-experience/{{id}}'>Edit</a> | <a href='/move-up-experience/{{id}}'>Move Up</a> | <a href='/move-down-experience/{{id}}'>Move Down</a> | <a href='/enable-experience/{{id}}'>Enable</a> | <a href='/remove-experience/{{id}}'>Remove</a>{% endwith %}
+	{{info.title}} at  {{info.employer}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-experience/{{id}}'>Edit</a> | <a href='/move-up-experience/{{id}}'>Move Up</a> | <a href='/move-down-experience/{{id}}'>Move Down</a> | <a href='/enable-experience/{{id}}'>Enable</a> | <a href='/remove-experience/{{id}}'>Remove</a>{% endwith %}</div>
 
 	{% endif %}
 
@@ -165,18 +192,18 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/disable-bp/{{id}}'>Disable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% else %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/enable-bp/{{id}}'>Enable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% endif %}
 			</li>
 
 			{% endfor %}
 			{% endif %}
 			{% endfor %}
-			<li><a href='/add-experience-bp/{info.{id}}'>Add Detail Bullet Point</a></li>
+			<li><a href='/add-experience-bp/{{info.id}}'>Add Detail Bullet Point</a></li>
 			<br>
 		</ul>
 </li>
@@ -188,18 +215,26 @@
 </div>
 
 <div id={{user_info.award_order}}>
-<h2>Your Awards -- <a href='/move-up-section/award/'>Move Up</a> | <a href='/move-down-section/award/'>Move Down</a></h2>
+<h2>Your Awards</h2>
+<div class='section_edit'>
+<a href='/move-up-section/award/'>Move Up</a> | <a href='/move-down-section/award/'>Move Down</a> |  <a href='/enable-section/award/'>Enable All</a> | <a href='/disable-section/award/'>Disable All</a>
+</div>
+<hr>
 <ul>
 {% for info in award_list %}
 <li>
 
 	{% if info.enabled %}
 
-	{{info.name}} from {{info.issuer}} ----- {% with info.id|stringformat:"s" as id %}<a href='/edit-award/{{id}}'>Edit</a>  | <a href='/move-up-award/{{id}}'>Move Up</a> | <a href='/move-down-award/{{id}}'>Move Down</a> | <a href='/disable-award/{{id}}'>Disable</a> |  <a href='/remove-award/{{id}}'>Remove</a>{% endwith %}
+	{{info.name}} from {{info.issuer}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-award/{{id}}'>Edit</a>  | <a href='/move-up-award/{{id}}'>Move Up</a> | <a href='/move-down-award/{{id}}'>Move Down</a> | <a href='/disable-award/{{id}}'>Disable</a> |  <a href='/remove-award/{{id}}'>Remove</a>{% endwith %}</div>
 
 	{% else %}
 
-	{{info.name}} from {{info.issuer}} ----- {% with info.id|stringformat:"s" as id %}<a href='/edit-award/{{id}}'>Edit</a>  | <a href='/move-up-award/{{id}}'>Move Up</a> | <a href='/move-down-award/{{id}}'>Move Down</a> | <a href='/enable-award/{{id}}'>Enable</a> |  <a href='/remove-award/{{id}}'>Remove</a>{% endwith %}
+	{{info.name}} from {{info.issuer}}
+
+	<div class='line_edit'>{% with info.id|stringformat:"s" as id %}<a href='/edit-award/{{id}}'>Edit</a>  | <a href='/move-up-award/{{id}}'>Move Up</a> | <a href='/move-down-award/{{id}}'>Move Down</a> | <a href='/enable-award/{{id}}'>Enable</a> |  <a href='/remove-award/{{id}}'>Remove</a>{% endwith %}</div>
 
 	{% endif %}
 
@@ -214,11 +249,11 @@
 			{% if key == info %}
 			{% for text in value %}
 
-			<li>
+			<li id={{text.id}} enabled={{text.enabled}}>
 			{% if text.enabled %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/disable-bp/{{id}}'>Disable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% else %}
-			{{text.text}} -- {{text.order}} {% with text.id|stringformat:"s" as id %}<a href='/move-up-bp/{{id}}'>Move Up</a> | <a href='/move-down-bp/{{id}}'>Move Down</a> | <a href='/enable-bp/{{id}}'>Enable</a> | <a href='/remove-bp/{{id}}'>Remove</a>{% endwith %}
+			{{text.text}}
 			{% endif %}
 			</li>
 
@@ -238,5 +273,30 @@
 </div>
 <script type='text/javascript'>
 tinysort('#container > div',{attr: 'id'})
+$( "#container li li" )
+  .mouseenter(function(e) {
+  	if ($(e.target).find(".bullet_edit").length > 0){ 
+
+  	} 
+
+  	else {
+  		var bp_id = $(e.target).attr('id')
+  		var enabled = $(e.target).attr('enabled')
+
+  		if (bp_id && enabled =="True") {
+  			$(e.target).append("<ul class='bullet_edit'><li><div><a href='/move-up-bp/"+bp_id+"'>Move Up</a> | <a href='/move-down-bp/"+bp_id+"'>Move Down</a> | <a href='/disable-bp/"+bp_id+"'>Disable</a> | <a href='/remove-bp/"+bp_id+"'>Remove</a></div></li></ul>")
+  		} 
+
+  		else if (bp_id && enabled =="False") {
+  			$(e.target).append("<ul class='bullet_edit'><li><div><a href='/move-up-bp/"+bp_id+"'>Move Up</a> | <a href='/move-down-bp/"+bp_id+"'>Move Down</a> | <a href='/enable-bp/"+bp_id+"'>Enable</a> | <a href='/remove-bp/"+bp_id+"'>Remove</a></div></li></ul>")
+  		}
+  		
+  	}
+
+  	
+  })
+  .mouseleave(function(e) {
+    $("ul.bullet_edit").remove();
+  });
 </script>
-</body>
+{% endblock %}

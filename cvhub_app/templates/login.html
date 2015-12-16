@@ -1,22 +1,43 @@
+{% extends 'login_base.html' %}
+{% load staticfiles %}
+{% block title %}Login{% endblock %}
+{% block page_title %}Login{% endblock %}
+{% block extra_head %}
+<link rel='stylesheet' href='{% static "cvhub_app/form_css.css" %}' />
+{% endblock %}
+
+{% block content %}
+<div id='form'>
 
     {% if form.errors %}
+    <center>
         <p>Your username and password didn't match. Please try again.</p>
+        </center>
     {% endif %}
-
+    <table>
     <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
         {% csrf_token %}
-        <table>
+
             <tr>
-                <td>{{ form.username.label_tag }}</td>
+                <th>{{ form.username.label_tag }}</th>
                 <td>{{ form.username }}</td>
             </tr>
             <tr>
-                <td>{{ form.password.label_tag }}</td>
+                <th>{{ form.password.label_tag }}</th>
                 <td>{{ form.password }}</td>
             </tr>
-       </table>
+   
 
-       <input type="submit" value="login" />
+       <tr><td class='center_me'><input type="submit" value="Log In" /></td></tr>
+
        <input type="hidden" name="next" value="{{ next }}" />
    </form>
+       </table><center>
+       <a href='/create-user/'>Not Registered?</a></center>
+
+</div>
+
+
+{% endblock %}
+
 

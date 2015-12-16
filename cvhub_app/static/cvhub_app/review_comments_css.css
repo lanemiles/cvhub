@@ -1,14 +1,21 @@
 #container {
+	position: relative;
+	top: 35px;
 	font-family: Garamond;
 	width: 800px;
 	margin: 0 auto;
 	border: 1px solid black;
+
 }
 
 #container_pdf {
 	font-family: Garamond;
 	margin: 0 auto;
 	background: gray;
+}
+
+.contact:hover {
+	text-decoration: underline;
 }
 
 #container span:hover {
