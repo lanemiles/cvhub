@@ -33,7 +33,7 @@
 <script type='text/javascript'>
 $('#form').submit(function() {
     if ($.trim($("#keywords").val()) === "") {
-        if (window.not_valid == 0) {
+        if (window.not_valid != 1) {
             $("#form").prepend("<center>Please enter a valid search string!</center>")
             window.not_valid = 1
         }
