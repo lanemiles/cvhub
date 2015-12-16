@@ -540,6 +540,8 @@ def edit_experience(request, experience_id=None):
         # create a form instance and populate it with data from the request:
         form = ExperienceForm(request.POST)
         form2 = ExperienceForm(request.POST, instance=Experience.objects.get(id=form.data.get('experience_id')))
+        print form2
+        print "HI"
 
         # check whether it's valid:
         if form2.is_valid():

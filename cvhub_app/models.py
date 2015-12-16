@@ -191,9 +191,12 @@ class Experience(ResumeItem):
     # num pending
     num_pending_comments = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+
+        super(Experience, self).save(*args, **kwargs)
+
     class Meta:
         ordering = ['-end_date']
-
 
 
 class Award(ResumeItem):
