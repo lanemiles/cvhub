@@ -21,7 +21,7 @@
     </center>
     <br>
 
-  	<tr><th><label for='keywords'>Keywords:</label></th><td> <input type="text" name="keywords"></td></tr>
+  	<tr><th><label for='keywords'>Keywords:</label></th><td> <input id='keywords' type="text" name="keywords"></td></tr>
     <tr><th><label for='num_resumes_to_return'>Number of results:</label></th><td> <input type="number" name="num_resumes_to_return" value="5" min = 1> </td></tr>
     <tr><td class='center_me'><input type="submit" value="Submit" /></td></tr>
 </form>
@@ -29,6 +29,19 @@
 </table>
 
 </div>
+
+<script type='text/javascript'>
+$('#form').submit(function() {
+    if ($.trim($("#keywords").val()) === "") {
+        if (window.not_valid != 1) {
+            $("#form").prepend("<center>Please enter a valid search string!</center>")
+            window.not_valid = 1
+        }
+        
+        return false;
+    }
+});
+</script>
 
 {% endblock %}
 

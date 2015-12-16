@@ -21,9 +21,9 @@
   	<h3 class='link_header'>Manage</h3>
   	<hr class='menu_hr'>
 <a href="/profile/" class='menu_link'>Edit Content</a>
+<a href="/review-comments/" class='menu_link'>Review Comments</a>
 <a href="/view-my-resume/" class='menu_link'>View Resume</a>
 <a href="/view-pdf/" class='menu_link' target="_blank">View as PDF</a>
-<a href="/review-comments/" class='menu_link'>Review Comments</a>
 <a href="/generate-pdf/" class='menu_link' id='save_version'>Save Current Version</a>
 <a href="/embed-pdf/" class='menu_link'>View Past Versions</a>
 
@@ -110,9 +110,13 @@ $('#save_version').click(function (e){
         slideout.toggle();
         if (window.is_set == 1) {
         	$(".slideout-menu").css('z-index', '0')
+          $("#header").css('box-shadow', '0px 0px 0px #888888')
+          $("#header").css('height', '75px')
         	window.is_set = 0
         } else {
         	window.is_set = 1
+          $("#header").css('height', '70px')
+          $("#header").css('box-shadow', '0px 1px 1px #888888')
         	$(".slideout-menu").css('z-index', '7')
         }
         

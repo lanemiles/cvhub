@@ -32,11 +32,15 @@ def create_user(request):
     # if a POST, process the form data
     if request.method == 'POST':
 
+        print "POST"
+
         # create a form instance and populate it with data from the request:
         form = UserInfoForm(request.POST)
 
         # check whether it's valid:
         if form.is_valid():
+
+            print "VALID"
 
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'),
@@ -44,6 +48,8 @@ def create_user(request):
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
+
+            print "MADE USER"
 
             # make the UserInfo object
             user_wrapper = UserInfo()
@@ -54,12 +60,16 @@ def create_user(request):
             user_wrapper.user = user
             user_wrapper.save()
 
+            print "SAVE"
+
             # redirect to the profile page:
-            user = authenticate(username=user.email, password=form.cleaned_data.get('password'))
+            user = authenticate(username=request.POST.get('email'), password=request.POST.get('password'))
             if user is not None:
+                print "NOT NONE"
                 if user.is_active:
+                    print "ACTIVE"
                     login(request, user)
-                    return redirect('/profile/')
+            return redirect('/profile/')
 
     # if a GET, present the sign up form
     else:
@@ -169,7 +179,7 @@ def edit_information(request):
     EDIT_INFORMATION: A user can edit certain parts of their information
     """
 
-   # if this is a POST request we need to process the form data
+    # if this is a POST request we need to process the form data
     if request.method == 'POST':
 
         form = EditInformationForm(request.POST)
@@ -196,7 +206,14 @@ def edit_information(request):
                 user_info.resume_url = proposed_resume_url
                 user_info.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+            
+            form = EditInformationForm(instance=request.user.user_info)
+
+            return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': False, 'errors': 'There was an error processing your form!'})
+
 
     # if a GET
     else:
@@ -241,6 +258,10 @@ def create_education(request):
             education.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add_education.html', {'form': form})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -319,10 +340,30 @@ def edit_education(request, education_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            education_bps = []
+            for bp in bps:
+                if bp.get_parent() == Education.objects.get(id=request.POST.get('edu_id')):
+                    education_bps.append(bp)
+
+            form = EducationBulletPointForm(education_bps, instance=Education.objects.get(id=request.POST.get('edu_id')))
+            form.add_bp_fields(education_bps)
+
+            return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id'), 'errors': "There was an error in processing your form."})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -401,6 +442,11 @@ def add_education_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_education(request.user, request.POST.get('edu_id'))
+            return render(request, 'add_education_bp.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -467,6 +513,10 @@ def create_experience(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add_experience.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -508,10 +558,29 @@ def edit_experience(request, experience_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            experience_bps = []
+            for bp in bps:
+                if bp.get_parent() == Experience.objects.get(id=request.POST.get('experience_id')):
+                    experience_bps.append(bp)
+
+            form = ExperienceBulletPointForm(experience_bps, instance=Experience.objects.get(id=request.POST.get('experience_id')))
+            form.add_bp_fields(experience_bps)
+            return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -614,6 +683,11 @@ def add_experience_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_experience(request.user, request.POST.get('experience_id'))
+            return render(request, 'add_experience_bp.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -691,6 +765,10 @@ def create_skill_category(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add-skill-category.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -732,10 +810,29 @@ def edit_skill(request, skill_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            skill_bps = []
+            for bp in bps:
+                if bp.get_parent() == Skill.objects.get(id=request.POST.get('skill_id')):
+                    skill_bps.append(bp)
+
+            form = SkillBulletPointForm(skill_bps, instance=Skill.objects.get(id=request.POST.get('skill_id')))
+            form.add_bp_fields(skill_bps)
+            return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -838,6 +935,11 @@ def add_skill_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_skills(request.user, request.POST.get('skill_id'))
+            return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -915,6 +1017,10 @@ def create_award(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add_award.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -954,10 +1060,29 @@ def edit_award(request, award_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            award_bps = []
+            for bp in bps:
+                if bp.get_parent() == Award.objects.get(id=request.POST.get('award_id')):
+                    award_bps.append(bp)
+
+            form = AwardBulletPointForm(award_bps, instance=Award.objects.get(id=request.POST.get('award_id')))
+            form.add_bp_fields(award_bps)
+            return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1059,6 +1184,11 @@ def add_award_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_awards(request.user, request.POST.get('award_id'))
+            return render(request, 'add_award_bp.html', {'form': form, 'award_id': request.POST.get('award_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -1111,7 +1241,15 @@ def remove_bp(request, bp_id):
     REMOVE_BP: Delete an BP and redirect to profile
     """
 
-    BulletPoint.objects.get(id=bp_id).delete()
+    # get the bullet point and the bp content type
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
+
+    comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    bp.delete()
 
     return redirect('/profile/')
 
@@ -1135,6 +1273,9 @@ def move_up_bp(request, bp_id):
         if bp.get_parent() == parent and bp != move_bp:
 
             siblings.append(bp)
+
+    if len(siblings) == 0:
+        return redirect('/profile/')
 
     # if top
     if move_bp.order < min(siblings, key=lambda x: x.order).order:
@@ -1181,6 +1322,9 @@ def move_down_bp(request, bp_id):
         if bp.get_parent() == parent and bp != move_bp:
 
             siblings.append(bp)
+
+    if len(siblings) == 0:
+        return redirect('/profile/')
 
     # if bottom
     if move_bp.order > max(siblings, key=lambda x: x.order).order:
@@ -1464,6 +1608,9 @@ def add_section_comment(request, section_name, user_info_id):
 
         # get the comment text
         new_comment.text = request.POST.get('comment_text')
+
+        if request.POST.get('comment_text') == "":
+            return redirect('/view-my-resume/')
 
         # add rep points to the commenter
         MADE_COMMENT_RP = 10
@@ -1900,6 +2047,9 @@ def add_item_comment(request, item_type, item_id):
     # get the comment text
     new_comment.text = request.POST.get('comment_text')
 
+    if request.POST.get('comment_text') == "":
+        return redirect('/view-my-resume/')
+
     # is there a suggestion
     new_comment.suggestion = request.POST.get('suggestion_text')
 
@@ -2119,7 +2269,7 @@ def choose_resume_to_edit(request):
 @login_required
 def most_recently_commented_resumes(request):
     """
-    MOST_RECENTLY_COMMENTED_RESUMES: This view returns the 5 most recently commented on resumes
+    MOST_RECENTLY_COMMENTED_RESUMES: This view returns at most 4 of the most recently commented on resumes
     """
 
     if request.method == 'POST':
@@ -2142,41 +2292,61 @@ def most_recently_commented_resumes(request):
     else:
 
         mrc_resumes_list = []
+        my_id = request.user.user_info.id
 
-        # Use a try clause in case there are not 5 uniquely commented resumes
+        # Use a try clause in case there are not 4 uniquely commented resumes
         # In successive queries, we exclude comments on resumes already in our list
         # of most recently commented resumes
+        ui1 = None
+        ui2 = None
+
+        # now look in comments on commentable resume tiems
         try:
-            # resume 1
-            c = Comment.objects.latest('timestamp')
+            # resume 1 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=my_id).latest('timestamp')
             ui1 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui1.id, ui1.display_name))
 
-            # resume 2
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).latest('timestamp')
+            # resume 2 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=my_id).exclude(resume_owner_id=ui1.id)\
+                .latest('timestamp')
             ui2 = UserInfo.objects.get(id=c.resume_owner_id)
             mrc_resumes_list.append((ui2.id, ui2.display_name))
 
-            # resume 3
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id).latest('timestamp')
-            ui3 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui3.id, ui3.display_name))
-
-            # resume 4
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id) \
-                .exclude(resume_owner_id=ui3.id).latest('timestamp')
-            ui4 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui4.id, ui4.display_name))
-
-            # resume 5
-            c = Comment.objects.exclude(resume_owner_id=ui1.id).exclude(resume_owner_id=ui2.id) \
-                .exclude(resume_owner_id=ui3.id).exclude(resume_owner_id=ui4.id).latest('timestamp')
-            ui5 = UserInfo.objects.get(id=c.resume_owner_id)
-            mrc_resumes_list.append((ui5.id, ui5.display_name))
-       
-        # if we don't have 5 uniquely commented resumes, just return the ones we do have
         except Comment.DoesNotExist:
             pass
+
+        except NameError:
+            pass
+
+        # now look in section comments
+        try:
+
+            # can't check ID's for "None"
+            if ui1 is None:
+                ui1 = request.user.user_info
+            if ui2 is None:
+                ui2 = request.user.user_info
+
+            # resume 3 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=my_id).exclude(section_owner_id=ui1.id)\
+                .latest('timestamp')
+            ui3 = UserInfo.objects.get(id=c.section_owner_id)
+            mrc_resumes_list.append((ui3.id, ui3.display_name))
+
+            # resume 4 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=my_id).exclude(section_owner_id=ui1.id)\
+                .exclude(section_owner_id=ui2.id).exclude(section_owner_id=ui3.id).latest('timestamp')
+            ui4 = UserInfo.objects.get(id=c.section_owner_id)
+            mrc_resumes_list.append((ui4.id, ui4.display_name))
+
+        except SectionComment.DoesNotExist:
+            pass
+
+        except NameError:
+            pass
+
+        # if we don't have 5 uniquely commented resumes, just return the ones we do have
 
         # create and populate form with choices of mrc resumes
         form = MostRecentlyCommentedResumesForm()
@@ -2188,7 +2358,7 @@ def most_recently_commented_resumes(request):
 @login_required
 def most_popular_resumes(request):
     """
-    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with 
+    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with
     the most comment activity in the last N_DAYS days
     """
 
@@ -2214,7 +2384,7 @@ def most_popular_resumes(request):
         N_DAYS = 3
         NUM_RESUMES_TO_RETURN = 5
 
-        # look at comments on others' resumes in the last 3 days
+        # look at comments on commentable resume items from the last 3 days
         d = datetime.date.today() - datetime.timedelta(days=N_DAYS)
         comments = Comment.objects.exclude(resume_owner=request.user.user_info.id).filter(timestamp__gt=d)
 
@@ -2225,6 +2395,14 @@ def most_popular_resumes(request):
                 comments_per_resume[c.resume_owner] = 1
             else:
                 comments_per_resume[c.resume_owner] = comments_per_resume[c.resume_owner] + 1
+
+        # do the same for comments on sections
+        section_comments = SectionComment.objects.exclude(section_owner_id=request.user.user_info.id).filter(timestamp__gt=d)
+        for sc in section_comments:
+            if sc.section_owner not in comments_per_resume:
+                comments_per_resume[sc.section_owner] = 1
+            else:
+                comments_per_resume[sc.section_owner] = comments_per_resume[sc.section_owner] + 1
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
         sorted_top_resumes = sorted(comments_per_resume, key=comments_per_resume.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
@@ -2354,7 +2532,7 @@ def generate_pdf(request):
     pdf.path = random_int
 
     # run the command on command line
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
     # get last version number
     last_max = ResumePDF.objects.filter(user=request.user.user_info).aggregate(Max('version_number')).get('version_number__max')
@@ -2376,7 +2554,7 @@ def embed_pdf(request):
     """
 
     # get past PDFs
-    pdfs = ResumePDF.objects.filter(user=request.user.user_info)
+    pdfs = ResumePDF.objects.filter(user=request.user.user_info).order_by('created_at')
 
     # if no PDFs, don't fail
     if len(pdfs) == 0:
@@ -2401,7 +2579,7 @@ def view_pdf(request):
     random_int = str(random.randint(00000001, 99999999))
 
     # run the command
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
     os.system(command)
 
@@ -2430,7 +2608,7 @@ def public_resume_pdf(request, custom_string):
         # generate file id
         random_int = str(random.randint(00000001, 99999999))
 
-        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
         os.system(command)
 

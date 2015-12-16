@@ -11,6 +11,10 @@
 <div id='form'>
 <table>
 <form action="/edit-skill/" method="post">
+{% if errors %}
+<center>{{errors}}</center><br>
+{% else %}
+{% endif %}
     {% csrf_token %}
     {{ form }}
     <input name='skill_id' type='hidden' value={{skill_id}}></input>
