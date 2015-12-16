@@ -10,7 +10,9 @@
 <div id='form'>
 
     {% if form.errors %}
+    <center>
         <p>Your username and password didn't match. Please try again.</p>
+        </center>
     {% endif %}
     <table>
     <form method="post" action="{% url 'django.contrib.auth.views.login' %}">

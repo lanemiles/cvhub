@@ -32,11 +32,15 @@ def create_user(request):
     # if a POST, process the form data
     if request.method == 'POST':
 
+        print "POST"
+
         # create a form instance and populate it with data from the request:
         form = UserInfoForm(request.POST)
 
         # check whether it's valid:
         if form.is_valid():
+
+            print "VALID"
 
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'),
@@ -44,6 +48,8 @@ def create_user(request):
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
+
+            print "MADE USER"
 
             # make the UserInfo object
             user_wrapper = UserInfo()
@@ -54,12 +60,16 @@ def create_user(request):
             user_wrapper.user = user
             user_wrapper.save()
 
+            print "SAVE"
+
             # redirect to the profile page:
-            user = authenticate(username=user.email, password=form.cleaned_data.get('password'))
+            user = authenticate(username=request.POST.get('email'), password=request.POST.get('password'))
             if user is not None:
+                print "NOT NONE"
                 if user.is_active:
+                    print "ACTIVE"
                     login(request, user)
-                    return redirect('/profile/')
+            return redirect('/profile/')
 
     # if a GET, present the sign up form
     else:
@@ -169,7 +179,7 @@ def edit_information(request):
     EDIT_INFORMATION: A user can edit certain parts of their information
     """
 
-   # if this is a POST request we need to process the form data
+    # if this is a POST request we need to process the form data
     if request.method == 'POST':
 
         form = EditInformationForm(request.POST)
@@ -196,7 +206,14 @@ def edit_information(request):
                 user_info.resume_url = proposed_resume_url
                 user_info.save()
 
-        return redirect('/profile/')
+            return redirect('/profile/')
+
+        else:
+            
+            form = EditInformationForm(instance=request.user.user_info)
+
+            return render(request, 'edit_information.html', {'form': form, 'name_taken': False, 'url_is_none': False, 'errors': 'There was an error processing your form!'})
+
 
     # if a GET
     else:
@@ -241,6 +258,10 @@ def create_education(request):
             education.save()
 
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'add_education.html', {'form': form})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -319,10 +340,30 @@ def edit_education(request, education_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            education_bps = []
+            for bp in bps:
+                if bp.get_parent() == Education.objects.get(id=request.POST.get('edu_id')):
+                    education_bps.append(bp)
+
+            form = EducationBulletPointForm(education_bps, instance=Education.objects.get(id=request.POST.get('edu_id')))
+            form.add_bp_fields(education_bps)
+
+            return render(request, 'edit_education.html', {'form': form, 'edu_id': request.POST.get('edu_id'), 'errors': "There was an error in processing your form."})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -383,7 +424,6 @@ def add_education_bp(request, item_id=None):
 
             # get education from the drop down list in form
             education = request.POST.get('edu_id')
-            print request.POST
 
             # return all bullet points for that education, and find the next number for an ordering
             order_max = BulletPoint.objects.filter(object_id=education).aggregate(Max('order')).get('order__max')
@@ -401,6 +441,11 @@ def add_education_bp(request, item_id=None):
             bp.save()
 
             return redirect('/profile/')
+
+        else:
+
+            form.set_education(request.user, request.POST.get('edu_id'))
+            return render(request, 'add_education_bp.html', {'form': form, 'edu_id': request.POST.get('edu_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -468,6 +513,10 @@ def create_experience(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add_experience.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -504,16 +553,34 @@ def edit_experience(request, experience_id=None):
 
                 if 'BP' in thing:
                     bp_dict[thing] = request.POST.get(thing)
-                    print request.POST.get(thing)
 
             # get associated bullet point changes
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            experience_bps = []
+            for bp in bps:
+                if bp.get_parent() == Experience.objects.get(id=request.POST.get('experience_id')):
+                    experience_bps.append(bp)
+
+            form = ExperienceBulletPointForm(experience_bps, instance=Experience.objects.get(id=request.POST.get('experience_id')))
+            form.add_bp_fields(experience_bps)
+            return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -616,6 +683,11 @@ def add_experience_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_experience(request.user, request.POST.get('experience_id'))
+            return render(request, 'add_experience_bp.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -693,6 +765,10 @@ def create_skill_category(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add-skill-category.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -734,10 +810,29 @@ def edit_skill(request, skill_id=None):
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            skill_bps = []
+            for bp in bps:
+                if bp.get_parent() == Skill.objects.get(id=request.POST.get('skill_id')):
+                    skill_bps.append(bp)
+
+            form = SkillBulletPointForm(skill_bps, instance=Skill.objects.get(id=request.POST.get('skill_id')))
+            form.add_bp_fields(skill_bps)
+            return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -840,6 +935,11 @@ def add_skill_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_skills(request.user, request.POST.get('skill_id'))
+            return render(request, 'add_skill_bp.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -917,6 +1017,10 @@ def create_award(request):
 
             return redirect('/profile/')
 
+        else:
+
+            return render(request, 'add_award.html', {'form': form})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -952,15 +1056,33 @@ def edit_award(request, award_id=None):
 
                 if 'BP' in thing:
                     bp_dict[thing] = request.POST.get(thing)
-                    print request.POST.get(thing)
 
             for (id_str, text) in bp_dict.items():
                 bp_id = id_str[2:]
                 bp = BulletPoint.objects.get(id=int(bp_id))
-                bp.text = text
-                bp.save()
 
-        return redirect('/profile/')
+                # if they deleted text, delete the BP
+                if text == "":
+                    ignore_this = remove_bp(request, bp_id)
+
+                else:
+                    bp.text = text
+                    bp.save()
+
+            return redirect('/profile/')
+
+        else:
+
+            # get associated bullet points
+            bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')
+            award_bps = []
+            for bp in bps:
+                if bp.get_parent() == Award.objects.get(id=request.POST.get('award_id')):
+                    award_bps.append(bp)
+
+            form = AwardBulletPointForm(award_bps, instance=Award.objects.get(id=request.POST.get('award_id')))
+            form.add_bp_fields(award_bps)
+            return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id')})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1062,6 +1184,11 @@ def add_award_bp(request, item_id=None):
 
             return redirect('/profile/')
 
+        else:
+
+            form.set_awards(request.user, request.POST.get('award_id'))
+            return render(request, 'add_award_bp.html', {'form': form, 'award_id': request.POST.get('award_id')})
+
     # if a GET (or any other method) we'll create a blank form
     else:
 
@@ -1114,7 +1241,15 @@ def remove_bp(request, bp_id):
     REMOVE_BP: Delete an BP and redirect to profile
     """
 
-    BulletPoint.objects.get(id=bp_id).delete()
+    # get the bullet point and the bp content type
+    bp = BulletPoint.objects.get(id=bp_id)
+    bp_type = ContentType.objects.get_for_model(BulletPoint)
+
+    comments_to_delete = Comment.objects.filter(content_type=bp_type, object_id=bp.id)
+    for ctd in comments_to_delete:
+        ctd.delete()
+
+    bp.delete()
 
     return redirect('/profile/')
 
@@ -1138,6 +1273,9 @@ def move_up_bp(request, bp_id):
         if bp.get_parent() == parent and bp != move_bp:
 
             siblings.append(bp)
+
+    if len(siblings) == 0:
+        return redirect('/profile/')
 
     # if top
     if move_bp.order < min(siblings, key=lambda x: x.order).order:
@@ -1184,6 +1322,9 @@ def move_down_bp(request, bp_id):
         if bp.get_parent() == parent and bp != move_bp:
 
             siblings.append(bp)
+
+    if len(siblings) == 0:
+        return redirect('/profile/')
 
     # if bottom
     if move_bp.order > max(siblings, key=lambda x: x.order).order:
@@ -1467,6 +1608,9 @@ def add_section_comment(request, section_name, user_info_id):
 
         # get the comment text
         new_comment.text = request.POST.get('comment_text')
+
+        if request.POST.get('comment_text') == "":
+            return redirect('/view-my-resume/')
 
         # add rep points to the commenter
         MADE_COMMENT_RP = 10
@@ -1798,7 +1942,6 @@ def move_down_resume_item(request, item_type, item_id):
     # get the item we want to move
     if item_type == 'education':
         item_to_move = Education.objects.get(id=item_id)
-        print item_to_move, "s"
     elif item_type == 'skill':
         item_to_move = Skill.objects.get(id=item_id)
     elif item_type == 'award':
@@ -1892,6 +2035,9 @@ def disable_item(request, item_type, item_id):
 
 @login_required
 def add_item_comment(request, item_type, item_id):
+    """
+    ADD_ITEM_COMMENT: Comment on a commentable resume item
+    """
 
     new_comment = Comment()
 
@@ -1900,6 +2046,9 @@ def add_item_comment(request, item_type, item_id):
 
     # get the comment text
     new_comment.text = request.POST.get('comment_text')
+
+    if request.POST.get('comment_text') == "":
+        return redirect('/view-my-resume/')
 
     # is there a suggestion
     new_comment.suggestion = request.POST.get('suggestion_text')
@@ -2024,111 +2173,93 @@ def get_comments_for_item(request, item_type, item_id):
 @login_required
 def choose_resume_to_edit(request):
     """
-    CHOOSE_RESUME_TO_EDIT: Controls the logic for search/explore resumes
+    CHOOSE_RESUME_TO_EDIT: Allows the resume reviewer to search all resumes by keyword.
     """
 
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = ChooseResumeToEditForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
 
-            # Find the num_resumes_to_return resumes most relevant to keywords
-            # if request.POST.get("search_resumes"):
-            print "in search"
+        # Find the num_resumes_to_return resumes most relevant to keywords
 
-            # Search terms; default is empty string
-            keywords = request.POST.get('keywords')
-            keywords = ("" if None else keywords)
+        # Search terms; default is empty string
+        keywords = request.POST.get('keywords')
+        keywords = ("" if None else keywords)
 
-            # Search terms; default is 5
-            num_resumes_to_return = request.POST.get('num_resumes_to_return')
-            num_resumes_to_return = (5 if None else num_resumes_to_return)
+        # Search terms; default is 5
+        num_resumes_to_return = request.POST.get('num_resumes_to_return')
+        num_resumes_to_return = (5 if None else num_resumes_to_return)
+        my_id = request.user.user_info.id
 
-            # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search
-            id_results = []
+        # a multiset of UserInfo ID's, with 1 occurrence for every time that user is hit in this search
+        id_results = []
 
-            # See if user's contact information or name matches
-            id_results += queryset_to_valueslist("id", UserInfo.objects.filter( \
-                Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
-                Q(website__icontains=keywords)).values('id'))
+        # Search in name, phone number, website, and email, excluding my own resume
+        id_results += queryset_to_valueslist("id", UserInfo.objects.exclude(id=my_id).filter( \
+            Q(display_name__icontains=keywords) | Q(phone_number__icontains=keywords) | \
+            Q(website__icontains=keywords)).values('id'))
+        id_results += queryset_to_valueslist("user_info", User.objects.exclude(id=my_id)\
+            .filter(Q(email__icontains=keywords)).values('user_info'))
 
-            # Attempts to search in email commented out here.
-            # UserInfo and User id's are not the same. We are using the UserInfo id's,
-            # so if a User matches, we have to fetch the UserInfo id
-            # matching_users = User.objects.filter(email__icontains=keywords)
-            # for x in matching_users:
-            #     print x
-            #     id_results.append(x.user_info.id)
+        # Search in Education, Skill categories, Experience, and Awards, excluding my own resume
+        id_results += queryset_to_valueslist("owner_id", Education.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
+        id_results += queryset_to_valueslist("owner", Skill.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(category__icontains=keywords)).values('owner'))
+        id_results += queryset_to_valueslist("owner", Experience.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
+        id_results += queryset_to_valueslist("owner", Award.objects.exclude(owner=my_id).filter(Q(enabled=True), \
+            Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
 
-            # Search in Education, Skill categories, Experience, and Awards
-            id_results += queryset_to_valueslist("owner_id", Education.objects.filter(Q(enabled=True), \
-                Q(school__icontains=keywords) | Q(location__icontains=keywords)).values('owner_id'))
-            id_results += queryset_to_valueslist("owner", Skill.objects.filter(Q(enabled=True), \
-                Q(category__icontains=keywords)).values('owner'))
-            id_results += queryset_to_valueslist("owner", Experience.objects.filter(Q(enabled=True), \
-                Q(title__icontains=keywords) | Q(employer__icontains=keywords) | Q(location__icontains=keywords)).values('owner'))
-            id_results += queryset_to_valueslist("owner", Award.objects.filter(Q(enabled=True), \
-                Q(name__icontains=keywords) | Q(issuer__icontains=keywords)).values('owner'))
+        # Search in Bullet Points, excluding my own resume
+        id_results += queryset_to_valueslist("resume_owner", BulletPoint.objects.exclude(resume_owner=my_id).filter(enabled=True, \
+            text__icontains=keywords).values('resume_owner'))
 
-            # Search in Bullet Points. BP's only know about their parent objects,
-            # so we get the bp's parent's owner's id
-            bp_results = BulletPoint.objects.filter(enabled=True, text__icontains=keywords)
-            bp_owner_ids = []
-            for bp in bp_results:
-                bp_owner_ids.append(bp.resume_owner.pk)
-            id_results += bp_owner_ids
+        # Count and order by how many times the keyword appeared per user,
+        c = collections.Counter(id_results).most_common()
 
-            # Count and order by how many times the keyword appeared per user,
-            c = collections.Counter(id_results).most_common()
+        # turn list of tuples (immutable) --> list of lists
+        c_1 = map(list, c)
+        none_item_to_remove = False
 
-            # turn list of tuples (immutable) --> list of lists
-            c_1 = map(list, c)
+        # adjust score for rep points
+        for x in c_1:
 
-            own_resume = None
-
-            # for every user
-            for x in c_1:
-
-                # if the user's own resume showed up in the search,
-                # remember it so we can remove it from the results
-                if x[0] == request.user.user_info.id:
-                    own_resume = x
-
-                # normal behavior: adjust each user's ranking based on rep score
-                else:
-                    points = UserInfo.objects.get(id=x[0]).points
-                    # no one ever loses points for low rep score
-                    points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
-                    x[1] += points_bonus
-
-            # if user's own resume showed up in search
-            if own_resume is not None:
-                c_1.remove(own_resume)
-
-            # return a flat list of num_resumes_to_return users in new ranking order
-            sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
-            top_hits = [item[0] for item in sorted_c]
-
-            # make the choice list of tuples (user id, user's display name)
-            results_list = []
-            for x in top_hits:
-                top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
-                results_list.append((x, top_hit_user))
-
-            # if we have search results, redirect to results page
-            if len(results_list) > 0:
-                form = SearchResumeResultsForm()
-                form.set_resumes_to_display(results_list)
-                return render(request, 'search_resume_results.html', {'form': form})
-
-            # if no search results returned, redirect to search page
+            # avoid calling a query on a "None" 
+            if x[0] is None:
+                none_item = x
+                none_item_to_remove = True
             else:
-                form = ChooseResumeToEditForm()
-                return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
+                points = UserInfo.objects.get(id=x[0]).points
+                # no one ever loses points for low rep score
+                points_bonus = (4 if (points <= 4) else math.log(points, 1.5))
+                x[1] += points_bonus
 
-    # if a GET (or any other method) we'll create a blank form
+        # remove Nones (resulting from queries with no hits), if there are any
+        if none_item_to_remove:
+            c_1.remove(none_item)
+
+        # return a flat list of num_resumes_to_return users in new ranking order
+        sorted_c = sorted(c_1,key=lambda x: x[1], reverse=True)[:(int)(num_resumes_to_return)]
+        top_hits = [item[0] for item in sorted_c]
+
+        # make the choice list of tuples (user id, user's display name)
+        results_list = []
+        for x in top_hits:
+            top_hit_user = UserInfo.objects.values_list('display_name', flat=True).get(pk=x)
+            results_list.append((x, top_hit_user))
+
+        # if we have search results, redirect to results page
+        if len(results_list) > 0:
+            form = SearchResumeResultsForm()
+            form.set_resumes_to_display(results_list)
+            return render(request, 'search_resume_results.html', {'form': form})
+
+        # if no search results returned, redirect to search page
+        else:
+            form = ChooseResumeToEditForm()
+            return render(request, 'choose_resume_to_edit.html', {'form': form, 'no_results': True})
+
+    # if a get request, we'll create a blank form
     else:
 
         form = ChooseResumeToEditForm()
@@ -2138,7 +2269,7 @@ def choose_resume_to_edit(request):
 @login_required
 def most_recently_commented_resumes(request):
     """
-    MOST_RECENTLY_COMMENTED_RESUMES: This view returns the most recently commented on resumes
+    MOST_RECENTLY_COMMENTED_RESUMES: This view returns at most 4 of the most recently commented on resumes
     """
 
     if request.method == 'POST':
@@ -2160,26 +2291,62 @@ def most_recently_commented_resumes(request):
     # get method
     else:
 
-        NUM_RESUMES_TO_RETURN = 5
-
-        # get all comments
-        comments = Comment.objects.order_by('-timestamp')
-
         mrc_resumes_list = []
+        my_id = request.user.user_info.id
 
-        # look at all comments until we have NUM_RESUMES_TO_RETURN most recently commented resumes
-        for c in comments:
+        # Use a try clause in case there are not 4 uniquely commented resumes
+        # In successive queries, we exclude comments on resumes already in our list
+        # of most recently commented resumes
+        ui1 = None
+        ui2 = None
 
-            # the owner of the resume item this comment is on (aka recipient of comment)
-            recipient = c.get_header_level_parent().owner
+        # now look in comments on commentable resume tiems
+        try:
+            # resume 1 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=my_id).latest('timestamp')
+            ui1 = UserInfo.objects.get(id=c.resume_owner_id)
+            mrc_resumes_list.append((ui1.id, ui1.display_name))
 
-            # append (user id, user's display name) to list of results
-            if (recipient.id != request.user.user_info.id) and (recipient.id, recipient.display_name) not in mrc_resumes_list:
-                mrc_resumes_list.append((recipient.id, recipient.display_name))
+            # resume 2 - comment on commentable resume item
+            c = Comment.objects.exclude(resume_owner_id=my_id).exclude(resume_owner_id=ui1.id)\
+                .latest('timestamp')
+            ui2 = UserInfo.objects.get(id=c.resume_owner_id)
+            mrc_resumes_list.append((ui2.id, ui2.display_name))
 
-            # once we have NUM_RESUMES_TO_RETURN resumes, stop looking for new resumes
-            if len(mrc_resumes_list) > NUM_RESUMES_TO_RETURN:
-                break
+        except Comment.DoesNotExist:
+            pass
+
+        except NameError:
+            pass
+
+        # now look in section comments
+        try:
+
+            # can't check ID's for "None"
+            if ui1 is None:
+                ui1 = request.user.user_info
+            if ui2 is None:
+                ui2 = request.user.user_info
+
+            # resume 3 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=my_id).exclude(section_owner_id=ui1.id)\
+                .latest('timestamp')
+            ui3 = UserInfo.objects.get(id=c.section_owner_id)
+            mrc_resumes_list.append((ui3.id, ui3.display_name))
+
+            # resume 4 - section comment
+            c = SectionComment.objects.exclude(section_owner_id=my_id).exclude(section_owner_id=ui1.id)\
+                .exclude(section_owner_id=ui2.id).exclude(section_owner_id=ui3.id).latest('timestamp')
+            ui4 = UserInfo.objects.get(id=c.section_owner_id)
+            mrc_resumes_list.append((ui4.id, ui4.display_name))
+
+        except SectionComment.DoesNotExist:
+            pass
+
+        except NameError:
+            pass
+
+        # if we don't have 5 uniquely commented resumes, just return the ones we do have
 
         # create and populate form with choices of mrc resumes
         form = MostRecentlyCommentedResumesForm()
@@ -2191,7 +2358,8 @@ def most_recently_commented_resumes(request):
 @login_required
 def most_popular_resumes(request):
     """
-    MOST_POPULAR_RESUMES: Returns the most commented on resumes
+    MOST_POPULAR_RESUMES: Returns the NUM_RESUMES_TO_RETURN resumes with
+    the most comment activity in the last N_DAYS days
     """
 
     if request.method == 'POST':
@@ -2210,36 +2378,37 @@ def most_popular_resumes(request):
             # comment chosen resume
             return render(request, 'comment_resume.html', user_dictionary)
 
-    # get request
+    # get most popular resumes
     else:
 
+        N_DAYS = 3
         NUM_RESUMES_TO_RETURN = 5
 
-        # list of all users
-        all_userinfos = UserInfo.objects.exclude(id=request.user.user_info.id)
+        # look at comments on commentable resume items from the last 3 days
+        d = datetime.date.today() - datetime.timedelta(days=N_DAYS)
+        comments = Comment.objects.exclude(resume_owner=request.user.user_info.id).filter(timestamp__gt=d)
 
-        # initialize count of comments for each resume to 0
-        comment_count_per_ui = {}
-        for ui in all_userinfos:
-            comment_count_per_ui[ui.id] = 0
-
-        # count the number of comments per resume/user
-        comments = Comment.objects.all()
+        # count comments per resumes using a dict of format {'c.resume_owner': count of comments}
+        comments_per_resume = {}
         for c in comments:
+            if c.resume_owner not in comments_per_resume:
+                comments_per_resume[c.resume_owner] = 1
+            else:
+                comments_per_resume[c.resume_owner] = comments_per_resume[c.resume_owner] + 1
 
-            # id of the owner of the resume item this comment is on (aka id of comment's recipient)
-            recipient_id = c.get_header_level_parent().owner.id
-
-            # increment number of comments attributed to that resume
-            if recipient_id != request.user.user_info.id:
-                comment_count_per_ui[recipient_id] = comment_count_per_ui[recipient_id] + 1
+        # do the same for comments on sections
+        section_comments = SectionComment.objects.exclude(section_owner_id=request.user.user_info.id).filter(timestamp__gt=d)
+        for sc in section_comments:
+            if sc.section_owner not in comments_per_resume:
+                comments_per_resume[sc.section_owner] = 1
+            else:
+                comments_per_resume[sc.section_owner] = comments_per_resume[sc.section_owner] + 1
 
         # return the NUM_RESUMES_TO_RETURN most commented resumes
-        sorted_top_resumes = sorted(comment_count_per_ui, key=comment_count_per_ui.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
-
+        sorted_top_resumes = sorted(comments_per_resume, key=comments_per_resume.get, reverse=True)[:NUM_RESUMES_TO_RETURN]
         mp_resumes_list = []
         for x in sorted_top_resumes:
-            mp_resumes_list.append((x, UserInfo.objects.get(id=x).display_name))
+            mp_resumes_list.append((x.id, x.display_name))
 
         # create and populate form with choices of mrc resumes
         form = MostPopularResume()
@@ -2254,7 +2423,7 @@ def random_resume(request):
     RANDOM_RESUME: Randomly choose a user/resume to view, giving priority
     to users with more rep points. Priority depends on rep points compared to
     other users, not absolute rep points. The general idea is that higher
-    ranked users will be more likely to remain. in the pool of resumes to
+    ranked users will be more likely to remain in the pool of resumes to
     be randomly chosen from.
     """
 
@@ -2363,7 +2532,7 @@ def generate_pdf(request):
     pdf.path = random_int
 
     # run the command on command line
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
     # get last version number
     last_max = ResumePDF.objects.filter(user=request.user.user_info).aggregate(Max('version_number')).get('version_number__max')
@@ -2385,7 +2554,7 @@ def embed_pdf(request):
     """
 
     # get past PDFs
-    pdfs = ResumePDF.objects.filter(user=request.user.user_info)
+    pdfs = ResumePDF.objects.filter(user=request.user.user_info).order_by('created_at')
 
     # if no PDFs, don't fail
     if len(pdfs) == 0:
@@ -2410,7 +2579,7 @@ def view_pdf(request):
     random_int = str(random.randint(00000001, 99999999))
 
     # run the command
-    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+    command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
     os.system(command)
 
@@ -2439,7 +2608,7 @@ def public_resume_pdf(request, custom_string):
         # generate file id
         random_int = str(random.randint(00000001, 99999999))
 
-        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46:8002/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
+        command = 'cd cvhub_app; cd static; cd cvhub_app;  xvfb-run --server-args="-screen 0, 1024x768x24" wkhtmltopdf http://40.83.184.46/view-user-resume/' + user_id + ' ' + random_int + '.pdf'
 
         os.system(command)
 
@@ -2583,6 +2752,7 @@ def reject_comment(request, comment_id):
     return render(request, 'review_comments.html', user_profile_dict(request.user, True))
 
 
+# HELPER FUNCTIONS
 def queryset_to_valueslist(key, query_set):
     """
     QUERYSET_TO_VALUESLIST: Turns a Query Set into a flat list of values for easier use
@@ -2592,6 +2762,5 @@ def queryset_to_valueslist(key, query_set):
     id_results = []
     for x in query_set:
         id_results.append(x[key])
-        print x
 
     return id_results
