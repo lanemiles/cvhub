@@ -15,9 +15,8 @@
 {% csrf_token %}
 
 
-
+<div id=0>
 <div style='height: 25px'> </div>
-
 <h2>Your Information</h2><div class='section_edit'><a href='/edit-information/'>Edit</a></div>
 <hr>
 <ul class='normal'>
@@ -41,6 +40,7 @@
 </div>
 
 
+<div id='sortme'>
 <div id={{user_info.education_order}}>
 <h2>Your Education</h2><div class='section_edit'>
 <a href='/move-up-section/education/'>Move Up</a> | <a href='/move-down-section/education/'>Move Down</a> | <a href='/enable-section/education/'>Enable All</a> | <a href='/disable-section/education/'>Disable All</a>
@@ -271,8 +271,9 @@
 </ul>
 </div>
 </div>
+</div>
 <script type='text/javascript'>
-tinysort('#container > div',{attr: 'id'})
+tinysort('#sortme > div',{attr: 'id'})
 $( "#container li li" )
   .mouseenter(function(e) {
   	if ($(e.target).find(".bullet_edit").length > 0){ 

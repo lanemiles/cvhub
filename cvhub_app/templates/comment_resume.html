@@ -120,7 +120,7 @@ blockquote p {
 
 	
 
-			<div class='contact' id='blah'>
+			<div class='contact' id='blah' id=0>
 			<h1 class='title small_caps' id='CONTACT'><span  user_info={{user_info.pk}}>{{user_info.display_name}}</span></h1>
 
 				<span class='email' user_info={{user_info.pk}}>{{user.email}}</span>
@@ -128,6 +128,7 @@ blockquote p {
 				<span class='phone' user_info={{user_info.pk}}>{{user_info.phone_number|slice:":3"}}-{{user_info.phone_number|slice:"3:6"}}-{{user_info.phone_number|slice:"6:"}}</span>
 				<span class='divider_pipe' > | </span>
 				<span class='user_url' user_info={{user_info.pk}}>{{user_info.website}}</span>
+				<div style='height:25px'> </div>
 			</div>
 
 			<!-- <div class='summary'>
@@ -135,7 +136,7 @@ blockquote p {
 					A fast-learning and self-motivated student leader passionate about computer science, politics, and their intersections
 				</span>
 			</div> -->
-
+			<div id='sortme'>
 			{% if education_list %}
 			<div class='section' id={{user_info.education_order}} name='education'>
 
@@ -387,6 +388,7 @@ blockquote p {
 
 
 
+		</div>
 		</div>
 
 		<script type='text/javascript'>

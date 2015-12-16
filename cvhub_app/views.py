@@ -540,7 +540,7 @@ def edit_experience(request, experience_id=None):
         # create a form instance and populate it with data from the request:
         form = ExperienceForm(request.POST)
         form2 = ExperienceForm(request.POST, instance=Experience.objects.get(id=form.data.get('experience_id')))
-        print form2
+        print request.POST
         print "HI"
 
         # check whether it's valid:
@@ -572,6 +572,8 @@ def edit_experience(request, experience_id=None):
             return redirect('/profile/')
 
         else:
+
+            print form2.errors
 
             # get associated bullet points
             bps = BulletPoint.objects.filter(resume_owner=request.user.user_info).order_by('order')

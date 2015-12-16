@@ -63,14 +63,10 @@ class ExperienceForm(forms.ModelForm):
     Add a header-level Experience Resume Item
     """
 
-    def clean_end_date(self):
+    def clean(self):
         current = self.cleaned_data.get('current')
-        print current
-        print type(current)
         end_date = self.cleaned_data.get('end_date')
-        print end_date
-        print type(end_date)
-        if (end_date is None or end_date == "") and current is None:
+        if end_date is None and current is None:
             raise forms.ValidationError("You need to specify an end date or select current!")
 
     class Meta:
