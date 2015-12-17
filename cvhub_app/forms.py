@@ -21,6 +21,8 @@ class UserInfoForm(forms.ModelForm):
     # validator method for email, enforcing uniqueness
     def clean_email(self):
         email = self.cleaned_data.get('email')
+        if len(email) > 29:
+            raise forms.ValidationError("Sorry, but your email needs to be less than 30 characters!")
         if email and User.objects.filter(email=email).count():
             raise forms.ValidationError('Email addresses must be unique.')
         return email
@@ -66,7 +68,8 @@ class ExperienceForm(forms.ModelForm):
     def clean(self):
         current = self.cleaned_data.get('current')
         end_date = self.cleaned_data.get('end_date')
-        if end_date is None and current is None:
+        print self.cleaned_data
+        if end_date is None and (current is None or current is False):
             raise forms.ValidationError("You need to specify an end date or select current!")
 
     class Meta:

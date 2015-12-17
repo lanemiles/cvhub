@@ -32,15 +32,11 @@ def create_user(request):
     # if a POST, process the form data
     if request.method == 'POST':
 
-        print "POST"
-
         # create a form instance and populate it with data from the request:
         form = UserInfoForm(request.POST)
 
         # check whether it's valid:
         if form.is_valid():
-
-            print "VALID"
 
             # make the User object
             user = User.objects.create_user(form.cleaned_data.get('email'),
@@ -48,8 +44,6 @@ def create_user(request):
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
             user.save()
-
-            print "MADE USER"
 
             # make the UserInfo object
             user_wrapper = UserInfo()
@@ -60,16 +54,16 @@ def create_user(request):
             user_wrapper.user = user
             user_wrapper.save()
 
-            print "SAVE"
-
             # redirect to the profile page:
             user = authenticate(username=request.POST.get('email'), password=request.POST.get('password'))
             if user is not None:
-                print "NOT NONE"
                 if user.is_active:
-                    print "ACTIVE"
                     login(request, user)
             return redirect('/profile/')
+
+        else:
+
+            return render(request, 'create_user.html', {'form': form})
 
     # if a GET, present the sign up form
     else:
@@ -584,7 +578,7 @@ def edit_experience(request, experience_id=None):
 
             form = ExperienceBulletPointForm(experience_bps, instance=Experience.objects.get(id=request.POST.get('experience_id')))
             form.add_bp_fields(experience_bps)
-            return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id')})
+            return render(request, 'edit_experience.html', {'form': form, 'experience_id': request.POST.get('experience_id'), 'errors': "There was an error in processing your form."})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -836,7 +830,7 @@ def edit_skill(request, skill_id=None):
 
             form = SkillBulletPointForm(skill_bps, instance=Skill.objects.get(id=request.POST.get('skill_id')))
             form.add_bp_fields(skill_bps)
-            return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id')})
+            return render(request, 'edit_skill.html', {'form': form, 'skill_id': request.POST.get('skill_id'), 'errors': "There was an error in processing your form."})
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -1086,7 +1080,7 @@ def edit_award(request, award_id=None):
 
             form = AwardBulletPointForm(award_bps, instance=Award.objects.get(id=request.POST.get('award_id')))
             form.add_bp_fields(award_bps)
-            return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id')})
+            return render(request, 'edit_award.html', {'form': form, 'award_id': request.POST.get('award_id'), 'errors': "There was an error in processing your form."})
 
     # if a GET (or any other method) we'll create a blank form
     else:
